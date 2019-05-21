@@ -3,7 +3,7 @@ trigger:
 
 variables:
   poolName: HomeServers
-  imageName: 'registry.gitlab.com/ricardosantos9521/github/reactProject:$(Build.BuildNumber)'
+  imageName: 'registry.gitlab.com/ricardosantos9521/github/reactproject:$(Build.BuildNumber)'
   dockerRegistryEndpoint: 'gitlab registry'
 
 stages:
