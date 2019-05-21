@@ -11,7 +11,7 @@
 }
 
 .avatar {
-    position: absolute;
+    position: absolute !important;
     top: 0%;
     left: 50%;
     width: 72px !important;
