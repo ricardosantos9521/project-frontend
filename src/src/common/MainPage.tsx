@@ -31,7 +31,9 @@ class MainPage extends React.Component<Props, IState>{
         this.state = {
             isAuth: false,
             profile: null,
-            history: createBrowserHistory(),
+            history: createBrowserHistory({
+                basename: '/reactproject'
+            }),
             navBarOptions: new INavBarOptions("Main Page"),
             qrReader: ""
         }
