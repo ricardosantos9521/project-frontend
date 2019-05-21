@@ -1,0 +1,24 @@
+.grid-container {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    width: 100%;
+    height: 100%;
+}
+
+.header {
+    grid-row: 1;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+.content {
+    grid-row: 2;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+.bottom {
+    grid-row: 3;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}

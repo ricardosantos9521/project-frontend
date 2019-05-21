@@ -1,0 +1,54 @@
+.bottomBar {
+    position: static;
+    width: 100%;
+    min-height: 64px;
+    height: auto;
+    z-index: 1100;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    /* background-color: #0078d4;
+    color: #fff; */
+}
+
+.backButton {
+    grid-column: 1;
+    height: 100%;
+    text-align: center;
+}
+
+.arrowButton {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.title {
+    grid-column: 2;
+    height: 100%;
+}
+
+.title h2 {
+    padding: 0;
+    padding-left: 10px;
+    margin: 0;
+    text-align: start;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.profileNavBar {
+    grid-column: 3;
+    height: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.profileNavBarButton {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+}

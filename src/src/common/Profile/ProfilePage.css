@@ -1,0 +1,48 @@
+.profilepage {
+    position: relative;
+    height: 100%;
+}
+
+.profile {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.avatar {
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    width: 72px !important;
+    height: 72px !important;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.card {
+    position: relative;
+    top: 35px;
+    left: 50%;
+    width: max-content;
+    transform: translate(-50%, -35px);
+    z-index: 0;
+    padding: 37px 15px 15px 15px;
+}
+
+.profileContent {
+    margin: 10px;
+}
+
+.profileInputs {
+    margin: 6px;
+}
+
+.profileButtons {
+    margin-top: 15px;
+}
+
+.buttons {
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+}

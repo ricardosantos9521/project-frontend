@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reactProject-dpl
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 50%
+      maxSurge: 2
+  selector:
+    matchLabels:
+      app: reactProject
+  template:
+    metadata:
+       labels:
+         app: reactProject
+    spec:
+      containers:
+      - name: reactProject
+        image: "registry.gitlab.com/ricardosantos9521/github/reactProject:BUILDNUMBER"
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            memory: "100Mi"
+            cpu: "150m"
+        readinessProbe:
+          httpGet:
+             path: /
+             port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+      imagePullSecrets:
+        - name: secretteamrics
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: reactProject-svc
+spec:
+  selector:
+    app: reactProject
+  ports:
+  - port: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: reactProject-ing
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/add-base-url: "true"
+    # nginx.ingress.kubernetes.io/ingress.allow-http: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /reactProject(.*)
+        backend:
+          serviceName: reactProject-svc
+          servicePort: 80
