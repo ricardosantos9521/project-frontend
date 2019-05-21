@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: reactProject-dpl
+  name: reactproject-dpl
 spec:
   replicas: 1
   revisionHistoryLimit: 1
@@ -11,14 +11,14 @@ spec:
       maxSurge: 2
   selector:
     matchLabels:
-      app: reactProject
+      app: reactproject
   template:
     metadata:
        labels:
-         app: reactProject
+         app: reactproject
     spec:
       containers:
-      - name: reactProject
+      - name: reactproject
         image: "registry.gitlab.com/ricardosantos9521/github/reactProject:BUILDNUMBER"
         ports:
         - containerPort: 80
@@ -39,17 +39,17 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: reactProject-svc
+  name: reactproject-svc
 spec:
   selector:
-    app: reactProject
+    app: reactproject
   ports:
   - port: 80
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: reactProject-ing
+  name: reactproject-ing
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/add-base-url: "true"
@@ -59,7 +59,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /reactProject(.*)
+      - path: /reactproject(.*)
         backend:
-          serviceName: reactProject-svc
+          serviceName: reactproject-svc
           servicePort: 80
