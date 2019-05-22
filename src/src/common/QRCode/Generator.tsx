@@ -14,7 +14,7 @@ class QRCodeGenerator extends React.Component<IProps> {
                     value={this.props.value}
                     renderAs="svg"
                     level="L"
-                    size={200}
+                    size={300}
                 />
             </div>
         );
