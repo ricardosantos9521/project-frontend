@@ -23,7 +23,8 @@ class QrCodeReaderPage extends React.Component<IProps, IState> {
     }
 
     onScan(data: string) {
-
+        navigator.vibrate(150);
+        this.setState({ qrCodeString: data });
     }
 
     render() {
