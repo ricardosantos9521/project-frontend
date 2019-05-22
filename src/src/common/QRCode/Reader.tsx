@@ -28,11 +28,12 @@ class QRCodeReader extends React.Component<IProps> {
     render() {
         return (
             <QrReader
-                facingMode="user"
+                facingMode="environment"
                 delay={false}
                 onError={this.onError}
                 onScan={this.onScan}
                 style={{ width: '50%' }}
+                legacyMode={true}
             />
         );
     }
