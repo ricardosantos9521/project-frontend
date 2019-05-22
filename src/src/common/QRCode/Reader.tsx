@@ -33,7 +33,6 @@ class QRCodeReader extends React.Component<IProps> {
                 onError={this.onError}
                 onScan={this.onScan}
                 style={{ width: '50%' }}
-                legacyMode={true}
             />
         );
     }
