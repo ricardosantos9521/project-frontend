@@ -32,7 +32,7 @@ class QRCodeReader extends React.Component<IProps> {
                 delay={50}
                 onError={this.onError}
                 onScan={this.onScan}
-                style={{ width: '50%' }}
+                style={{ width: '100%' }}
             />
         );
     }
