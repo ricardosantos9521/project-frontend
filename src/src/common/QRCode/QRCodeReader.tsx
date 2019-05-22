@@ -15,7 +15,6 @@ class QRCodeReader extends React.Component<IProps> {
     }
 
     onScan(data: string | null) {
-        console.log(data);
         if (data !== null) {
             this.props.onScan(data!);
         }
