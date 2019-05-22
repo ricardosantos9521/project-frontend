@@ -1,5 +1,4 @@
 import React from "react";
-import './MainPage.css';
 import { Router, Route, RouteComponentProps } from "react-router-dom";
 import { History, createBrowserHistory } from "history";
 import { StaticContext } from "react-router";
@@ -10,8 +9,9 @@ import { INavBarOptions } from "./Navigation/INavBarOptions";
 import SignInPage from "./SignIn/SignInPage";
 import IProfile from "./Profile/IProfile";
 import Profile from "./Backend/Profile";
-import QRCodeGenerator from "./QRCode/Generator";
-import QRCodeReader from "./QRCode/Reader";
+import QrCodeReaderPage from "./QRCode/QRCodeReaderPage";
+import QrCodePage from "./QRCode/QRCodePage";
+import './MainPage.css';
 
 interface IState {
     isAuth: boolean;
@@ -123,7 +123,7 @@ class MainPage extends React.Component<Props, IState>{
                                     render={
                                         (props: RouteComponentProps<any, StaticContext, any>) => {
                                             return (
-                                                <QRCodeGenerator value={this.state.profile!.firstName} />
+                                                <QrCodePage value={this.state.profile!.firstName} />
                                             )
                                         }
                                     }
@@ -134,12 +134,7 @@ class MainPage extends React.Component<Props, IState>{
                                     render={
                                         (props: RouteComponentProps<any, StaticContext, any>) => {
                                             return (
-                                                <div>
-                                                    <QRCodeReader onScan={(s: string) => {
-                                                        this.setState({ qrReader: s })
-                                                    }} />
-                                                    <h2>{this.state.qrReader}</h2>
-                                                </div>
+                                                <QrCodeReaderPage />
                                             )
                                         }
                                     }
