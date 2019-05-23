@@ -2,7 +2,8 @@ import React from "react";
 import QrReader from "react-qr-reader";
 
 interface IProps {
-    onScan(data: string): void
+    onScan(data: string): void,
+    scan: boolean
 }
 
 class QRCodeReader extends React.Component<IProps> {
@@ -32,6 +33,7 @@ class QRCodeReader extends React.Component<IProps> {
                 onError={this.onError}
                 onScan={this.onScan}
                 style={{ width: '100%' }}
+                legacyMode={!this.props.scan}
             />
         );
     }
