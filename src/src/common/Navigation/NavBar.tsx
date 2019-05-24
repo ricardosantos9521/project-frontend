@@ -106,7 +106,7 @@ class NavBar extends React.Component<IProps, IState> {
                 </div>
                 <div className="title" style={{ fontSize: FontSizes.size16 }}>
                     <h2>
-                        {this.props.navBarOptions.title}
+                        {this.props.navBarOptions.title + ((this.props.profile != null && this.props.profile.isAdmin) ? " (admin)" : "")}
                     </h2>
                 </div>
                 <div className="profileNavBar">
