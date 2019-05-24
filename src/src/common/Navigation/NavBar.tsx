@@ -9,6 +9,7 @@ import './NavBar.css'
 import { Depths } from "@uifabric/fluent-theme/lib/fluent/FluentDepths";
 import { CommunicationColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
 import { FontSizes } from '@uifabric/fluent-theme/lib/fluent/FluentType';
+import { IContextualMenuItem } from "office-ui-fabric-react/lib/ContextualMenu";
 
 interface IProps {
     navBarOptions: INavBarOptions
@@ -33,6 +34,7 @@ class NavBar extends React.Component<IProps, IState> {
         this.handleRequestGoBack = this.handleRequestGoBack.bind(this);
         this.handleRequestToSignIn = this.handleRequestToSignIn.bind(this);
         this.openProfilePage = this.openProfilePage.bind(this);
+        this.openAdminMainPage = this.openAdminMainPage.bind(this);
         this.signOut = this.signOut.bind(this);
     }
 
@@ -48,6 +50,10 @@ class NavBar extends React.Component<IProps, IState> {
         this.props.history.push({ pathname: '/profile' });
     }
 
+    openAdminMainPage() {
+        this.props.history.push({ pathname: '/admin' });
+    }
+
     signOut() {
         this.setState({ anchorEl: null });
         AuthBackend.SignOut();
@@ -56,10 +62,31 @@ class NavBar extends React.Component<IProps, IState> {
     render() {
         let persona: IPersonaSharedProps = {}
 
+        let menu: IContextualMenuItem[] = [
+            {
+                key: 'profile',
+                text: 'Profile',
+                onClick: this.openProfilePage
+            },
+            {
+                key: 'signout',
+                text: 'SignOut',
+                onClick: this.signOut
+            }
+        ]
+
         if (this.props.profile != null) {
             persona = {
                 imageInitials: this.props.profile!.firstName.charAt(0),
                 text: this.props.profile!.firstName
+            }
+
+            if (this.props.profile.isAdmin) {
+                menu.splice(1, 0, {
+                    key: 'admin',
+                    text: "Admin",
+                    onClick: this.openAdminMainPage
+                });
             }
         }
 
@@ -90,18 +117,7 @@ class NavBar extends React.Component<IProps, IState> {
                                     className="profileNavBarButton"
                                     menuProps={{
                                         shouldFocusOnMount: true,
-                                        items: [
-                                            {
-                                                key: 'profile',
-                                                text: 'Profile',
-                                                onClick: this.openProfilePage
-                                            },
-                                            {
-                                                key: 'signout',
-                                                text: 'SignOut',
-                                                onClick: this.signOut
-                                            }
-                                        ]
+                                        items: menu
                                     }}
                                 >
                                     <Persona
