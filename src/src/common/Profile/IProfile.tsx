@@ -5,4 +5,5 @@ export default interface IProfile {
     picture: string | undefined;
     birthDate: number | undefined;
     gender: string | undefined;
+    isAdmin: boolean
 }
