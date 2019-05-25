@@ -1,6 +1,5 @@
 import React from "react";
 import QRCode from "./QRCode";
-import './QRCodePage.css'
 import CardPage from "../UIPages/CardPage";
 
 interface IProps {
