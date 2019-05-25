@@ -1,0 +1,14 @@
+.cardpage {
+    height: 100%;
+}
+
+.cardcenter {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.cardContent {
+    margin: 8px;
+}

@@ -1,6 +1,5 @@
 import React from "react";
 import { Router, Route, RouteComponentProps } from "react-router-dom";
-import { History, createBrowserHistory } from "history";
 import { StaticContext } from "react-router";
 import NavBar from "./Navigation/NavBar";
 import ProfilePage from "./Profile/ProfilePage";
@@ -8,14 +7,12 @@ import { INavBarOptions } from "./Navigation/INavBarOptions";
 import SignInPage from "./SignIn/SignInPage";
 import IProfile from "./Profile/IProfile";
 import Profile from "./Backend/Profile";
-import QrCodeReaderPage from "./QRCode/QRCodeReaderPage";
-import QrCodePage from "./QRCode/QRCodePage";
 import './MainPage.css';
+import Settings from "./Settings";
 
 interface IState {
     isAuth: boolean;
     profile: IProfile | null;
-    history: History<any>;
     navBarOptions: INavBarOptions,
     qrReader: string
 }
@@ -30,9 +27,6 @@ class MainPage extends React.Component<Props, IState>{
         this.state = {
             isAuth: false,
             profile: null,
-            history: createBrowserHistory({
-                basename: '/reactproject'
-            }),
             navBarOptions: new INavBarOptions("Main Page"),
             qrReader: ""
         }
@@ -73,10 +67,8 @@ class MainPage extends React.Component<Props, IState>{
     }
 
     async LoginConclude() {
-        var self = this;
-
         Profile.Get().then(() => {
-            self.state.history.push({ pathname: '/profile' });
+            Settings.history.push({ pathname: '/profile' });
         });
     }
 
@@ -84,12 +76,12 @@ class MainPage extends React.Component<Props, IState>{
 
         return (
             <div className="grid-container">
-                <NavBar isAuth={this.state.isAuth} history={this.state.history} profile={this.state.profile} navBarOptions={this.state.navBarOptions} />
+                <NavBar isAuth={this.state.isAuth} profile={this.state.profile} navBarOptions={this.state.navBarOptions} />
                 <div className="content">
-                    <Router history={this.state.history}>
+                    <Router history={Settings.history}>
                         {
                             (!this.state.isAuth) &&
-                            (
+                            ([
                                 <Route
                                     path="/signin/"
                                     render={
@@ -99,8 +91,9 @@ class MainPage extends React.Component<Props, IState>{
                                             )
                                         }
                                     }
+                                    key="signin"
                                 />
-                            )
+                            ])
                         }
                         {
 
@@ -116,28 +109,6 @@ class MainPage extends React.Component<Props, IState>{
                                         }
                                     }
                                     key="profile"
-                                />,
-                                <Route
-                                    path="/qrcode/"
-                                    render={
-                                        (props: RouteComponentProps<any, StaticContext, any>) => {
-                                            return (
-                                                <QrCodePage value={this.state.profile!.firstName} />
-                                            )
-                                        }
-                                    }
-                                    key="qrcode"
-                                />,
-                                <Route
-                                    path="/qrreader/"
-                                    render={
-                                        (props: RouteComponentProps<any, StaticContext, any>) => {
-                                            return (
-                                                <QrCodeReaderPage />
-                                            )
-                                        }
-                                    }
-                                    key="qrreader"
                                 />
                             ])
                         }

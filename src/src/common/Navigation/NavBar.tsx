@@ -1,4 +1,3 @@
-import { History } from "history";
 import React from "react";
 import { INavBarOptions } from "./INavBarOptions";
 import IProfile from "../Profile/IProfile";
@@ -10,12 +9,12 @@ import { Depths } from "@uifabric/fluent-theme/lib/fluent/FluentDepths";
 import { CommunicationColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
 import { FontSizes } from '@uifabric/fluent-theme/lib/fluent/FluentType';
 import { IContextualMenuItem } from "office-ui-fabric-react/lib/ContextualMenu";
+import Settings from "../Settings";
 
 interface IProps {
     navBarOptions: INavBarOptions
     profile: IProfile | null;
     isAuth: boolean;
-    history: History<any>;
 }
 
 interface IState {
@@ -39,19 +38,19 @@ class NavBar extends React.Component<IProps, IState> {
     }
 
     handleRequestGoBack() {
-        this.props.history.goBack();
+        Settings.history.goBack();
     }
 
     handleRequestToSignIn(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-        this.props.history.push({ pathname: '/signin' });
+        Settings.history.push({ pathname: '/signin' });
     }
 
     openProfilePage() {
-        this.props.history.push({ pathname: '/profile' });
+        Settings.history.push({ pathname: '/profile' });
     }
 
     openAdminMainPage() {
-        this.props.history.push({ pathname: '/admin' });
+        Settings.history.push({ pathname: '/admin' });
     }
 
     signOut() {

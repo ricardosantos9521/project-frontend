@@ -2,6 +2,7 @@ import React from "react";
 import QRCodeReader from "./QRCodeReader";
 import './QRCodeReaderPage.css'
 import { DefaultButton } from "office-ui-fabric-react/lib/Button";
+import CardPage from "../UIPages/CardPage";
 
 interface IProps {
 
@@ -37,7 +38,7 @@ class QrCodeReaderPage extends React.Component<IProps, IState> {
 
     render() {
         return (
-            <div style={{ width: "100%", height: "100%" }}>
+            <CardPage>
                 <div className="qrcodereadercontainer">
                     <QRCodeReader
                         onScan={this.onScan}
@@ -53,7 +54,7 @@ class QrCodeReaderPage extends React.Component<IProps, IState> {
                         />)
                     }
                 </div>
-            </div>
+            </CardPage>
         );
     }
 }
