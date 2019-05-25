@@ -4,7 +4,7 @@ import { StaticContext } from "react-router";
 import NavBar from "./Navigation/NavBar";
 import ProfilePage from "./Profile/ProfilePage";
 import { INavBarOptions } from "./Navigation/INavBarOptions";
-import SignInPage from "./SignIn/SignInPage";
+import SignInPage from "./Login/SignInBackend/SignInPage";
 import IProfile from "./Profile/IProfile";
 import Profile from "./Backend/Profile";
 import './MainPage.css';

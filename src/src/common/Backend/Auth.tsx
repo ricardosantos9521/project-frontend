@@ -1,4 +1,4 @@
-import { Token, TokenResponse } from "../SignIn/TokenResponse";
+import { Token, TokenResponse } from "./TokenResponse";
 import { Semaphore } from "prex/out/lib/semaphore";
 import Settings from "../Settings";
 import Profile from "./Profile";

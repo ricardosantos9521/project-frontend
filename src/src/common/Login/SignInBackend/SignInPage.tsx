@@ -1,9 +1,9 @@
 import React from 'react';
-import { INavBarOptions } from '../Navigation/INavBarOptions';
-import OAuthLogin from '../Login/OAuth/OAuthLogin';
+import { INavBarOptions } from '../../Navigation/INavBarOptions';
+import OAuthLogin from '../OAuth/OAuthLogin';
 import './SignInPage.css';
-import AuthBackend from '../Backend/Auth';
-import CardPage from '../UIPages/CardPage';
+import AuthBackend from '../../Backend/Auth';
+import CardPage from '../../UIPages/CardPage';
 
 interface IProps {
     LoginConclude(): void,
