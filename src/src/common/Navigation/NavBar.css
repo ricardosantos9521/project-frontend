@@ -6,8 +6,7 @@
     z-index: 1100;
     display: grid;
     grid-template-columns: auto 1fr auto;
-    /* background-color: #0078d4;
-    color: #fff; */
+    background-color: #fff;
 }
 
 .backButton {
