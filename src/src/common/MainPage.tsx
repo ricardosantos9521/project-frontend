@@ -91,6 +91,7 @@ class MainPage extends React.Component<Props, IState>{
                                             )
                                         }
                                     }
+                                    key="signin"
                                 />
                             ])
                         }
