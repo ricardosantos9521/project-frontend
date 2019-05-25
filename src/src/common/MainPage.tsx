@@ -9,6 +9,7 @@ import IProfile from "./Profile/IProfile";
 import Profile from "./Backend/Profile";
 import './MainPage.css';
 import Settings from "./Settings";
+import MainPageAdmin from "../admin/MainPageAdmin";
 
 interface IState {
     isAuth: boolean;
@@ -109,7 +110,19 @@ class MainPage extends React.Component<Props, IState>{
                                         }
                                     }
                                     key="profile"
-                                />
+                                />,
+                                (this.state.profile !== null && this.state.profile.isAdmin) &&
+                                (<Route
+                                    path="/admin"
+                                    render={
+                                        (props: RouteComponentProps<any, StaticContext, any>) => {
+                                            return (
+                                                <MainPageAdmin pathParent="/admin" />
+                                            )
+                                        }
+                                    }
+                                    key="admin"
+                                />)
                             ])
                         }
                     </Router>
