@@ -8,8 +8,6 @@ import { INavBarOptions } from "./Navigation/INavBarOptions";
 import SignInPage from "./SignIn/SignInPage";
 import IProfile from "./Profile/IProfile";
 import Profile from "./Backend/Profile";
-import QrCodeReaderPage from "./QRCode/QRCodeReaderPage";
-import QrCodePage from "./QRCode/QRCodePage";
 import './MainPage.css';
 
 interface IState {
@@ -89,7 +87,7 @@ class MainPage extends React.Component<Props, IState>{
                     <Router history={this.state.history}>
                         {
                             (!this.state.isAuth) &&
-                            (
+                            ([
                                 <Route
                                     path="/signin/"
                                     render={
@@ -100,7 +98,7 @@ class MainPage extends React.Component<Props, IState>{
                                         }
                                     }
                                 />
-                            )
+                            ])
                         }
                         {
 
@@ -116,28 +114,6 @@ class MainPage extends React.Component<Props, IState>{
                                         }
                                     }
                                     key="profile"
-                                />,
-                                <Route
-                                    path="/qrcode/"
-                                    render={
-                                        (props: RouteComponentProps<any, StaticContext, any>) => {
-                                            return (
-                                                <QrCodePage value={this.state.profile!.firstName} />
-                                            )
-                                        }
-                                    }
-                                    key="qrcode"
-                                />,
-                                <Route
-                                    path="/qrreader/"
-                                    render={
-                                        (props: RouteComponentProps<any, StaticContext, any>) => {
-                                            return (
-                                                <QrCodeReaderPage />
-                                            )
-                                        }
-                                    }
-                                    key="qrreader"
                                 />
                             ])
                         }
