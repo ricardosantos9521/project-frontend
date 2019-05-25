@@ -1,6 +1,7 @@
 import React from "react";
 import QRCode from "./QRCode";
 import './QRCodePage.css'
+import CardPage from "../UIPages/CardPage";
 
 interface IProps {
     value: string
@@ -9,9 +10,11 @@ interface IProps {
 class QrCodePage extends React.Component<IProps> {
     render() {
         return (
-            <div className="qrcodecontainer">
-                <QRCode value={this.props.value} />
-            </div>
+            <CardPage>
+                <div className="qrcodepage">
+                    <QRCode value={this.props.value} />
+                </div>
+            </CardPage>
         );
     }
 }
