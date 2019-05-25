@@ -9,6 +9,7 @@ import IProfile from "./Profile/IProfile";
 import Profile from "./Backend/Profile";
 import './MainPage.css';
 import Settings from "./Settings";
+import MainPageAdmin from "../admin/MainPageAdmin";
 import MainPageUser from "../user/MainPageUser";
 
 interface IState {
@@ -124,7 +125,19 @@ class MainPage extends React.Component<Props, IState>{
                                                 }
                                             }
                                             key="user"
-                                        />
+                                        />,
+                                        (this.state.profile.isAdmin) &&
+                                        (<Route
+                                            path="/admin"
+                                            render={
+                                                (props: RouteComponentProps<any, StaticContext, any>) => {
+                                                    return (
+                                                        <MainPageAdmin pathParent="/admin" />
+                                                    )
+                                                }
+                                            }
+                                            key="admin"
+                                        />)
                                     ]
                                 )
                             ])
