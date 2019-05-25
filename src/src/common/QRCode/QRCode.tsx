@@ -10,10 +10,10 @@ class QRCode extends React.Component<IProps> {
     render() {
         return (
             <QRCodeReact
+                {...{ style: { width: "100%", height: "auto" } }}
                 value={this.props.value}
                 renderAs="svg"
                 level="L"
-                size={400}
             />
         );
     }
