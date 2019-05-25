@@ -3,7 +3,6 @@ import { Router, Route, RouteComponentProps } from "react-router-dom";
 import { History, createBrowserHistory } from "history";
 import { StaticContext } from "react-router";
 import NavBar from "./Navigation/NavBar";
-import NavBottom from "./Navigation/NavBottom";
 import ProfilePage from "./Profile/ProfilePage";
 import { INavBarOptions } from "./Navigation/INavBarOptions";
 import SignInPage from "./SignIn/SignInPage";
@@ -144,7 +143,6 @@ class MainPage extends React.Component<Props, IState>{
                         }
                     </Router>
                 </div>
-                <NavBottom isAuth={this.state.isAuth} history={this.state.history} />
             </div>
         );
     }
