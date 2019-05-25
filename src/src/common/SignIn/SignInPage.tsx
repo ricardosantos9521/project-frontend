@@ -3,7 +3,7 @@ import { INavBarOptions } from '../Navigation/INavBarOptions';
 import OAuthLogin from '../OAuthLogin/OAuthLogin';
 import './SignInPage.css';
 import AuthBackend from '../Backend/Auth';
-import { Depths } from '@uifabric/fluent-theme/lib/fluent/FluentDepths';
+import CardPage from '../UIPages/CardPage';
 
 interface IProps {
     LoginConclude(): void,
@@ -27,12 +27,12 @@ class SignInPage extends React.Component<IProps, any> {
 
     render() {
         return (
-            <div className="signinpage">
-                <div className="oauthcontent" style={{ boxShadow: Depths.depth64 }}>
+            <CardPage>
+                <div className="oauthcontent">
                     <h4>SignIn with your account: </h4>
                     <OAuthLogin OAuthLoginConclude={this.OAuthLoginConclude} />
                 </div>
-            </div>
+            </CardPage>
         )
     }
 }
