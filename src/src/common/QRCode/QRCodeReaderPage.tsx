@@ -38,8 +38,7 @@ class QrCodeReaderPage extends React.Component<IProps, IState> {
 
     render() {
         return (
-            <CardPage>
-                <div className="qrcodereadercontainer">
+            <CardPage widthCard="400px">
                     <QRCodeReader
                         onScan={this.onScan}
                         scan={this.state.scan}
@@ -53,7 +52,6 @@ class QrCodeReaderPage extends React.Component<IProps, IState> {
                             onClick={this.onClickScan}
                         />)
                     }
-                </div>
             </CardPage>
         );
     }

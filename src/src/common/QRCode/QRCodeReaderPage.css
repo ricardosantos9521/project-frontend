@@ -1,7 +1,3 @@
-.qrcodereadercontainer {
-    min-width: 350px;
-}
-
 .buttonScanQRReader {
     width: 15%;
     position: absolute !important;

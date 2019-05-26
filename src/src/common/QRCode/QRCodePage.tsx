@@ -9,7 +9,7 @@ interface IProps {
 class QrCodePage extends React.Component<IProps> {
     render() {
         return (
-            <CardPage>
+            <CardPage widthCard="400px">
                 <div className="qrcodepage">
                     <QRCode value={this.props.value} />
                 </div>
