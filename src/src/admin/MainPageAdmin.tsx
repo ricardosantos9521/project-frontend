@@ -11,7 +11,7 @@ class MainPageAdmin extends React.Component<IProps>{
 
     render() {
         return (
-            <div className="admin-container">
+            <div className="admin-container" style={{ width: "100%", height: "100%" }}>
                 <Route
                     path={this.props.pathParent + "/qrreader"}
                     render={

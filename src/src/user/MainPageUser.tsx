@@ -13,7 +13,7 @@ class MainPageUser extends React.Component<IProps>{
 
     render() {
         return (
-            <div className="user-container">
+            <div className="user-container" style={{ width: "100%", height: "100%" }}>
                 <Route
                     path={this.props.pathParent + "/qrcode"}
                     render={
