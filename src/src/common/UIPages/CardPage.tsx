@@ -4,7 +4,8 @@ import { Depths } from "@uifabric/fluent-theme/lib/fluent/FluentDepths";
 import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
 
 interface IProps {
-    isLoading?: boolean
+    isLoading?: boolean,
+    widthCard?: string | number | undefined
 }
 
 class CardPage extends React.Component<IProps> {
@@ -13,7 +14,7 @@ class CardPage extends React.Component<IProps> {
             <div className="cardpage">
                 {
                     (!this.props.isLoading || this.props.isLoading === undefined) ?
-                        (<div className="cardcenter" style={{ boxShadow: Depths.depth64 }}>
+                        (<div className="cardcenter" style={{ boxShadow: Depths.depth64, width: this.props.widthCard }}>
                             <div className="cardContent">
                                 {this.props.children}
                             </div>
