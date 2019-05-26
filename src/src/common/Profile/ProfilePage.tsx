@@ -166,7 +166,7 @@ class ProfilePage extends React.Component<IProps, IState>{
 
     render() {
         return (
-            <CardPage isLoading={this.state.profile == null || this.state.persona == null}>
+            <CardPage isLoading={this.state.profile == null || this.state.persona == null} widthCard="max-content">
                 {
                     (this.state.profile !== null && this.state.persona !== null) &&
                     ([
