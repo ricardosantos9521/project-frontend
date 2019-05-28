@@ -11,6 +11,7 @@ import './MainPage.css';
 import Settings from "./Settings";
 import MainPageAdmin from "../admin/MainPageAdmin";
 import MainPageUser from "../user/MainPageUser";
+import MessageBar from "./MessageBar";
 
 interface IState {
     isAuth: boolean;
@@ -80,6 +81,7 @@ class MainPage extends React.Component<Props, IState>{
             <div className="grid-container">
                 <NavBar isAuth={this.state.isAuth} profile={this.state.profile} navBarOptions={this.state.navBarOptions} />
                 <div className="content">
+                    <MessageBar />
                     <Router history={Settings.history}>
                         {
                             (!this.state.isAuth) &&
