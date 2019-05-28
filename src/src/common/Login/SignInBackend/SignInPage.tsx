@@ -10,10 +10,18 @@ interface IProps {
     setNavBarOptions(newNavBarOptions: INavBarOptions): void,
 }
 
-class SignInPage extends React.Component<IProps, any> {
+interface IState {
+    isLoading: boolean
+}
 
-    constructor(props: any) {
+class SignInPage extends React.Component<IProps, IState> {
+
+    constructor(props: IProps) {
         super(props);
+
+        this.state = {
+            isLoading: false
+        }
 
         this.props.setNavBarOptions(new INavBarOptions("Login"));
 
@@ -21,13 +29,14 @@ class SignInPage extends React.Component<IProps, any> {
     }
 
     async OAuthLoginConclude(issuer: string, id_token: string) {
+        this.setState({ isLoading: true });
         await AuthBackend.GetToken(issuer, id_token);
         this.props.LoginConclude();
     }
 
     render() {
         return (
-            <CardPage>
+            <CardPage isLoading={this.state.isLoading}>
                 <div className="oauthcontent">
                     <h4>SignIn with your account: </h4>
                     <OAuthLogin OAuthLoginConclude={this.OAuthLoginConclude} />
