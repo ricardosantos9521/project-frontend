@@ -1,6 +1,7 @@
 import IProfile from "../Profile/IProfile";
 import Settings from "../Settings";
 import Auth from "./Auth";
+import MessageBar from "../MessageBar";
 
 class Profile {
     private static profile: IProfile | null = JSON.parse(localStorage.getItem("profile")!);
@@ -18,12 +19,17 @@ class Profile {
 
                     if (this.readyState !== 4) return;
 
-                    if (this.readyState === 4 && this.status === 200) {
-                        var profile: IProfile = JSON.parse(this.response);
-                        localStorage.setItem("profile", JSON.stringify(profile));
-                        self.profile = { ...profile };
-                        dispatchEvent(new CustomEvent("profileChanged", { detail: self.profile }));
-                        resolve(profile);
+                    if (this.readyState === 4) {
+                        if (this.status === 200) {
+                            var profile: IProfile = JSON.parse(this.response);
+                            localStorage.setItem("profile", JSON.stringify(profile));
+                            self.profile = { ...profile };
+                            dispatchEvent(new CustomEvent("profileChanged", { detail: self.profile }));
+                            resolve(profile);
+                        }
+                        else if (this.status === 401) {
+                            MessageBar.setMessage(this.responseText);
+                        }
                     }
                 });
 
@@ -46,8 +52,13 @@ class Profile {
 
                     if (this.readyState !== 4) return;
 
-                    if (this.readyState === 4 && this.status === 200) {
-                        resolve();
+                    if (this.readyState === 4) {
+                        if (this.status === 200) {
+                            resolve();
+                        }
+                        else if (this.status === 401) {
+                            MessageBar.setMessage(this.responseText);
+                        }
                     }
                 });
 
