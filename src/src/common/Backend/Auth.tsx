@@ -2,6 +2,7 @@ import { Token, TokenResponse } from "./TokenResponse";
 import { Semaphore } from "prex/out/lib/semaphore";
 import Settings from "../Settings";
 import Profile from "./Profile";
+import MessageBar from "../MessageBar";
 
 class Auth {
 
@@ -39,10 +40,15 @@ class Auth {
 
                 if (this.readyState !== 4) return;
 
-                if (this.readyState === 4 && this.status === 200) {
-                    var tokenResponse: TokenResponse = JSON.parse(this.responseText);
-                    localStorage.setItem("refreshToken", tokenResponse.refreshToken.token);
-                    resolve();
+                if (this.readyState === 4) {
+                    if (this.status === 200) {
+                        var tokenResponse: TokenResponse = JSON.parse(this.responseText);
+                        localStorage.setItem("refreshToken", tokenResponse.refreshToken.token);
+                        resolve();
+                    }
+                    else if (this.status === 401) {
+                        MessageBar.setMessage(this.responseText);
+                    }
                 }
             });
 
@@ -64,13 +70,16 @@ class Auth {
             xhr.addEventListener("readystatechange", function () {
                 if (this.readyState !== 4) return;
 
-                if (this.readyState === 4 && this.status === 200) {
-                    var tokenResponse: TokenResponse = JSON.parse(this.responseText);
-                    localStorage.setItem("refreshToken", tokenResponse.refreshToken.token);
-                    resolve(tokenResponse);
-                }
-                else if (this.readyState === 4 && this.status === 401) {
-                    self.SignOut();
+                if (this.readyState === 4) {
+                    if (this.status === 200) {
+                        var tokenResponse: TokenResponse = JSON.parse(this.responseText);
+                        localStorage.setItem("refreshToken", tokenResponse.refreshToken.token);
+                        resolve(tokenResponse);
+                    }
+                    else if (this.status === 401) {
+                        MessageBar.setMessage(this.responseText);
+                        self.SignOut();
+                    }
                 }
             });
 
