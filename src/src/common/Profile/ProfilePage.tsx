@@ -169,89 +169,92 @@ class ProfilePage extends React.Component<IProps, IState>{
             <CardPage isLoading={this.state.profile == null || this.state.persona == null} widthCard="max-content">
                 {
                     (this.state.profile !== null && this.state.persona !== null) &&
-                    ([
-                        <Persona
-                            {...this.state.persona!}
-                            size={PersonaSize.size72}
-                            className="avatar"
-                            style={{ boxShadow: Depths.depth64 }}
-                        />,
-                        <div className="profileContent">
-                            <div className="profileInputs">
-                                <div>
-                                    <TextField
-                                        label="First Name"
-                                        value={this.state.profile!.firstName}
-                                        onChange={this.onChangeFirstName}
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <TextField
-                                        label="Last Name"
-                                        value={this.state.profile!.lastName}
-                                        onChange={this.onChangeLastName}
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <TextField
-                                        label="Email"
-                                        value={this.state.profile!.email}
-                                        onChange={this.onChangeEmail}
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <DatePicker
-                                        label="Birth Date"
-                                        firstDayOfWeek={DayOfWeek.Sunday}
-                                        formatDate={this.formatDate}
-                                        strings={DayPickerStrings}
-                                        placeholder="Select a date..."
-                                        ariaLabel="Select a date"
-                                        value={(this.state.profile!.birthDate !== undefined && this.state.profile!.birthDate !== null) ? new Date(this.state.profile!.birthDate) : undefined}
-                                        onSelectDate={this.onChangeBirthDate}
-                                    />
-                                </div>
-                                <div>
-                                    <ChoiceGroup
-                                        options={[
-                                            {
-                                                key: 'male',
-                                                text: 'Male'
-                                            },
-                                            {
-                                                key: 'female',
-                                                text: 'Female',
-                                            }
-                                        ]}
-                                        selectedKey={this.state.profile!.gender}
-                                        onChange={this.onChangeGender}
-                                        label="Gender:"
-                                        required
-                                    />
+                    (
+                        <div>
+                            <Persona
+                                {...this.state.persona!}
+                                size={PersonaSize.size72}
+                                className="avatar"
+                                style={{ boxShadow: Depths.depth64 }}
+                                key="avatar"
+                            />
+                            <div className="profileContent" key="profile">
+                                <div className="profileInputs">
+                                    <div>
+                                        <TextField
+                                            label="First Name"
+                                            value={this.state.profile!.firstName}
+                                            onChange={this.onChangeFirstName}
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <TextField
+                                            label="Last Name"
+                                            value={this.state.profile!.lastName}
+                                            onChange={this.onChangeLastName}
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <TextField
+                                            label="Email"
+                                            value={this.state.profile!.email}
+                                            onChange={this.onChangeEmail}
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <DatePicker
+                                            label="Birth Date"
+                                            firstDayOfWeek={DayOfWeek.Sunday}
+                                            formatDate={this.formatDate}
+                                            strings={DayPickerStrings}
+                                            placeholder="Select a date..."
+                                            ariaLabel="Select a date"
+                                            value={(this.state.profile!.birthDate !== undefined && this.state.profile!.birthDate !== null) ? new Date(this.state.profile!.birthDate) : undefined}
+                                            onSelectDate={this.onChangeBirthDate}
+                                        />
+                                    </div>
+                                    <div>
+                                        <ChoiceGroup
+                                            options={[
+                                                {
+                                                    key: 'male',
+                                                    text: 'Male'
+                                                },
+                                                {
+                                                    key: 'female',
+                                                    text: 'Female',
+                                                }
+                                            ]}
+                                            selectedKey={this.state.profile!.gender}
+                                            onChange={this.onChangeGender}
+                                            label="Gender:"
+                                            required
+                                        />
 
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="profileButtons">
-                                <PrimaryButton
-                                    className="buttons"
-                                    disabled={!this.state.changed}
-                                    text="Submit Changes"
-                                    onClick={this.submitChanges}
-                                    allowDisabledFocus={true}
-                                />
-                                <DefaultButton
-                                    className="buttons"
-                                    disabled={!this.state.changed}
-                                    text="Clear Changes"
-                                    onClick={this.clearChanges}
-                                    allowDisabledFocus={true}
-                                />
+                                <div className="profileButtons">
+                                    <PrimaryButton
+                                        className="buttons"
+                                        disabled={!this.state.changed}
+                                        text="Submit Changes"
+                                        onClick={this.submitChanges}
+                                        allowDisabledFocus={true}
+                                    />
+                                    <DefaultButton
+                                        className="buttons"
+                                        disabled={!this.state.changed}
+                                        text="Clear Changes"
+                                        onClick={this.clearChanges}
+                                        allowDisabledFocus={true}
+                                    />
+                                </div>
                             </div>
                         </div>
-                    ])
+                    )
                 }
             </CardPage>
         );
