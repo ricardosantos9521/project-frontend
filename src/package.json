@@ -4,7 +4,7 @@
     "private": true,
     "dependencies": {
         "@uifabric/fluent-theme": "^0.16.10",
-        "office-ui-fabric-react": "^6.186.0",
+        "office-ui-fabric-react": "^6.187.0",
         "prex": "^0.4.6",
         "qrcode.react": "^0.9.3",
         "react": "^16.8.6",
@@ -13,7 +13,7 @@
         "react-qr-reader": "^2.2.1",
         "react-router-dom": "^5.0.0",
         "react-scripts": "3.0.1",
-        "typescript": "3.4.5"
+        "typescript": "3.5.1"
     },
     "scripts": {
         "start": "react-scripts start",
@@ -38,9 +38,9 @@
     },
     "devDependencies": {
         "@types/jest": "24.0.13",
-        "@types/node": "12.0.2",
+        "@types/node": "12.0.3",
         "@types/qrcode.react": "^0.8.2",
-        "@types/react": "16.8.18",
+        "@types/react": "16.8.19",
         "@types/react-dom": "16.8.4",
         "@types/react-qr-reader": "^2.1.2",
         "@types/react-router-dom": "^4.3.3"
