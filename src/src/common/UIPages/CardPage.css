@@ -4,6 +4,7 @@
 }
 
 .cardcenter {
+    width: max-content;
     max-width: 90%;
     position: relative;
     top: 50%;
