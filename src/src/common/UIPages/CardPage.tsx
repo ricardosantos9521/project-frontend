@@ -14,7 +14,15 @@ class CardPage extends React.Component<IProps> {
             <div className="cardpage">
                 {
                     (!this.props.isLoading || this.props.isLoading === undefined) ?
-                        (<div className="cardcenter" style={{ boxShadow: Depths.depth64, width: this.props.widthCard }}>
+                        (<div className="cardcenter"
+                            style={
+                                {
+                                    boxShadow: Depths.depth64,
+                                    width:
+                                        (this.props.widthCard === undefined) ?
+                                            this.props.widthCard :
+                                            ("min-content(90%, " + this.props.widthCard + ")")
+                                }}>
                             <div className="cardContent">
                                 {this.props.children}
                             </div>
