@@ -33,6 +33,8 @@ class Auth {
     }
 
     public static async GetToken(issuer: string, id_token: string): Promise<any> {
+        var self = this;
+
         return new Promise(function (resolve, reject) {
 
             var xhr = new XMLHttpRequest();
@@ -48,6 +50,7 @@ class Auth {
                     }
                     else if (this.status === 401) {
                         MessageBar.setMessage(this.responseText);
+                        self.SignOut();
                     }
                 }
             });
