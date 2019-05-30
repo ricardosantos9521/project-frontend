@@ -36,7 +36,7 @@ class SignInPage extends React.Component<IProps, IState> {
 
     render() {
         return (
-            <CardPage isLoading={this.state.isLoading}>
+            <CardPage isLoading={this.state.isLoading} loadingMessage="Doing login with server">
                 <div className="oauthcontent">
                     <h4>SignIn with your account: </h4>
                     <OAuthLogin OAuthLoginConclude={this.OAuthLoginConclude} />
