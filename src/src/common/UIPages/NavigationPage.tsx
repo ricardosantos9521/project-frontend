@@ -3,6 +3,7 @@ import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
 import './NavigationPage.css'
+import { Depths } from '@uifabric/fluent-theme/lib/fluent/FluentDepths';
 
 interface IProps {
     items: Array<MenuItem>,
@@ -43,6 +44,13 @@ class NavigationPage extends React.Component<IProps> {
                 <OverflowSet
                     className="navigationPageOverflow"
                     vertical
+                    styles={
+                        {
+                            root: {
+                                boxShadow: Depths.depth8,
+                            }
+                        }
+                    }
                     items={
                         this.props.items.map(x => {
                             return (
