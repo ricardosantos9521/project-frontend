@@ -1,10 +1,10 @@
 {
     "name": "app",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "private": true,
     "dependencies": {
         "@uifabric/fluent-theme": "^0.16.10",
-        "office-ui-fabric-react": "^6.187.1",
+        "office-ui-fabric-react": "^6.188.2",
         "prex": "^0.4.6",
         "qrcode.react": "^0.9.3",
         "react": "^16.8.6",
