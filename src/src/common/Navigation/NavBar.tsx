@@ -18,6 +18,7 @@ interface IProps {
 }
 
 interface IState {
+    mode: "admin" | "user" | "common"
 }
 
 class NavBar extends React.Component<IProps, IState> {
@@ -26,15 +27,29 @@ class NavBar extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            anchorEl: null
+            mode: "user"
         }
-
 
         this.handleRequestGoBack = this.handleRequestGoBack.bind(this);
         this.handleRequestToSignIn = this.handleRequestToSignIn.bind(this);
         this.openProfilePage = this.openProfilePage.bind(this);
-        this.openAdminMainPage = this.openAdminMainPage.bind(this);
         this.signOut = this.signOut.bind(this);
+
+        Settings.history.listen((p) => {
+            let path_aux = (p.pathname.charAt(0) === '/') ? (p.pathname.slice(1, p.pathname.length)) : p.pathname;
+            let path: string[] = path_aux.split("/");
+            switch (path[0]) {
+                case "admin":
+                    this.setState({ mode: "admin" });
+                    break;
+                case "user":
+                    this.setState({ mode: "user" });
+                    break;
+                default:
+                    this.setState({ mode: "common" });
+                    break;
+            }
+        })
     }
 
     handleRequestGoBack() {
@@ -49,12 +64,7 @@ class NavBar extends React.Component<IProps, IState> {
         Settings.history.push({ pathname: '/profile' });
     }
 
-    openAdminMainPage() {
-        Settings.history.push({ pathname: '/admin' });
-    }
-
     signOut() {
-        this.setState({ anchorEl: null });
         AuthBackend.SignOut();
     }
 
@@ -80,11 +90,23 @@ class NavBar extends React.Component<IProps, IState> {
                 text: this.props.profile!.firstName
             }
 
-            if (this.props.profile.isAdmin) {
+            if (this.state.mode !== "user") {
+                menu.splice(1, 0, {
+                    key: 'user',
+                    text: "User",
+                    onClick: () => {
+                        Settings.history.push({ pathname: '/user' });
+                    }
+                });
+            }
+
+            if (this.props.profile.isAdmin && (this.state.mode !== "admin")) {
                 menu.splice(1, 0, {
                     key: 'admin',
                     text: "Admin",
-                    onClick: this.openAdminMainPage
+                    onClick: () => {
+                        Settings.history.push({ pathname: '/admin' });
+                    }
                 });
             }
         }
