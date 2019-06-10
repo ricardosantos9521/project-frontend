@@ -45,6 +45,7 @@ class Auth {
                 if (this.readyState === 4) {
                     if (this.status === 200) {
                         var tokenResponse: TokenResponse = JSON.parse(this.responseText);
+                        self.accessToken = tokenResponse.accessToken;
                         localStorage.setItem("refreshToken", tokenResponse.refreshToken.token);
                         resolve();
                     }

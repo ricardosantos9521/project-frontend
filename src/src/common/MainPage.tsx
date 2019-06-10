@@ -69,7 +69,7 @@ class MainPage extends React.Component<Props, IState>{
         this.setState({ navBarOptions: newNavBarOptions });
     }
 
-    async LoginConclude() {
+    LoginConclude() {
         Profile.Get().then(() => {
             Settings.history.push({ pathname: '/profile' });
         });
