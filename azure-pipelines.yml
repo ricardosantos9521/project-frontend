@@ -66,6 +66,6 @@ stages:
         configuration: '$(System.DefaultWorkingDirectory)/drop/deployment.yaml'
         secretType: 'dockerRegistry'
         containerRegistryType: 'Container Registry'
-        dockerRegistryEndpoint: $(dockerRegistryEndpoint)
+        dockerRegistryEndpoint: 'github registry'
         secretName: 'githubsecret'
         checkLatest: true
