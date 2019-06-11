@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: reactproject
-        image: "docker.pkg.github.com/ricardosantos9521/reactproject/reactproject:BUILDNUMBER"
+        image: "registry.gitlab.com/ricardosantos9521/github/reactproject:BUILDNUMBER"
         ports:
         - containerPort: 80
         resources:
