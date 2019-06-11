@@ -67,5 +67,5 @@ stages:
         secretType: 'dockerRegistry'
         containerRegistryType: 'Container Registry'
         dockerRegistryEndpoint: 'github registry'
-        secretName: 'githubsecret'
+        secretName: 'dockerregistrysecret'
         checkLatest: true
