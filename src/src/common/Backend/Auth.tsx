@@ -64,7 +64,7 @@ class Auth {
         })
     }
 
-    private static GetNewToken(refreshToken: string): Promise<TokenResponse> {
+    private static GetNewToken(refreshToken: string): Promise<TokenResponse | null> {
         var self = this;
 
         return new Promise(function (resolve, reject) {
@@ -84,6 +84,7 @@ class Auth {
                         MessageBar.setMessage(this.responseText);
                         self.SignOut();
                     }
+                    resolve(null);
                 }
             });
 
