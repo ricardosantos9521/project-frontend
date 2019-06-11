@@ -16,18 +16,18 @@ class Auth {
         let accessToken: Token | null = null;
 
         if (this.accessToken === null) {
-            this.sempahore.release();
             let refreshToken = localStorage.getItem("refreshToken");
             if (refreshToken != null) {
                 var responseToken = await this.GetNewToken(refreshToken);
-                this.accessToken = responseToken.accessToken;
+                this.accessToken = responseToken!.accessToken;
                 accessToken = this.accessToken;
             }
         }
         else {
-            this.sempahore.release();
             accessToken = this.accessToken;
         }
+
+        this.sempahore.release();
 
         return accessToken;
     }
