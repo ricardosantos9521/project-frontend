@@ -53,6 +53,10 @@ class Auth {
                         MessageBar.setMessage(this.responseText);
                         self.SignOut();
                     }
+                    else {
+                        MessageBar.setMessage("Something happen try again later!");
+                    }
+                    resolve();
                 }
             });
 
@@ -83,6 +87,9 @@ class Auth {
                     else if (this.status === 401) {
                         MessageBar.setMessage(this.responseText);
                         self.SignOut();
+                    }
+                    else {
+                        MessageBar.setMessage("Something happen try again later!");
                     }
                     resolve(null);
                 }
