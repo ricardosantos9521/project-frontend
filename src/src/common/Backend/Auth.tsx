@@ -60,7 +60,7 @@ class Auth {
                 }
             });
 
-            xhr.open("POST", Settings.serverUrl + "/api/account/token");
+            xhr.open("POST", Settings.serverUrl + "/api/auth/token");
             xhr.setRequestHeader("Content-Type", "application/json");
 
             var tokenRequest = JSON.stringify({ "Issuer": issuer, "IdToken": id_token });
@@ -95,7 +95,7 @@ class Auth {
                 }
             });
 
-            xhr.open("POST", Settings.serverUrl + "/api/account/token/refresh");
+            xhr.open("POST", Settings.serverUrl + "/api/auth/token/refresh");
             xhr.setRequestHeader("Content-Type", "application/json");
 
             var data = JSON.stringify({
