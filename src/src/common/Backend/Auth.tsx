@@ -10,6 +10,16 @@ class Auth {
 
     private static sempahore = new Semaphore(1);
 
+    public static async Login(issuer: string, id_token: string): Promise<Boolean> {
+        var responseToken = await this.GetTokenWithIdToken(issuer, id_token);
+        if (responseToken !== null) {
+            this.accessToken = responseToken.accessToken;
+            localStorage.setItem("refreshToken", responseToken.refreshToken.token);
+            return true;
+        }
+        return false;
+    }
+
     public static async GetAcessToken(): Promise<Token | null> {
         await this.sempahore.wait();
 
@@ -18,9 +28,12 @@ class Auth {
         if (this.accessToken === null) {
             let refreshToken = localStorage.getItem("refreshToken");
             if (refreshToken != null) {
-                var responseToken = await this.GetNewToken(refreshToken);
-                this.accessToken = responseToken!.accessToken;
-                accessToken = this.accessToken;
+                var responseToken = await this.GetTokenWithRefreshToken(refreshToken);
+                if (responseToken !== null) {
+                    this.accessToken = responseToken.accessToken;
+                    localStorage.setItem("refreshToken", responseToken.refreshToken.token);
+                    accessToken = this.accessToken;
+                }
             }
         }
         else {
@@ -32,7 +45,7 @@ class Auth {
         return accessToken;
     }
 
-    public static async GetToken(issuer: string, id_token: string): Promise<any> {
+    public static async GetTokenWithIdToken(issuer: string, id_token: string): Promise<TokenResponse | null> {
         var self = this;
 
         return new Promise(function (resolve, reject) {
@@ -45,9 +58,7 @@ class Auth {
                 if (this.readyState === 4) {
                     if (this.status === 200) {
                         var tokenResponse: TokenResponse = JSON.parse(this.responseText);
-                        self.accessToken = tokenResponse.accessToken;
-                        localStorage.setItem("refreshToken", tokenResponse.refreshToken.token);
-                        resolve();
+                        resolve(tokenResponse);
                     }
                     else if (this.status === 401) {
                         MessageBar.setMessage(this.responseText);
@@ -56,7 +67,7 @@ class Auth {
                     else {
                         MessageBar.setMessage("Something happen try again later!");
                     }
-                    resolve();
+                    resolve(null);
                 }
             });
 
@@ -68,7 +79,7 @@ class Auth {
         })
     }
 
-    private static GetNewToken(refreshToken: string): Promise<TokenResponse | null> {
+    private static GetTokenWithRefreshToken(refreshToken: string): Promise<TokenResponse | null> {
         var self = this;
 
         return new Promise(function (resolve, reject) {
@@ -81,7 +92,6 @@ class Auth {
                 if (this.readyState === 4) {
                     if (this.status === 200) {
                         var tokenResponse: TokenResponse = JSON.parse(this.responseText);
-                        localStorage.setItem("refreshToken", tokenResponse.refreshToken.token);
                         resolve(tokenResponse);
                     }
                     else if (this.status === 401) {

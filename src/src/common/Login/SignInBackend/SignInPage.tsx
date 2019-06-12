@@ -30,8 +30,9 @@ class SignInPage extends React.Component<IProps, IState> {
 
     async OAuthLoginConclude(issuer: string, id_token: string) {
         this.setState({ isLoading: true });
-        await AuthBackend.GetToken(issuer, id_token);
-        this.props.LoginConclude();
+        if (await AuthBackend.Login(issuer, id_token)) {
+            this.props.LoginConclude();
+        }
     }
 
     render() {
