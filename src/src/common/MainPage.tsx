@@ -12,6 +12,7 @@ import Settings from "./Settings";
 import MainPageAdmin from "../admin/MainPageAdmin";
 import MainPageUser from "../user/MainPageUser";
 import MessageBar from "./MessageBar";
+import AboutPage from "./About/AboutPage";
 
 interface IState {
     isAuth: boolean;
@@ -84,64 +85,74 @@ class MainPage extends React.Component<Props, IState>{
                     <MessageBar />
                     <Router history={Settings.history}>
                         {
-                            (!this.state.isAuth) &&
                             ([
                                 <Route
-                                    path="/signin/"
+                                    path="/about"
                                     render={
                                         (props: RouteComponentProps<any, StaticContext, any>) => {
                                             return (
-                                                <SignInPage LoginConclude={this.LoginConclude} setNavBarOptions={this.setNavBarOptions} />
+                                                <AboutPage />
                                             )
                                         }
                                     }
-                                    key="signin"
-                                />
-                            ])
-                        }
-                        {
-
-                            (this.state.isAuth) &&
-                            ([
-                                <Route
-                                    path="/profile/"
-                                    render={
-                                        (props: RouteComponentProps<any, StaticContext, any>) => {
-                                            return (
-                                                <ProfilePage setNavBarOptions={this.setNavBarOptions} />
-                                            )
-                                        }
-                                    }
-                                    key="profile"
+                                    key="about"
                                 />,
-                                (this.state.profile !== null) &&
-                                (
-                                    [
-                                        <Route
-                                            path="/user/"
-                                            render={
-                                                (props: RouteComponentProps<any, StaticContext, any>) => {
-                                                    return (
-                                                        <MainPageUser pathParent="/user" profile={this.state.profile!} />
-                                                    )
-                                                }
+                                (!this.state.isAuth) &&
+                                ([
+                                    <Route
+                                        path="/signin/"
+                                        render={
+                                            (props: RouteComponentProps<any, StaticContext, any>) => {
+                                                return (
+                                                    <SignInPage LoginConclude={this.LoginConclude} setNavBarOptions={this.setNavBarOptions} />
+                                                )
                                             }
-                                            key="user"
-                                        />,
-                                        (this.state.profile.isAdmin) &&
-                                        (<Route
-                                            path="/admin"
-                                            render={
-                                                (props: RouteComponentProps<any, StaticContext, any>) => {
-                                                    return (
-                                                        <MainPageAdmin pathParent="/admin" />
-                                                    )
-                                                }
+                                        }
+                                        key="signin"
+                                    />
+                                ]),
+                                (this.state.isAuth) &&
+                                ([
+                                    <Route
+                                        path="/profile/"
+                                        render={
+                                            (props: RouteComponentProps<any, StaticContext, any>) => {
+                                                return (
+                                                    <ProfilePage setNavBarOptions={this.setNavBarOptions} />
+                                                )
                                             }
-                                            key="admin"
-                                        />)
-                                    ]
-                                )
+                                        }
+                                        key="profile"
+                                    />,
+                                    (this.state.profile !== null) &&
+                                    (
+                                        [
+                                            <Route
+                                                path="/user/"
+                                                render={
+                                                    (props: RouteComponentProps<any, StaticContext, any>) => {
+                                                        return (
+                                                            <MainPageUser pathParent="/user" profile={this.state.profile!} />
+                                                        )
+                                                    }
+                                                }
+                                                key="user"
+                                            />,
+                                            (this.state.profile.isAdmin) &&
+                                            (<Route
+                                                path="/admin"
+                                                render={
+                                                    (props: RouteComponentProps<any, StaticContext, any>) => {
+                                                        return (
+                                                            <MainPageAdmin pathParent="/admin" />
+                                                        )
+                                                    }
+                                                }
+                                                key="admin"
+                                            />)
+                                        ]
+                                    )
+                                ])
                             ])
                         }
                     </Router>
