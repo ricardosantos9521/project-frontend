@@ -130,7 +130,7 @@ class ProfilePage extends React.Component<IProps, IState>{
     onChangeBirthDate(date: Date | null | undefined) {
         if (this.state.profile !== null && date !== null && date !== undefined) {
             var profile = this.state.profile;
-            profile!.birthDate = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
+            profile!.birthDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0));
             this.propertyChanged("birthDate", profile);
             this.setState({ profile: profile });
         }
@@ -159,7 +159,8 @@ class ProfilePage extends React.Component<IProps, IState>{
 
     formatDate(date: Date | undefined): string {
         if (date !== undefined) {
-            return date.getUTCFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + (date.getDate())).slice(-2);
+            console.log(date);
+            return date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + (date.getDate())).slice(-2);
         }
         return "";
     }

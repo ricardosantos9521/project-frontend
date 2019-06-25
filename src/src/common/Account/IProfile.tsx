@@ -3,7 +3,7 @@ export default interface IProfile {
     lastName: string;
     email: string;
     picture: string | undefined;
-    birthDate: number | undefined;
+    birthDate: Date | undefined;
     gender: string | undefined;
     isAdmin: boolean
 }
