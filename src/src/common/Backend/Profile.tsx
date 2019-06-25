@@ -1,4 +1,4 @@
-import IProfile from "../Profile/IProfile";
+import IProfile from "../Account/IProfile";
 import Settings from "../Settings";
 import Auth from "./Auth";
 import MessageBar from "../MessageBar";

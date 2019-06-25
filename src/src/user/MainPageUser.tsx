@@ -2,7 +2,7 @@ import React from "react";
 import { Route, RouteComponentProps } from "react-router-dom";
 import { StaticContext } from "react-router";
 import QrCodePage from "../common/QRCode/QRCodePage";
-import IProfile from "../common/Profile/IProfile";
+import IProfile from "../common/Account/IProfile";
 import NavigationPage, { MenuItem } from "../common/UIPages/NavigationPage";
 import Settings from "../common/Settings";
 
