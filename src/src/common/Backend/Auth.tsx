@@ -116,7 +116,32 @@ class Auth {
         });
     }
 
+    private static logout(): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            var accessToken = await Auth.GetAcessToken();
+            if (accessToken != null) {
+
+                var xhr = new XMLHttpRequest();
+
+                xhr.addEventListener("readystatechange", function () {
+
+                    if (this.readyState !== 4) return;
+
+                    if (this.readyState === 4) {
+                        resolve();
+                    }
+                });
+
+                xhr.open("POST", Settings.serverUrl + "/api/session/logout");
+                xhr.setRequestHeader("Authorization", "Bearer " + accessToken!.token);
+
+                xhr.send(null);
+            }
+        });
+    }
+
     public static async SignOut() {
+        await this.logout();
         localStorage.removeItem("refreshToken");
         this.accessToken = null;
         Profile.DeleteLocalProfile();
