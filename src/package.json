@@ -4,7 +4,7 @@
     "private": true,
     "dependencies": {
         "@uifabric/fluent-theme": "7.0.2",
-        "office-ui-fabric-react": "7.5.3",
+        "office-ui-fabric-react": "7.6.1",
         "prex": "0.4.6",
         "qrcode.react": "0.9.3",
         "react": "16.8.6",
