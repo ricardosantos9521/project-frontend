@@ -3,6 +3,7 @@ import { Semaphore } from "prex/out/lib/semaphore";
 import Settings from "../Settings";
 import Profile from "./Profile";
 import MessageBar from "../MessageBar";
+import { ErrorMessages } from "../ErrorMessages";
 
 class Auth {
 
@@ -65,7 +66,7 @@ class Auth {
                         self.SignOut();
                     }
                     else if (this.status === 404 || this.status === 0) {
-                        MessageBar.setMessage("Cannot acess server!");
+                        MessageBar.setMessage(ErrorMessages.CannotAcessServer);
                     }
                     else {
                         MessageBar.setMessage("Something happen try again later!");
@@ -102,7 +103,7 @@ class Auth {
                         self.SignOut();
                     }
                     else if (this.status === 404 || this.status === 0) {
-                        MessageBar.setMessage("Cannot acess server!");
+                        MessageBar.setMessage(ErrorMessages.CannotAcessServer);
                     }
                     else {
                         console.log(this);
@@ -136,7 +137,7 @@ class Auth {
 
                     if (this.readyState === 4) {
                         if (this.status === 404 || this.status === 0) {
-                            MessageBar.setMessage("Cannot acess server!");
+                            MessageBar.setMessage(ErrorMessages.CannotAcessServer);
                         }
                         resolve();
                     }

@@ -5,6 +5,7 @@ import Settings from '../Settings';
 import CardPage from '../UIPages/CardPage';
 import MessageBar from '../MessageBar';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { ErrorMessages } from '../ErrorMessages';
 
 interface Session {
     sessionId: string,
@@ -56,7 +57,7 @@ class SessionsPage extends React.Component<IProps, IState>{
                         self.setState({ sessions: sessions, isLoading: false });
                     }
                     else if (this.status === 404 || this.status === 0) {
-                        MessageBar.setMessage("Cannot acess server!");
+                        MessageBar.setMessage(ErrorMessages.CannotAcessServer);
                     }
                     else {
                         MessageBar.setMessage(this.responseText);
@@ -89,7 +90,7 @@ class SessionsPage extends React.Component<IProps, IState>{
                         self.getSessions();
                     }
                     else if (this.status === 404 || this.status === 0) {
-                        MessageBar.setMessage("Cannot acess server!");
+                        MessageBar.setMessage(ErrorMessages.CannotAcessServer);
                     }
                     else {
                         MessageBar.setMessage(this.responseText);
