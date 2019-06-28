@@ -2,6 +2,7 @@ import IProfile from "../Account/IProfile";
 import Settings from "../Settings";
 import Auth from "./Auth";
 import MessageBar from "../MessageBar";
+import { ErrorMessages } from "../ErrorMessages";
 
 class Profile {
     private static profile: IProfile | null = JSON.parse(localStorage.getItem("profile")!);
@@ -27,7 +28,10 @@ class Profile {
                             dispatchEvent(new CustomEvent("profileChanged", { detail: self.profile }));
                             resolve(profile);
                         }
-                        else if (this.status === 401) {
+                        else if (this.status === 404 || this.status === 0) {
+                            MessageBar.setMessage(ErrorMessages.CannotAcessServer);
+                        }
+                        else {
                             MessageBar.setMessage(this.responseText);
                         }
                     }
@@ -56,7 +60,10 @@ class Profile {
                         if (this.status === 200) {
                             resolve();
                         }
-                        else if (this.status === 401) {
+                        else if (this.status === 404 || this.status === 0) {
+                            MessageBar.setMessage(ErrorMessages.CannotAcessServer);
+                        }
+                        else {
                             MessageBar.setMessage(this.responseText);
                         }
                     }
