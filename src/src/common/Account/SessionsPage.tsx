@@ -55,6 +55,12 @@ class SessionsPage extends React.Component<IProps, IState>{
                         console.log(sessions)
                         self.setState({ sessions: sessions, isLoading: false });
                     }
+                    else if (this.status === 404 || this.status === 0) {
+                        MessageBar.setMessage("Cannot acess server!");
+                    }
+                    else {
+                        MessageBar.setMessage(this.responseText);
+                    }
                 }
             });
 
@@ -81,6 +87,9 @@ class SessionsPage extends React.Component<IProps, IState>{
                     if (this.status === 200) {
                         self.setState({ sessions: [], isLoading: true });
                         self.getSessions();
+                    }
+                    else if (this.status === 404 || this.status === 0) {
+                        MessageBar.setMessage("Cannot acess server!");
                     }
                     else {
                         MessageBar.setMessage(this.responseText);

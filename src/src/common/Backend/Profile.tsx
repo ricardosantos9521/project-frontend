@@ -27,7 +27,10 @@ class Profile {
                             dispatchEvent(new CustomEvent("profileChanged", { detail: self.profile }));
                             resolve(profile);
                         }
-                        else if (this.status === 401) {
+                        else if (this.status === 404 || this.status === 0) {
+                            MessageBar.setMessage("Cannot acess server!");
+                        }
+                        else {
                             MessageBar.setMessage(this.responseText);
                         }
                     }
@@ -56,7 +59,10 @@ class Profile {
                         if (this.status === 200) {
                             resolve();
                         }
-                        else if (this.status === 401) {
+                        else if (this.status === 404 || this.status === 0) {
+                            MessageBar.setMessage("Cannot acess server!");
+                        }
+                        else {
                             MessageBar.setMessage(this.responseText);
                         }
                     }
