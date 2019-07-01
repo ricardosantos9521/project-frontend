@@ -4,7 +4,6 @@ import OAuthLogin from '../OAuth/OAuthLogin';
 import './SignInPage.css';
 import AuthBackend from '../../Backend/Auth';
 import CardPage from '../../UIPages/CardPage';
-import Settings from '../../Settings';
 
 interface IProps {
     LoginConclude(): void,
@@ -36,7 +35,6 @@ class SignInPage extends React.Component<IProps, IState> {
         }
         else {
             this.setState({ isLoading: false });
-            Settings.history.push({pathname: "/signin"});
         }
     }
 
