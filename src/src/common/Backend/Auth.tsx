@@ -151,8 +151,8 @@ class Auth {
         });
     }
 
-    public static async SignOut() {
-        await this.logout();
+    public static SignOut() {
+        this.logout();
         localStorage.removeItem("refreshToken");
         this.accessToken = null;
         Profile.DeleteLocalProfile();
