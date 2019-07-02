@@ -14,6 +14,8 @@ import MainPageUser from "../user/MainPageUser";
 import MessageBar from "./MessageBar";
 import AboutPage from "./About/AboutPage";
 import SessionsPage from "./Account/SessionsPage";
+import UploadFile from "./File/UploadFile";
+import Files from "./File/Files";
 
 interface IState {
     isAuth: boolean;
@@ -135,6 +137,28 @@ class MainPage extends React.Component<Props, IState>{
                                             }
                                         }
                                         key="sessions"
+                                    />,
+                                    <Route
+                                        path="/upload/"
+                                        render={
+                                            (props: RouteComponentProps<any, StaticContext, any>) => {
+                                                return (
+                                                    <UploadFile />
+                                                )
+                                            }
+                                        }
+                                        key="upload"
+                                    />,
+                                    <Route
+                                        path="/files/"
+                                        render={
+                                            (props: RouteComponentProps<any, StaticContext, any>) => {
+                                                return (
+                                                    <Files />
+                                                )
+                                            }
+                                        }
+                                        key="files"
                                     />,
                                     (this.state.profile !== null) &&
                                     (
