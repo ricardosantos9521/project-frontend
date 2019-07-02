@@ -70,7 +70,7 @@ class CardFile extends React.Component<IProps, IState>{
         const previewPropsUsingIcon: IDocumentCardPreviewProps = {
             previewImages: [
                 {
-                    previewIconProps: { iconName: 'OpenFile', styles: { root: { fontSize: 42, color: theme.palette.white } } },
+                    previewIconProps: { iconName: 'TextDocument', styles: { root: { fontSize: 42, color: theme.palette.white } } },
                     width: 144
                 }
             ],
