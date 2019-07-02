@@ -4,15 +4,14 @@ import { DocumentCard, DocumentCardType, DocumentCardDetails, DocumentCardTitle,
 import { getTheme } from 'office-ui-fabric-react/lib/Styling';
 import Auth from '../Backend/Auth';
 import Settings from '../Settings';
-import Profile from '../Backend/Profile';
 import IProfile from '../Account/IProfile';
 
 interface IProps {
-    file: IFileDescription
+    file: IFileDescription,
+    profile: IProfile
 }
 
 interface IState {
-    profile: IProfile | null
 }
 
 class CardFile extends React.Component<IProps, IState>{
@@ -20,16 +19,7 @@ class CardFile extends React.Component<IProps, IState>{
     constructor(props: IProps) {
         super(props);
 
-        this.state = {
-            profile: null
-        }
-
         this.getFile = this.getFile.bind(this);
-    }
-
-    async componentDidMount() {
-        let profile = await Profile.Get();
-        this.setState({ profile });
     }
 
     promptToDownload(blob: Blob, fileName: string) {
@@ -93,22 +83,18 @@ class CardFile extends React.Component<IProps, IState>{
                 <DocumentCardDetails>
                     <DocumentCardTitle title={this.props.file.fileName} />
                     <DocumentCardTitle title={this.props.file.contentType} showAsSecondaryTitle={true} />
-                    {
-                        (this.state.profile !== null) && (
-                            <DocumentCardActivity
-                                activity={new Date(this.props.file.creationDate).toLocaleString()}
-                                people={
-                                    [
-                                        {
-                                            name: this.state.profile.firstName + ' ' + this.state.profile.lastName,
-                                            profileImageSrc: '',
-                                            initials: this.state.profile.firstName.charAt(0)
-                                        }
-                                    ]
+                    <DocumentCardActivity
+                        activity={new Date(this.props.file.creationDate).toLocaleString()}
+                        people={
+                            [
+                                {
+                                    name: this.props.profile.firstName + ' ' + this.props.profile.lastName,
+                                    profileImageSrc: '',
+                                    initials: this.props.profile.firstName.charAt(0)
                                 }
-                            />
-                        )
-                    }
+                            ]
+                        }
+                    />
                 </DocumentCardDetails>
             </DocumentCard>
         );
