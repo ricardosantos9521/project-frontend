@@ -106,7 +106,6 @@ class Auth {
                         MessageBar.setMessage(ErrorMessages.CannotAcessServer);
                     }
                     else {
-                        console.log(this);
                         MessageBar.setMessage(this.statusText + ": Something happen try again later!");
                     }
                     resolve(null);
@@ -124,9 +123,8 @@ class Auth {
         });
     }
 
-    private static logout(): Promise<any> {
+    private static logout(accessToken: Token | null): Promise<any> {
         return new Promise(async (resolve, reject) => {
-            var accessToken = await Auth.GetAcessToken();
             if (accessToken != null) {
 
                 var xhr = new XMLHttpRequest();
@@ -151,8 +149,8 @@ class Auth {
         });
     }
 
-    public static async SignOut() {
-        await this.logout();
+    public static SignOut() {
+        this.logout(this.accessToken);
         localStorage.removeItem("refreshToken");
         this.accessToken = null;
         Profile.DeleteLocalProfile();
