@@ -53,7 +53,6 @@ class SessionsPage extends React.Component<IProps, IState>{
                 if (this.readyState === 4) {
                     if (this.status === 200) {
                         var sessions: Array<Session> = JSON.parse(this.response);
-                        console.log(sessions)
                         self.setState({ sessions: sessions, isLoading: false });
                     }
                     else if (this.status === 404 || this.status === 0) {

@@ -106,7 +106,6 @@ class Auth {
                         MessageBar.setMessage(ErrorMessages.CannotAcessServer);
                     }
                     else {
-                        console.log(this);
                         MessageBar.setMessage(this.statusText + ": Something happen try again later!");
                     }
                     resolve(null);
