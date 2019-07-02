@@ -4,11 +4,9 @@ import { DocumentCard, DocumentCardType, DocumentCardDetails, DocumentCardTitle,
 import { getTheme } from 'office-ui-fabric-react/lib/Styling';
 import Auth from '../Backend/Auth';
 import Settings from '../Settings';
-import IProfile from '../Account/IProfile';
 
 interface IProps {
-    file: IFileDescription,
-    profile: IProfile
+    file: IFileDescription
 }
 
 interface IState {
@@ -88,9 +86,9 @@ class CardFile extends React.Component<IProps, IState>{
                         people={
                             [
                                 {
-                                    name: this.props.profile.firstName + ' ' + this.props.profile.lastName,
+                                    name: this.props.file.createdBy.firstName + ' ' + this.props.file.createdBy.lastName,
                                     profileImageSrc: '',
-                                    initials: this.props.profile.firstName.charAt(0)
+                                    initials: this.props.file.createdBy.firstName.charAt(0)
                                 }
                             ]
                         }

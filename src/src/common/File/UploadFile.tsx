@@ -4,10 +4,8 @@ import Auth from '../Backend/Auth';
 import IFileDescription from './IFileDescription';
 import CardFile from './CardFile';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import IProfile from '../Account/IProfile';
 
 interface IProps {
-    profile: IProfile
 }
 
 interface IState {
@@ -72,7 +70,7 @@ class UploadFile extends React.Component<IProps, IState>{
                 <DefaultButton text="upload" onClick={this.uploadFile} disabled={!this.state.uploadButtonEnabled} />
                 {
                     (this.state.fileInfo !== null) && (
-                        <CardFile file={this.state.fileInfo} profile={this.props.profile} />
+                        <CardFile file={this.state.fileInfo} />
                     )
                 }
             </div >

@@ -3,10 +3,8 @@ import Settings from '../Settings';
 import Auth from '../Backend/Auth';
 import IFileDescription from './IFileDescription';
 import CardFile from './CardFile';
-import IProfile from '../Account/IProfile';
 
 interface IProps {
-    profile: IProfile
 }
 
 interface IState {
@@ -53,7 +51,7 @@ class Files extends React.Component<IProps, IState>{
                 {
                     this.state.files.map((file, key) => {
                         return (
-                            <CardFile file={file} key={key} profile={this.props.profile} />
+                            <CardFile file={file} key={key}/>
                         )
                     })
                 }

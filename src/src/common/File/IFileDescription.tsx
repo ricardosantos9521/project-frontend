@@ -6,5 +6,12 @@ export default interface IFileDescription {
     isPublic: boolean
     readPermission: boolean,
     writePermission: boolean,
-    creationDate: string
+    creationDate: string,
+    createdBy: ICreatedByProfile
+}
+
+interface ICreatedByProfile {
+    firstName: string,
+    lastName: string,
+    uniqueId: string
 }

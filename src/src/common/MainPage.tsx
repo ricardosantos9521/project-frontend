@@ -138,6 +138,28 @@ class MainPage extends React.Component<Props, IState>{
                                         }
                                         key="sessions"
                                     />,
+                                    <Route
+                                        path="/upload/"
+                                        render={
+                                            (props: RouteComponentProps<any, StaticContext, any>) => {
+                                                return (
+                                                    <UploadFile />
+                                                )
+                                            }
+                                        }
+                                        key="upload"
+                                    />,
+                                    <Route
+                                        path="/files/"
+                                        render={
+                                            (props: RouteComponentProps<any, StaticContext, any>) => {
+                                                return (
+                                                    <Files />
+                                                )
+                                            }
+                                        }
+                                        key="files"
+                                    />,
                                     (this.state.profile !== null) &&
                                     (
                                         [
@@ -151,28 +173,6 @@ class MainPage extends React.Component<Props, IState>{
                                                     }
                                                 }
                                                 key="user"
-                                            />,
-                                            <Route
-                                                path="/upload/"
-                                                render={
-                                                    (props: RouteComponentProps<any, StaticContext, any>) => {
-                                                        return (
-                                                            <UploadFile profile={this.state.profile!} />
-                                                        )
-                                                    }
-                                                }
-                                                key="upload"
-                                            />,
-                                            <Route
-                                                path="/files/"
-                                                render={
-                                                    (props: RouteComponentProps<any, StaticContext, any>) => {
-                                                        return (
-                                                            <Files profile={this.state.profile!} />
-                                                        )
-                                                    }
-                                                }
-                                                key="files"
                                             />,
                                             (this.state.profile.isAdmin) &&
                                             (<Route
