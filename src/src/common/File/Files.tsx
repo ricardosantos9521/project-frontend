@@ -3,6 +3,7 @@ import Settings from '../Settings';
 import Auth from '../Backend/Auth';
 import IFileDescription from './IFileDescription';
 import CardFile from './CardFile';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
 interface IProps {
 }
@@ -48,13 +49,15 @@ class Files extends React.Component<IProps, IState>{
 
         return (
             <div>
-                {
-                    this.state.files.map((file, key) => {
-                        return (
-                            <CardFile file={file} key={key}/>
-                        )
-                    })
-                }
+                <Stack gap={20}>
+                    {
+                        this.state.files.map((file, key) => {
+                            return (
+                                <CardFile file={file} key={key} />
+                            )
+                        })
+                    }
+                </Stack>
             </div >
         );
     }
