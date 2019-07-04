@@ -1,14 +1,14 @@
 import React from 'react';
 import IFileDescription from './IFileDescription';
-import { DocumentCard, DocumentCardType, DocumentCardDetails, DocumentCardTitle, DocumentCardActivity, IDocumentCardPreviewProps, DocumentCardPreview, DocumentCardActions } from 'office-ui-fabric-react/lib/DocumentCard';
+import { DocumentCard, DocumentCardType, DocumentCardDetails, DocumentCardTitle, DocumentCardActivity, DocumentCardActions } from 'office-ui-fabric-react/lib/DocumentCard';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { getTheme } from 'office-ui-fabric-react/lib/Styling';
 import Auth from '../Backend/Auth';
 import Settings from '../Settings';
 import { getId } from 'office-ui-fabric-react/lib/Utilities';
 import { PrimaryButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { Label } from 'office-ui-fabric-react/lib/Label';
 
 interface IProps {
     file: IFileDescription
@@ -89,7 +89,9 @@ class CardFile extends React.Component<IProps, IState>{
     }
 
     private openShareDialog() {
-        this.setState({ showShareDialog: true });
+        if (this.props.file.writePermission) {
+            this.setState({ showShareDialog: true });
+        }
     }
 
     private closeShareDialog() {
@@ -145,25 +147,9 @@ class CardFile extends React.Component<IProps, IState>{
     }
 
     render() {
-        console.log(this.props.file);
-
-        const theme = getTheme();
-        const previewPropsUsingIcon: IDocumentCardPreviewProps = {
-            previewImages: [
-                {
-                    previewIconProps: { iconName: 'TextDocument', styles: { root: { fontSize: 42, color: theme.palette.white } } },
-                    width: 144
-                }
-            ],
-            styles: { previewIcon: { backgroundColor: theme.palette.themePrimary } },
-        };
+        const permissions: string[] = [];
 
         const properties: IButtonProps[] = [
-            {
-                iconProps: { iconName: 'Share' },
-                onClick: this.openShareDialog,
-                ariaLabel: 'share action'
-            },
             {
                 iconProps: { iconName: 'Download' },
                 onClick: async () => { await this.getFile(this.props.file!.fileId) },
@@ -173,48 +159,46 @@ class CardFile extends React.Component<IProps, IState>{
 
         if (this.props.file.writePermission) {
             properties.push({
-                iconProps: { iconName: 'FieldChanged' },
-                ariaLabel: 'Write adn read'
-            })
+                iconProps: { iconName: 'Share' },
+                onClick: this.openShareDialog,
+                ariaLabel: 'share action'
+            });
+
+            permissions.push("Read");
+            permissions.push("Write");
         }
         else if (this.props.file.readPermission) {
-            properties.push({
-                iconProps: { iconName: 'FieldReadOnly' },
-                ariaLabel: 'Read only'
-            })
+            permissions.push("Read");
         }
 
         if (this.props.file.isPublic) {
-            properties.push({
-                iconProps: { iconName: 'Contact' },
-                ariaLabel: 'Public'
-            })
+            permissions.push("Public");
         }
-
 
         const _labelId: string = getId('dialogLabel');
         const _subTextId: string = getId('subTextLabel');
 
         return (
             <div>
-                <DocumentCard type={DocumentCardType.compact}>
-                    <DocumentCardPreview {...previewPropsUsingIcon} />
-                    <DocumentCardDetails>
-                        <DocumentCardTitle title={this.props.file.fileName} />
-                        <DocumentCardTitle title={this.props.file.contentType} showAsSecondaryTitle={true} />
-                        <DocumentCardActivity
-                            activity={new Date(this.props.file.creationDate).toLocaleString()}
-                            people={
-                                [
-                                    {
-                                        name: this.props.file.createdBy.firstName + ' ' + this.props.file.createdBy.lastName,
-                                        profileImageSrc: '',
-                                        initials: this.props.file.createdBy.firstName.charAt(0)
-                                    }
-                                ]
-                            }
-                        />
+                <DocumentCard type={DocumentCardType.normal}>
+                    <DocumentCardTitle title={this.props.file.fileName} />
+                    <DocumentCardDetails styles={{root: {textAlign: "center"}}}>
+                        <Label>
+                            {permissions.join(' / ')}
+                        </Label>
                     </DocumentCardDetails>
+                    <DocumentCardActivity
+                        activity={new Date(this.props.file.creationDate).toLocaleString()}
+                        people={
+                            [
+                                {
+                                    name: this.props.file.createdBy.firstName + ' ' + this.props.file.createdBy.lastName,
+                                    profileImageSrc: '',
+                                    initials: this.props.file.createdBy.firstName.charAt(0)
+                                }
+                            ]
+                        }
+                    />
                     <DocumentCardActions
                         actions={properties}
                     />
@@ -239,6 +223,7 @@ class CardFile extends React.Component<IProps, IState>{
                         label="UserId"
                         value={this.state.userIdToShare}
                         onChange={this.onChangeUserId}
+                        disabled={!(this.state.giveReadPermission || this.state.giveWritePermission)}
                         required
                     />
                     <Toggle
