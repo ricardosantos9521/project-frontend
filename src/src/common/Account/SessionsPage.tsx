@@ -2,10 +2,11 @@ import React from 'react';
 import { INavBarOptions } from '../Navigation/INavBarOptions';
 import Auth from '../Backend/Auth';
 import Settings from '../Settings';
-import CardPage from '../UIPages/CardPage';
 import MessageBar from '../MessageBar';
-import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { ErrorMessages } from '../ErrorMessages';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { DocumentCard, DocumentCardType, DocumentCardActions, DocumentCardTitle } from 'office-ui-fabric-react/lib/DocumentCard';
+import { Label } from 'office-ui-fabric-react/lib/Label';
 
 interface Session {
     sessionId: string,
@@ -41,7 +42,7 @@ class SessionsPage extends React.Component<IProps, IState>{
     async getSessions() {
         var self = this;
 
-        var accessToken = await Auth.GetAcessToken();
+        var accessToken = await Auth.GetAccessToken();
         if (accessToken != null) {
 
             var xhr = new XMLHttpRequest();
@@ -56,7 +57,7 @@ class SessionsPage extends React.Component<IProps, IState>{
                         self.setState({ sessions: sessions, isLoading: false });
                     }
                     else if (this.status === 404 || this.status === 0) {
-                        MessageBar.setMessage(ErrorMessages.CannotAcessServer);
+                        MessageBar.setMessage(ErrorMessages.CannotAccessServer);
                     }
                     else {
                         MessageBar.setMessage(this.responseText);
@@ -74,7 +75,7 @@ class SessionsPage extends React.Component<IProps, IState>{
     async deleteSession(sessionId: string) {
         var self = this;
 
-        var accessToken = await Auth.GetAcessToken();
+        var accessToken = await Auth.GetAccessToken();
         if (accessToken != null) {
 
             var xhr = new XMLHttpRequest();
@@ -89,7 +90,7 @@ class SessionsPage extends React.Component<IProps, IState>{
                         self.getSessions();
                     }
                     else if (this.status === 404 || this.status === 0) {
-                        MessageBar.setMessage(ErrorMessages.CannotAcessServer);
+                        MessageBar.setMessage(ErrorMessages.CannotAccessServer);
                     }
                     else {
                         MessageBar.setMessage(this.responseText);
@@ -107,23 +108,28 @@ class SessionsPage extends React.Component<IProps, IState>{
 
     render() {
         return (
-            <CardPage isLoading={this.state.isLoading}>
+            <Stack tokens={{ childrenGap: 20 }}>
                 {
                     this.state.sessions.map((session, key) => {
                         return (
-                            <div style={{ border: "2px solid black", padding: "10px", margin: "5px" }} key={key}>
-                                Session:
-                                <h5>{session.sessionId}</h5>
+                            <DocumentCard type={DocumentCardType.normal} key={key}>
+                                <DocumentCardTitle title={session.sessionId} />
                                 First login:
-                                <p>{new Date(session.firstLogin).toLocaleString()}</p>
+                                <Label>{new Date(session.firstLogin).toLocaleString()}</Label>
                                 Last token request:
-                                <p>{new Date(session.lastLogin).toLocaleString()}</p>
-                                <PrimaryButton text="Delete Session" onClick={() => { this.deleteSession(session.sessionId) }} />
-                            </div>
+                                <Label>{new Date(session.lastLogin).toLocaleString()}</Label>
+                                <DocumentCardActions
+                                    actions={[{
+                                        iconProps: { iconName: 'Delete' },
+                                        onClick: () => this.deleteSession(session.sessionId),
+                                        ariaLabel: 'Delete session'
+                                    }]}
+                                />
+                            </DocumentCard>
                         )
                     })
                 }
-            </CardPage>
+            </Stack>
         );
     }
 }

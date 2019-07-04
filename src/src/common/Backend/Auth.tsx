@@ -9,7 +9,7 @@ class Auth {
 
     private static accessToken: Token | null = null;
 
-    private static sempahore = new Semaphore(1);
+    private static semaphore = new Semaphore(1);
 
     public static async Login(issuer: string, id_token: string): Promise<Boolean> {
         var responseToken = await this.GetTokenWithIdToken(issuer, id_token);
@@ -21,8 +21,8 @@ class Auth {
         return false;
     }
 
-    public static async GetAcessToken(): Promise<Token | null> {
-        await this.sempahore.wait();
+    public static async GetAccessToken(): Promise<Token | null> {
+        await this.semaphore.wait();
 
         let accessToken: Token | null = null;
 
@@ -41,7 +41,7 @@ class Auth {
             accessToken = this.accessToken;
         }
 
-        this.sempahore.release();
+        this.semaphore.release();
 
         return accessToken;
     }
@@ -66,7 +66,7 @@ class Auth {
                         self.SignOut();
                     }
                     else if (this.status === 404 || this.status === 0) {
-                        MessageBar.setMessage(ErrorMessages.CannotAcessServer);
+                        MessageBar.setMessage(ErrorMessages.CannotAccessServer);
                     }
                     else {
                         MessageBar.setMessage("Something happen try again later!");
@@ -103,7 +103,7 @@ class Auth {
                         self.SignOut();
                     }
                     else if (this.status === 404 || this.status === 0) {
-                        MessageBar.setMessage(ErrorMessages.CannotAcessServer);
+                        MessageBar.setMessage(ErrorMessages.CannotAccessServer);
                     }
                     else {
                         MessageBar.setMessage(this.statusText + ": Something happen try again later!");
@@ -135,7 +135,7 @@ class Auth {
 
                     if (this.readyState === 4) {
                         if (this.status === 404 || this.status === 0) {
-                            MessageBar.setMessage(ErrorMessages.CannotAcessServer);
+                            MessageBar.setMessage(ErrorMessages.CannotAccessServer);
                         }
                         resolve();
                     }
