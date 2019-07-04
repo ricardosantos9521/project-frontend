@@ -49,7 +49,7 @@ class Files extends React.Component<IProps, IState>{
 
         return (
             <div>
-                <Stack gap={20}>
+                <Stack tokens={{ childrenGap: 20 }}>
                     {
                         this.state.files.map((file, key) => {
                             return (
