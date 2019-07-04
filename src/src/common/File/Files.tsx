@@ -27,7 +27,7 @@ class Files extends React.Component<IProps, IState>{
     async getFiles() {
         var self = this;
 
-        var accessToken = await Auth.GetAcessToken();
+        var accessToken = await Auth.GetAccessToken();
         if (accessToken != null) {
             var xhr = new XMLHttpRequest();
 

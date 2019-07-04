@@ -55,7 +55,7 @@ class CardFile extends React.Component<IProps, IState>{
     private async getFile(id: string) {
         var self = this;
 
-        var accessToken = await Auth.GetAcessToken();
+        var accessToken = await Auth.GetAccessToken();
         if (accessToken != null) {
             var xhr = new XMLHttpRequest();
 
@@ -115,7 +115,7 @@ class CardFile extends React.Component<IProps, IState>{
     }
 
     private async shareFile() {
-        var accessToken = await Auth.GetAcessToken();
+        var accessToken = await Auth.GetAccessToken();
         if (accessToken != null) {
             var self = this;
 

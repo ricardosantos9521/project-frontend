@@ -40,7 +40,7 @@ class UploadFile extends React.Component<IProps, IState>{
     async uploadFile() {
         if (this.file !== null) {
             var self = this;
-            var accessToken = await Auth.GetAcessToken();
+            var accessToken = await Auth.GetAccessToken();
             if (accessToken != null) {
                 var data = new FormData();
                 data.append("file", this.file);
