@@ -42,7 +42,7 @@ class SessionsPage extends React.Component<IProps, IState>{
     async getSessions() {
         var self = this;
 
-        var accessToken = await Auth.GetAcessToken();
+        var accessToken = await Auth.GetAccessToken();
         if (accessToken != null) {
 
             var xhr = new XMLHttpRequest();
@@ -57,7 +57,7 @@ class SessionsPage extends React.Component<IProps, IState>{
                         self.setState({ sessions: sessions, isLoading: false });
                     }
                     else if (this.status === 404 || this.status === 0) {
-                        MessageBar.setMessage(ErrorMessages.CannotAcessServer);
+                        MessageBar.setMessage(ErrorMessages.CannotAccessServer);
                     }
                     else {
                         MessageBar.setMessage(this.responseText);
@@ -75,7 +75,7 @@ class SessionsPage extends React.Component<IProps, IState>{
     async deleteSession(sessionId: string) {
         var self = this;
 
-        var accessToken = await Auth.GetAcessToken();
+        var accessToken = await Auth.GetAccessToken();
         if (accessToken != null) {
 
             var xhr = new XMLHttpRequest();
@@ -90,7 +90,7 @@ class SessionsPage extends React.Component<IProps, IState>{
                         self.getSessions();
                     }
                     else if (this.status === 404 || this.status === 0) {
-                        MessageBar.setMessage(ErrorMessages.CannotAcessServer);
+                        MessageBar.setMessage(ErrorMessages.CannotAccessServer);
                     }
                     else {
                         MessageBar.setMessage(this.responseText);

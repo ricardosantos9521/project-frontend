@@ -11,7 +11,7 @@ class Profile {
         var self = this;
 
         return new Promise(async function (resolve, reject) {
-            var accessToken = await Auth.GetAcessToken();
+            var accessToken = await Auth.GetAccessToken();
             if (accessToken != null) {
 
                 var xhr = new XMLHttpRequest();
@@ -29,7 +29,7 @@ class Profile {
                             resolve(profile);
                         }
                         else if (this.status === 404 || this.status === 0) {
-                            MessageBar.setMessage(ErrorMessages.CannotAcessServer);
+                            MessageBar.setMessage(ErrorMessages.CannotAccessServer);
                         }
                         else {
                             MessageBar.setMessage(this.responseText);
@@ -48,7 +48,7 @@ class Profile {
     public static Change(profile: IProfile, propertieschanged: Array<String>): Promise<any> {
 
         return new Promise(async function (resolve, reject) {
-            var accessToken = await Auth.GetAcessToken();
+            var accessToken = await Auth.GetAccessToken();
             if (accessToken != null) {
                 var xhr = new XMLHttpRequest();
 
@@ -61,7 +61,7 @@ class Profile {
                             resolve();
                         }
                         else if (this.status === 404 || this.status === 0) {
-                            MessageBar.setMessage(ErrorMessages.CannotAcessServer);
+                            MessageBar.setMessage(ErrorMessages.CannotAccessServer);
                         }
                         else {
                             MessageBar.setMessage(this.responseText);
