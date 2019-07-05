@@ -4,6 +4,7 @@ import Auth from '../Backend/Auth';
 import IFileDescription from './IFileDescription';
 import CardFile from './CardFile';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import './Files.css'
 
 interface IProps {
 }
@@ -49,7 +50,7 @@ class Files extends React.Component<IProps, IState>{
 
         return (
             <div>
-                <Stack tokens={{ childrenGap: 20 }}>
+                <Stack className="files" tokens={{ childrenGap: 20 }} horizontal disableShrink wrap horizontalAlign="center">
                     {
                         this.state.files.map((file, key) => {
                             return (

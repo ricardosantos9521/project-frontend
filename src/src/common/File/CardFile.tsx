@@ -212,7 +212,7 @@ class CardFile extends React.Component<IProps, IState>{
 
         return (
             <div>
-                <DocumentCard type={DocumentCardType.normal}>
+                <DocumentCard type={DocumentCardType.normal} styles={{ root: { margin: "auto" } }}>
                     <DocumentCardTitle title={this.props.file.fileName} />
                     <DocumentCardDetails styles={{ root: { textAlign: "center" } }}>
                         <Label>
