@@ -5,6 +5,7 @@ import IFileDescription from './IFileDescription';
 import CardFile from './CardFile';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import './Files.css'
+import MessageBar from '../MessageBar';
 
 interface IProps {
 }
@@ -34,8 +35,13 @@ class Files extends React.Component<IProps, IState>{
 
             xhr.addEventListener("readystatechange", async function () {
                 if (this.readyState === 4) {
-                    var files: Array<IFileDescription> = JSON.parse(this.responseText) as Array<IFileDescription>;
-                    self.setState({ files });
+                    if (this.status === 200) {
+                        var files: Array<IFileDescription> = JSON.parse(this.responseText) as Array<IFileDescription>;
+                        self.setState({ files });
+                    }
+                    else {
+                        MessageBar.setMessage(this.responseText);
+                    }
                 }
             });
 
