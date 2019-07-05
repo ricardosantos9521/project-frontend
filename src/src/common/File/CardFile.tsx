@@ -19,7 +19,8 @@ interface IProps {
 interface IState {
     showShareDialog: boolean,
     showDownloadDialog: boolean,
-    userIdToShare: string,
+    emailToShare: string,
+    emailErrorMessage: string,
     giveReadPermission: boolean,
     giveWritePermission: boolean,
     givePublicPermission: boolean,
@@ -34,7 +35,8 @@ class CardFile extends React.Component<IProps, IState>{
         this.state = {
             showShareDialog: false,
             showDownloadDialog: false,
-            userIdToShare: "",
+            emailToShare: "",
+            emailErrorMessage: "",
             giveReadPermission: false,
             giveWritePermission: false,
             givePublicPermission: false,
@@ -47,7 +49,7 @@ class CardFile extends React.Component<IProps, IState>{
         this.closeDownloadDialog = this.closeDownloadDialog.bind(this);
         this.openShareDialog = this.openShareDialog.bind(this);
         this.closeShareDialog = this.closeShareDialog.bind(this);
-        this.onChangeUserId = this.onChangeUserId.bind(this);
+        this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangeReadPermission = this.onChangeReadPermission.bind(this);
         this.onChangeWritePermission = this.onChangeWritePermission.bind(this);
         this.onChangePublicPermission = this.onChangePublicPermission.bind(this);
@@ -124,8 +126,8 @@ class CardFile extends React.Component<IProps, IState>{
         this.setState({ showShareDialog: false });
     }
 
-    private onChangeUserId(ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) {
-        this.setState({ userIdToShare: newValue! });
+    private onChangeEmail(ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) {
+        this.setState({ emailToShare: newValue! });
     }
 
     private onChangeReadPermission(ev?: React.FormEvent<HTMLElement | HTMLInputElement>, isChecked?: boolean): void {
@@ -148,7 +150,7 @@ class CardFile extends React.Component<IProps, IState>{
 
             var data = {
                 fileId: this.props.file!.fileId,
-                personUniqueId: this.state.userIdToShare,
+                email: this.state.emailToShare,
                 readPermission: this.state.giveReadPermission,
                 writePermission: this.state.giveWritePermission,
                 publicPermission: this.state.givePublicPermission
@@ -159,11 +161,19 @@ class CardFile extends React.Component<IProps, IState>{
 
             xhr.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
+                    console.log(this.status)
+                    console.log(this.responseText)
                     if (this.status === 200) {
                         self.closeShareDialog();
+                        self.setState({ emailErrorMessage: "" });
+                    }
+                    else if (this.status === 406) {
+                        self.setState({ emailErrorMessage: this.responseText });
                     }
                     else {
                         MessageBar.setMessage(this.responseText);
+                        self.closeShareDialog();
+                        self.setState({ emailErrorMessage: "" });
                     }
                 }
             });
@@ -263,10 +273,11 @@ class CardFile extends React.Component<IProps, IState>{
                     }}
                 >
                     <TextField
-                        label="UserId"
-                        value={this.state.userIdToShare}
-                        onChange={this.onChangeUserId}
+                        label="Email"
+                        value={this.state.emailToShare}
+                        onChange={this.onChangeEmail}
                         disabled={!(this.state.giveReadPermission || this.state.giveWritePermission)}
+                        errorMessage={(this.state.emailErrorMessage) ? this.state.emailErrorMessage : undefined}
                         required
                     />
                     <Checkbox
