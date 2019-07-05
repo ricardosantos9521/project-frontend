@@ -13,7 +13,7 @@ import MainPageAdmin from "../admin/MainPageAdmin";
 import MainPageUser from "../user/MainPageUser";
 import MessageBar from "./MessageBar";
 import AboutPage from "./About/AboutPage";
-import SessionsPage from "./Account/SessionsPage";
+import Sessions from "./Account/Sessions";
 
 interface IState {
     isAuth: boolean;
@@ -130,7 +130,7 @@ class MainPage extends React.Component<Props, IState>{
                                         render={
                                             (props: RouteComponentProps<any, StaticContext, any>) => {
                                                 return (
-                                                    <SessionsPage setNavBarOptions={this.setNavBarOptions} />
+                                                    <Sessions setNavBarOptions={this.setNavBarOptions} />
                                                 )
                                             }
                                         }
