@@ -7,6 +7,7 @@ import { ErrorMessages } from '../ErrorMessages';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { DocumentCard, DocumentCardType, DocumentCardActions, DocumentCardTitle } from 'office-ui-fabric-react/lib/DocumentCard';
 import { Label } from 'office-ui-fabric-react/lib/Label';
+import './Sessions.css'
 
 interface Session {
     sessionId: string,
@@ -24,7 +25,7 @@ interface IState {
     isLoading: boolean
 }
 
-class SessionsPage extends React.Component<IProps, IState>{
+class Sessions extends React.Component<IProps, IState>{
 
     constructor(props: IProps) {
         super(props);
@@ -108,7 +109,7 @@ class SessionsPage extends React.Component<IProps, IState>{
 
     render() {
         return (
-            <Stack tokens={{ childrenGap: 20 }}>
+            <Stack className="sessions" tokens={{ childrenGap: 20 }} horizontal disableShrink wrap horizontalAlign="center">
                 {
                     this.state.sessions.map((session, key) => {
                         return (
@@ -134,4 +135,4 @@ class SessionsPage extends React.Component<IProps, IState>{
     }
 }
 
-export default SessionsPage;
+export default Sessions;
