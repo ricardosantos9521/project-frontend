@@ -9,6 +9,7 @@ import { PrimaryButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Label } from 'office-ui-fabric-react/lib/Label';
+import MessageBar from '../MessageBar';
 
 interface IProps {
     file: IFileDescription
@@ -19,7 +20,8 @@ interface IState {
     userIdToShare: string,
     giveReadPermission: boolean,
     giveWritePermission: boolean,
-    givePublicPermission: boolean
+    givePublicPermission: boolean,
+    waitingForShareResponse: boolean
 }
 
 class CardFile extends React.Component<IProps, IState>{
@@ -32,7 +34,8 @@ class CardFile extends React.Component<IProps, IState>{
             userIdToShare: "",
             giveReadPermission: false,
             giveWritePermission: false,
-            givePublicPermission: false
+            givePublicPermission: false,
+            waitingForShareResponse: false
         }
 
         this.getFile = this.getFile.bind(this);
@@ -70,6 +73,9 @@ class CardFile extends React.Component<IProps, IState>{
                                 if (this.status === 200) {
                                     var blob: Blob = this.response as Blob;
                                     self.promptToDownload(blob, fileInfo.fileName);
+                                }
+                                else {
+                                    MessageBar.setMessage(this.responseText);
                                 }
                             }
                         });
@@ -115,6 +121,7 @@ class CardFile extends React.Component<IProps, IState>{
     }
 
     private async shareFile() {
+        await this.setState({ waitingForShareResponse: true });
         var accessToken = await Auth.GetAccessToken();
         if (accessToken != null) {
             var self = this;
@@ -132,18 +139,23 @@ class CardFile extends React.Component<IProps, IState>{
 
             xhr.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
-                    self.closeShareDialog();
-                    console.log(this.responseText);
+                    if (this.status === 200) {
+                        self.closeShareDialog();
+                    }
+                    else {
+                        MessageBar.setMessage(this.responseText);
+                    }
                 }
             });
 
-            xhr.open("POST", "http://localhost:5000/api/file/share");
+            xhr.open("POST", Settings.serverUrl + "/api/file/share");
             xhr.setRequestHeader("Content-Type", "application/json");
             xhr.setRequestHeader("Authorization", "Bearer " + accessToken!.token);
 
             xhr.send(JSON.stringify(data));
         }
 
+        await this.setState({ waitingForShareResponse: false });
     }
 
     render() {
@@ -219,42 +231,34 @@ class CardFile extends React.Component<IProps, IState>{
                         dragOptions: undefined
                     }}
                 >
-                    <p>
-                        <TextField
-                            label="UserId"
-                            value={this.state.userIdToShare}
-                            onChange={this.onChangeUserId}
-                            disabled={!(this.state.giveReadPermission || this.state.giveWritePermission)}
-                            required
-                        />
-                    </p>
-                    <p>
-                        <Checkbox
-                            label="Read Permissions"
-                            checked={this.state.giveReadPermission}
-                            onChange={this.onChangeReadPermission}
-                        />
-                    </p>
-                    <p>
-                        <Checkbox
-                            label="Write Permissions"
-                            checked={this.state.giveWritePermission}
-                            onChange={this.onChangeWritePermission}
-                        />
-                    </p>
+                    <TextField
+                        label="UserId"
+                        value={this.state.userIdToShare}
+                        onChange={this.onChangeUserId}
+                        disabled={!(this.state.giveReadPermission || this.state.giveWritePermission)}
+                        required
+                    />
+                    <Checkbox
+                        label="Read Permissions"
+                        checked={this.state.giveReadPermission}
+                        onChange={this.onChangeReadPermission}
+                    />
+                    <Checkbox
+                        label="Write Permissions"
+                        checked={this.state.giveWritePermission}
+                        onChange={this.onChangeWritePermission}
+                    />
                     <hr />
-                    <p>
-                        <Checkbox
-                            label="Public"
-                            checked={this.state.givePublicPermission}
-                            onChange={this.onChangePublicPermission}
-                        />
-                    </p>
+                    <Checkbox
+                        label="Public"
+                        checked={this.state.givePublicPermission}
+                        onChange={this.onChangePublicPermission}
+                    />
                     <DialogFooter>
-                        <PrimaryButton 
-                            text="Share" 
-                            onClick={async () => { await this.shareFile() }} 
-                            disabled={!(this.state.giveReadPermission || this.state.giveWritePermission || this.state.givePublicPermission)} 
+                        <PrimaryButton
+                            text="Share"
+                            onClick={async () => { await this.shareFile(); }}
+                            disabled={!(this.state.giveReadPermission || this.state.giveWritePermission || this.state.givePublicPermission) || this.state.waitingForShareResponse}
                         />
                     </DialogFooter>
                 </Dialog>
