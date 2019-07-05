@@ -10,6 +10,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import MessageBar from '../MessageBar';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 interface IProps {
     file: IFileDescription
@@ -17,6 +18,7 @@ interface IProps {
 
 interface IState {
     showShareDialog: boolean,
+    showDownloadDialog: boolean,
     userIdToShare: string,
     giveReadPermission: boolean,
     giveWritePermission: boolean,
@@ -31,6 +33,7 @@ class CardFile extends React.Component<IProps, IState>{
 
         this.state = {
             showShareDialog: false,
+            showDownloadDialog: false,
             userIdToShare: "",
             giveReadPermission: false,
             giveWritePermission: false,
@@ -38,7 +41,10 @@ class CardFile extends React.Component<IProps, IState>{
             waitingForShareResponse: false
         }
 
+        this.promptToDownload = this.promptToDownload.bind(this);
         this.getFile = this.getFile.bind(this);
+        this.openDownloadDialog = this.openDownloadDialog.bind(this);
+        this.closeDownloadDialog = this.closeDownloadDialog.bind(this);
         this.openShareDialog = this.openShareDialog.bind(this);
         this.closeShareDialog = this.closeShareDialog.bind(this);
         this.onChangeUserId = this.onChangeUserId.bind(this);
@@ -53,9 +59,12 @@ class CardFile extends React.Component<IProps, IState>{
         a.href = window.URL.createObjectURL(blob);
         a.download = fileName;
         a.dispatchEvent(new MouseEvent('click'));
+        this.setState({ showDownloadDialog: false });
     }
 
     private async getFile(id: string) {
+        await this.setState({ showDownloadDialog: true });
+
         var self = this;
 
         var accessToken = await Auth.GetAccessToken();
@@ -77,6 +86,7 @@ class CardFile extends React.Component<IProps, IState>{
                                 else {
                                     MessageBar.setMessage(this.responseText);
                                 }
+                                self.setState({ showDownloadDialog: false });
                             }
                         });
                         xhr2.open("GET", Settings.serverUrl + "/api/file/get/" + id);
@@ -92,6 +102,16 @@ class CardFile extends React.Component<IProps, IState>{
 
             xhr.send();
         }
+    }
+
+    private openDownloadDialog() {
+        if (this.props.file.readPermission) {
+            this.setState({ showDownloadDialog: true });
+        }
+    }
+
+    private closeDownloadDialog() {
+        this.setState({ showDownloadDialog: false });
     }
 
     private openShareDialog() {
@@ -215,6 +235,17 @@ class CardFile extends React.Component<IProps, IState>{
                         actions={properties}
                     />
                 </DocumentCard>
+                <Dialog
+                    hidden={!this.state.showDownloadDialog}
+                    onDismiss={this.closeDownloadDialog}
+                    dialogContentProps={{
+                        type: DialogType.normal,
+                        title: 'Downloading ' + this.props.file!.fileName,
+                        subText: ''
+                    }}
+                >
+                    <Spinner size={SpinnerSize.large} />
+                </Dialog>
                 <Dialog
                     hidden={!this.state.showShareDialog}
                     onDismiss={this.closeShareDialog}
