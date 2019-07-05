@@ -7,7 +7,7 @@ import Settings from '../Settings';
 import { getId } from 'office-ui-fabric-react/lib/Utilities';
 import { PrimaryButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 
 interface IProps {
@@ -102,16 +102,16 @@ class CardFile extends React.Component<IProps, IState>{
         this.setState({ userIdToShare: newValue! });
     }
 
-    private onChangeReadPermission(event: React.MouseEvent<HTMLElement>, checked?: boolean) {
-        this.setState({ giveReadPermission: checked! })
+    private onChangeReadPermission(ev?: React.FormEvent<HTMLElement | HTMLInputElement>, isChecked?: boolean): void {
+        this.setState({ giveReadPermission: isChecked! })
     }
 
-    private onChangeWritePermission(event: React.MouseEvent<HTMLElement>, checked?: boolean) {
-        this.setState({ giveWritePermission: checked! })
+    private onChangeWritePermission(ev?: React.FormEvent<HTMLElement | HTMLInputElement>, isChecked?: boolean): void {
+        this.setState({ giveWritePermission: isChecked! })
     }
 
-    private onChangePublicPermission(event: React.MouseEvent<HTMLElement>, checked?: boolean) {
-        this.setState({ givePublicPermission: checked! })
+    private onChangePublicPermission(ev?: React.FormEvent<HTMLElement | HTMLInputElement>, isChecked?: boolean): void {
+        this.setState({ givePublicPermission: isChecked! })
     }
 
     private async shareFile() {
@@ -182,7 +182,7 @@ class CardFile extends React.Component<IProps, IState>{
             <div>
                 <DocumentCard type={DocumentCardType.normal}>
                     <DocumentCardTitle title={this.props.file.fileName} />
-                    <DocumentCardDetails styles={{root: {textAlign: "center"}}}>
+                    <DocumentCardDetails styles={{ root: { textAlign: "center" } }}>
                         <Label>
                             {permissions.join(' / ')}
                         </Label>
@@ -219,36 +219,43 @@ class CardFile extends React.Component<IProps, IState>{
                         dragOptions: undefined
                     }}
                 >
-                    <TextField
-                        label="UserId"
-                        value={this.state.userIdToShare}
-                        onChange={this.onChangeUserId}
-                        disabled={!(this.state.giveReadPermission || this.state.giveWritePermission)}
-                        required
-                    />
-                    <Toggle
-                        label="Give Read Permissions"
-                        offText="No"
-                        onText="Yes"
-                        checked={this.state.giveReadPermission}
-                        onChange={this.onChangeReadPermission}
-                    />
-                    <Toggle
-                        label="Give Write Permissions"
-                        offText="No"
-                        onText="Yes"
-                        checked={this.state.giveWritePermission}
-                        onChange={this.onChangeWritePermission}
-                    />
-                    <Toggle
-                        label="Make it public"
-                        offText="No"
-                        onText="Yes"
-                        checked={this.state.givePublicPermission}
-                        onChange={this.onChangePublicPermission}
-                    />
+                    <p>
+                        <TextField
+                            label="UserId"
+                            value={this.state.userIdToShare}
+                            onChange={this.onChangeUserId}
+                            disabled={!(this.state.giveReadPermission || this.state.giveWritePermission)}
+                            required
+                        />
+                    </p>
+                    <p>
+                        <Checkbox
+                            label="Read Permissions"
+                            checked={this.state.giveReadPermission}
+                            onChange={this.onChangeReadPermission}
+                        />
+                    </p>
+                    <p>
+                        <Checkbox
+                            label="Write Permissions"
+                            checked={this.state.giveWritePermission}
+                            onChange={this.onChangeWritePermission}
+                        />
+                    </p>
+                    <hr />
+                    <p>
+                        <Checkbox
+                            label="Public"
+                            checked={this.state.givePublicPermission}
+                            onChange={this.onChangePublicPermission}
+                        />
+                    </p>
                     <DialogFooter>
-                        <PrimaryButton text="Share" onClick={async () => { await this.shareFile() }} />
+                        <PrimaryButton 
+                            text="Share" 
+                            onClick={async () => { await this.shareFile() }} 
+                            disabled={!(this.state.giveReadPermission || this.state.giveWritePermission || this.state.givePublicPermission)} 
+                        />
                     </DialogFooter>
                 </Dialog>
             </div >
