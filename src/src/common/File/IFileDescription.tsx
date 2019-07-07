@@ -7,7 +7,9 @@ export default interface IFileDescription {
     readPermission: boolean,
     writePermission: boolean,
     creationDate: string,
-    createdBy: ICreatedByProfile
+    createdBy: ICreatedByProfile,
+    readPermissionCount: number,
+    writePermissionCount: number
 }
 
 interface ICreatedByProfile {
