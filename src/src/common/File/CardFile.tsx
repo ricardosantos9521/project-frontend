@@ -5,7 +5,7 @@ import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dia
 import Auth from '../Backend/Auth';
 import Settings from '../Settings';
 import { getId } from 'office-ui-fabric-react/lib/Utilities';
-import { PrimaryButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
+import { PrimaryButton, IButtonProps, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Label } from 'office-ui-fabric-react/lib/Label';
@@ -13,12 +13,15 @@ import MessageBar from '../MessageBar';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 interface IProps {
-    file: IFileDescription
+    file: IFileDescription,
+    afterDeleteFile?: (file: IFileDescription) => void,
+    uniqueKey: number
 }
 
 interface IState {
     showShareDialog: boolean,
     showDownloadDialog: boolean,
+    showDeleteDialog: boolean,
     emailToShare: string,
     emailErrorMessage: string,
     giveReadPermission: boolean,
@@ -35,6 +38,7 @@ class CardFile extends React.Component<IProps, IState>{
         this.state = {
             showShareDialog: false,
             showDownloadDialog: false,
+            showDeleteDialog: false,
             emailToShare: "",
             emailErrorMessage: "",
             giveReadPermission: false,
@@ -43,10 +47,13 @@ class CardFile extends React.Component<IProps, IState>{
             waitingForShareResponse: false
         }
 
-        this.promptToDownload = this.promptToDownload.bind(this);
-        this.getFile = this.getFile.bind(this);
+        //download file
         this.openDownloadDialog = this.openDownloadDialog.bind(this);
         this.closeDownloadDialog = this.closeDownloadDialog.bind(this);
+        this.promptToDownload = this.promptToDownload.bind(this);
+        this.getFile = this.getFile.bind(this);
+
+        //share file
         this.openShareDialog = this.openShareDialog.bind(this);
         this.closeShareDialog = this.closeShareDialog.bind(this);
         this.onChangeEmail = this.onChangeEmail.bind(this);
@@ -54,6 +61,11 @@ class CardFile extends React.Component<IProps, IState>{
         this.onChangeWritePermission = this.onChangeWritePermission.bind(this);
         this.onChangePublicPermission = this.onChangePublicPermission.bind(this);
         this.shareFile = this.shareFile.bind(this);
+
+        //delete file
+        this.openDeleteDialog = this.openDeleteDialog.bind(this);
+        this.closeDeleteDialog = this.closeDeleteDialog.bind(this);
+        this.deleteFile = this.deleteFile.bind(this);
     }
 
     promptToDownload(blob: Blob, fileName: string) {
@@ -161,8 +173,6 @@ class CardFile extends React.Component<IProps, IState>{
 
             xhr.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
-                    console.log(this.status)
-                    console.log(this.responseText)
                     if (this.status === 200) {
                         self.closeShareDialog();
                         self.setState({ emailErrorMessage: "" });
@@ -188,6 +198,48 @@ class CardFile extends React.Component<IProps, IState>{
         await this.setState({ waitingForShareResponse: false });
     }
 
+    private openDeleteDialog() {
+        if (this.props.file.writePermission) {
+            this.setState({ showDeleteDialog: true });
+        }
+    }
+
+    private closeDeleteDialog() {
+        this.setState({ showDeleteDialog: false });
+    }
+
+    private async deleteFile() {
+        var accessToken = await Auth.GetAccessToken();
+        if (accessToken != null) {
+            var self = this;
+
+            var data = JSON.stringify(this.props.file.fileId);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === 4) {
+                    if (this.status === 200) {
+                        if (self.props.afterDeleteFile !== undefined) {
+                            self.props.afterDeleteFile(self.props.file);
+                        }
+                        self.closeDeleteDialog();
+                    }
+                    else {
+                        MessageBar.setMessage(this.responseText);
+                        self.closeDeleteDialog();
+                    }
+                }
+            });
+
+            xhr.open("POST", Settings.serverUrl + "/api/file/delete");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.setRequestHeader("Authorization", "Bearer " + accessToken!.token);
+
+            xhr.send(data);
+        }
+    }
+
     render() {
         const permissions: string[] = [];
 
@@ -200,11 +252,18 @@ class CardFile extends React.Component<IProps, IState>{
         ]
 
         if (this.props.file.writePermission) {
-            properties.push({
-                iconProps: { iconName: 'Share' },
-                onClick: this.openShareDialog,
-                ariaLabel: 'share action'
-            });
+            properties.push(
+                {
+                    iconProps: { iconName: 'Share' },
+                    onClick: this.openShareDialog,
+                    ariaLabel: 'share action'
+                },
+                {
+                    iconProps: { iconName: 'Delete' },
+                    onClick: this.openDeleteDialog,
+                    ariaLabel: 'delete action'
+                }
+            );
 
             permissions.push("Read");
             permissions.push("Write");
@@ -302,6 +361,24 @@ class CardFile extends React.Component<IProps, IState>{
                             onClick={async () => { await this.shareFile(); }}
                             disabled={!(this.state.giveReadPermission || this.state.giveWritePermission || this.state.givePublicPermission) || this.state.waitingForShareResponse}
                         />
+                    </DialogFooter>
+                </Dialog>
+                <Dialog
+                    hidden={!this.state.showDeleteDialog}
+                    onDismiss={this.closeDeleteDialog}
+                    dialogContentProps={{
+                        type: DialogType.normal,
+                        title: 'Delete File',
+                        subText: "Are you sure you want to delete file '" + this.props.file.fileName + "'?"
+                    }}
+                    modalProps={{
+                        isBlocking: true,
+                        styles: { main: { maxWidth: 450 } }
+                    }}
+                >
+                    <DialogFooter>
+                        <PrimaryButton onClick={async () => await this.deleteFile()} text="Yes" />
+                        <DefaultButton onClick={this.closeDeleteDialog} text="No" />
                     </DialogFooter>
                 </Dialog>
             </div >
