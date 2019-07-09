@@ -14,11 +14,11 @@ import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 interface IProps {
     file: IFileDescription,
-    afterDeleteFile?: (file: IFileDescription) => void,
     uniqueKey: number
 }
 
 interface IState {
+    showCardFile: boolean,
     showShareDialog: boolean,
     showDownloadDialog: boolean,
     showDeleteDialog: boolean,
@@ -36,6 +36,7 @@ class CardFile extends React.Component<IProps, IState>{
         super(props);
 
         this.state = {
+            showCardFile: true,
             showShareDialog: false,
             showDownloadDialog: false,
             showDeleteDialog: false,
@@ -220,9 +221,8 @@ class CardFile extends React.Component<IProps, IState>{
             xhr.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
                     if (this.status === 200) {
-                        if (self.props.afterDeleteFile !== undefined) {
-                            self.props.afterDeleteFile(self.props.file);
-                        }
+
+                        self.setState({ showCardFile: false })
                         self.closeDeleteDialog();
                     }
                     else {
@@ -280,108 +280,113 @@ class CardFile extends React.Component<IProps, IState>{
         const _subTextId: string = getId('subTextLabel');
 
         return (
-            <div>
-                <DocumentCard type={DocumentCardType.normal} styles={{ root: { margin: "auto" } }}>
-                    <DocumentCardTitle title={this.props.file.fileName} />
-                    <DocumentCardDetails styles={{ root: { textAlign: "center" } }}>
-                        <Label>
-                            {permissions.join(' / ')}
-                        </Label>
-                    </DocumentCardDetails>
-                    <DocumentCardActivity
-                        activity={new Date(this.props.file.creationDate).toLocaleString()}
-                        people={
-                            [
-                                {
-                                    name: this.props.file.createdBy.firstName + ' ' + this.props.file.createdBy.lastName,
-                                    profileImageSrc: '',
-                                    initials: this.props.file.createdBy.firstName.charAt(0)
+            (this.state.showCardFile) ?
+                (
+                    <div>
+                        <DocumentCard type={DocumentCardType.normal} styles={{ root: { margin: "auto" } }}>
+                            <DocumentCardTitle title={this.props.file.fileName} />
+                            <DocumentCardDetails styles={{ root: { textAlign: "center" } }}>
+                                <Label>
+                                    {permissions.join(' / ')}
+                                </Label>
+                            </DocumentCardDetails>
+                            <DocumentCardActivity
+                                activity={new Date(this.props.file.creationDate).toLocaleString()}
+                                people={
+                                    [
+                                        {
+                                            name: this.props.file.createdBy.firstName + ' ' + this.props.file.createdBy.lastName,
+                                            profileImageSrc: '',
+                                            initials: this.props.file.createdBy.firstName.charAt(0)
+                                        }
+                                    ]
                                 }
-                            ]
-                        }
-                    />
-                    <DocumentCardActions
-                        actions={properties}
-                    />
-                </DocumentCard>
-                <Dialog
-                    hidden={!this.state.showDownloadDialog}
-                    onDismiss={this.closeDownloadDialog}
-                    dialogContentProps={{
-                        type: DialogType.normal,
-                        title: 'Downloading ' + this.props.file!.fileName,
-                        subText: ''
-                    }}
-                >
-                    <Spinner size={SpinnerSize.large} />
-                </Dialog>
-                <Dialog
-                    hidden={!this.state.showShareDialog}
-                    onDismiss={this.closeShareDialog}
-                    dialogContentProps={{
-                        type: DialogType.normal,
-                        title: 'Share ' + this.props.file!.fileName,
-                        subText: ''
-                    }}
-                    modalProps={{
-                        titleAriaId: _labelId,
-                        subtitleAriaId: _subTextId,
-                        isBlocking: false,
-                        styles: { main: { maxWidth: 450 } },
-                        dragOptions: undefined
-                    }}
-                >
-                    <TextField
-                        label="Email"
-                        value={this.state.emailToShare}
-                        onChange={this.onChangeEmail}
-                        disabled={!(this.state.giveReadPermission || this.state.giveWritePermission)}
-                        errorMessage={(this.state.emailErrorMessage) ? this.state.emailErrorMessage : undefined}
-                        required
-                    />
-                    <Checkbox
-                        label="Read Permissions"
-                        checked={this.state.giveReadPermission}
-                        onChange={this.onChangeReadPermission}
-                    />
-                    <Checkbox
-                        label="Write Permissions"
-                        checked={this.state.giveWritePermission}
-                        onChange={this.onChangeWritePermission}
-                    />
-                    <hr />
-                    <Checkbox
-                        label="Public"
-                        checked={this.state.givePublicPermission}
-                        onChange={this.onChangePublicPermission}
-                    />
-                    <DialogFooter>
-                        <PrimaryButton
-                            text="Share"
-                            onClick={async () => { await this.shareFile(); }}
-                            disabled={!(this.state.giveReadPermission || this.state.giveWritePermission || this.state.givePublicPermission) || this.state.waitingForShareResponse}
-                        />
-                    </DialogFooter>
-                </Dialog>
-                <Dialog
-                    hidden={!this.state.showDeleteDialog}
-                    onDismiss={this.closeDeleteDialog}
-                    dialogContentProps={{
-                        type: DialogType.normal,
-                        title: 'Delete File',
-                        subText: "Are you sure you want to delete file '" + this.props.file.fileName + "'?"
-                    }}
-                    modalProps={{
-                        isBlocking: true,
-                        styles: { main: { maxWidth: 450 } }
-                    }}
-                >
-                    <DialogFooter>
-                        <PrimaryButton onClick={async () => await this.deleteFile()} text="Yes" />
-                        <DefaultButton onClick={this.closeDeleteDialog} text="No" />
-                    </DialogFooter>
-                </Dialog>
-            </div >
+                            />
+                            <DocumentCardActions
+                                actions={properties}
+                            />
+                        </DocumentCard>
+                        <Dialog
+                            hidden={!this.state.showDownloadDialog}
+                            onDismiss={this.closeDownloadDialog}
+                            dialogContentProps={{
+                                type: DialogType.normal,
+                                title: 'Downloading ' + this.props.file!.fileName,
+                                subText: ''
+                            }}
+                        >
+                            <Spinner size={SpinnerSize.large} />
+                        </Dialog>
+                        <Dialog
+                            hidden={!this.state.showShareDialog}
+                            onDismiss={this.closeShareDialog}
+                            dialogContentProps={{
+                                type: DialogType.normal,
+                                title: 'Share ' + this.props.file!.fileName,
+                                subText: ''
+                            }}
+                            modalProps={{
+                                titleAriaId: _labelId,
+                                subtitleAriaId: _subTextId,
+                                isBlocking: false,
+                                styles: { main: { maxWidth: 450 } },
+                                dragOptions: undefined
+                            }}
+                        >
+                            <TextField
+                                label="Email"
+                                value={this.state.emailToShare}
+                                onChange={this.onChangeEmail}
+                                disabled={!(this.state.giveReadPermission || this.state.giveWritePermission)}
+                                errorMessage={(this.state.emailErrorMessage) ? this.state.emailErrorMessage : undefined}
+                                required
+                            />
+                            <Checkbox
+                                label="Read Permissions"
+                                checked={this.state.giveReadPermission}
+                                onChange={this.onChangeReadPermission}
+                            />
+                            <Checkbox
+                                label="Write Permissions"
+                                checked={this.state.giveWritePermission}
+                                onChange={this.onChangeWritePermission}
+                            />
+                            <hr />
+                            <Checkbox
+                                label="Public"
+                                checked={this.state.givePublicPermission}
+                                onChange={this.onChangePublicPermission}
+                            />
+                            <DialogFooter>
+                                <PrimaryButton
+                                    text="Share"
+                                    onClick={async () => { await this.shareFile(); }}
+                                    disabled={!(this.state.giveReadPermission || this.state.giveWritePermission || this.state.givePublicPermission) || this.state.waitingForShareResponse}
+                                />
+                            </DialogFooter>
+                        </Dialog>
+                        <Dialog
+                            hidden={!this.state.showDeleteDialog}
+                            onDismiss={this.closeDeleteDialog}
+                            dialogContentProps={{
+                                type: DialogType.normal,
+                                title: 'Delete File',
+                                subText: "Are you sure you want to delete file '" + this.props.file.fileName + "'?"
+                            }}
+                            modalProps={{
+                                isBlocking: true,
+                                styles: { main: { maxWidth: 450 } }
+                            }}
+                        >
+                            <DialogFooter>
+                                <PrimaryButton onClick={async () => await this.deleteFile()} text="Yes" />
+                                <DefaultButton onClick={this.closeDeleteDialog} text="No" />
+                            </DialogFooter>
+                        </Dialog>
+                    </div >
+                )
+                :
+                null
         );
     }
 }

@@ -28,7 +28,6 @@ class Files extends React.Component<IProps, IState>{
         this.props.setNavBarOptions!(new INavBarOptions("Files", false));
 
         this.getFiles = this.getFiles.bind(this);
-        this.afterDeleteFile = this.afterDeleteFile.bind(this);
 
         this.getFiles();
     }
@@ -61,10 +60,6 @@ class Files extends React.Component<IProps, IState>{
         }
     }
 
-    private async afterDeleteFile(file: IFileDescription) {
-        await this.getFiles();
-    }
-
     render() {
 
         return (
@@ -73,7 +68,7 @@ class Files extends React.Component<IProps, IState>{
                     {
                         this.state.files.map((file, key) => {
                             return (
-                                <CardFile file={file} key={key} afterDeleteFile={async (file) => await this.afterDeleteFile(file)} uniqueKey={key} />
+                                <CardFile file={file} key={key} uniqueKey={key} />
                             )
                         })
                     }
