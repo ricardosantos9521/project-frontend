@@ -9,8 +9,8 @@ import { PrimaryButton, IButtonProps, DefaultButton } from 'office-ui-fabric-rea
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Label } from 'office-ui-fabric-react/lib/Label';
-import MessageBar from '../MessageBar';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import HandleResponsesXHR from '../Helper/HandleResponsesXHR';
 
 interface IProps {
     file: IFileDescription,
@@ -88,19 +88,25 @@ class CardFile extends React.Component<IProps, IState>{
 
             xhr.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
-                    if (this.status === 200) {
-                        var fileInfo: IFileDescription = JSON.parse(this.response);
+                    HandleResponsesXHR.handleOkResponse(this, (r) => {
+                        var fileInfo: IFileDescription = JSON.parse(r.response);
                         var xhr2 = new XMLHttpRequest();
 
                         xhr2.addEventListener("readystatechange", function () {
                             if (this.readyState === 4) {
-                                if (this.status === 200) {
-                                    var blob: Blob = this.response as Blob;
+                                HandleResponsesXHR.handleOkResponse(this, (r) => {
+                                    var blob: Blob = r.response as Blob;
                                     self.promptToDownload(blob, fileInfo.fileName);
-                                }
-                                else {
-                                    MessageBar.setMessage(this.responseText);
-                                }
+                                })
+
+                                HandleResponsesXHR.handleBadRequest(this);
+
+                                HandleResponsesXHR.handleCannotAccessServer(this);
+
+                                HandleResponsesXHR.handleUnauthorized(this);
+
+                                HandleResponsesXHR.handleNotAcceptable(this);
+
                                 self.setState({ showDownloadDialog: false });
                             }
                         });
@@ -109,7 +115,15 @@ class CardFile extends React.Component<IProps, IState>{
                         xhr2.setRequestHeader("Authorization", "Bearer " + accessToken!.token);
 
                         xhr2.send();
-                    }
+                    })
+
+                    HandleResponsesXHR.handleBadRequest(this);
+
+                    HandleResponsesXHR.handleCannotAccessServer(this);
+
+                    HandleResponsesXHR.handleUnauthorized(this);
+
+                    HandleResponsesXHR.handleNotAcceptable(this);
                 }
             });
             xhr.open("GET", Settings.serverUrl + "/api/file/info/" + id);
@@ -174,18 +188,25 @@ class CardFile extends React.Component<IProps, IState>{
 
             xhr.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
-                    if (this.status === 200) {
+                    HandleResponsesXHR.handleOkResponse(this, (r) => {
+                        self.closeShareDialog();
+                        self.setState({ emailErrorMessage: "" });
+                    })
+
+                    var errorFunction = (r: XMLHttpRequest) => {
                         self.closeShareDialog();
                         self.setState({ emailErrorMessage: "" });
                     }
-                    else if (this.status === 406) {
+
+                    HandleResponsesXHR.handleBadRequest(this);
+
+                    HandleResponsesXHR.handleCannotAccessServer(this, errorFunction);
+
+                    HandleResponsesXHR.handleUnauthorized(this, errorFunction);
+
+                    HandleResponsesXHR.handleNotAcceptable(this, (r) => {
                         self.setState({ emailErrorMessage: this.responseText });
-                    }
-                    else {
-                        MessageBar.setMessage(this.responseText);
-                        self.closeShareDialog();
-                        self.setState({ emailErrorMessage: "" });
-                    }
+                    });
                 }
             });
 
@@ -220,15 +241,22 @@ class CardFile extends React.Component<IProps, IState>{
 
             xhr.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
-                    if (this.status === 200) {
-
+                    HandleResponsesXHR.handleOkResponse(this, (r) => {
                         self.setState({ showCardFile: false })
                         self.closeDeleteDialog();
-                    }
-                    else {
-                        MessageBar.setMessage(this.responseText);
+                    })
+
+                    var elseFunction = (r: XMLHttpRequest) => {
                         self.closeDeleteDialog();
                     }
+
+                    HandleResponsesXHR.handleBadRequest(this, elseFunction);
+
+                    HandleResponsesXHR.handleCannotAccessServer(this, elseFunction);
+
+                    HandleResponsesXHR.handleNotAcceptable(this, elseFunction);
+
+                    HandleResponsesXHR.handleUnauthorized(this);
                 }
             });
 

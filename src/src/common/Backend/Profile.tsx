@@ -1,8 +1,7 @@
 import IProfile from "../Account/IProfile";
 import Settings from "../Settings";
 import Auth from "./Auth";
-import MessageBar from "../MessageBar";
-import { ErrorMessages } from "../ErrorMessages";
+import HandleResponsesXHR from "../Helper/HandleResponsesXHR";
 
 class Profile {
     private static profile: IProfile | null = JSON.parse(localStorage.getItem("profile")!);
@@ -17,23 +16,22 @@ class Profile {
                 var xhr = new XMLHttpRequest();
 
                 xhr.addEventListener("readystatechange", function () {
-
-                    if (this.readyState !== 4) return;
-
                     if (this.readyState === 4) {
-                        if (this.status === 200) {
-                            var profile: IProfile = JSON.parse(this.response);
+                        HandleResponsesXHR.handleOkResponse(this, (r) => {
+                            var profile: IProfile = JSON.parse(r.response);
                             localStorage.setItem("profile", JSON.stringify(profile));
                             self.profile = { ...profile };
                             dispatchEvent(new CustomEvent("profileChanged", { detail: self.profile }));
                             resolve(profile);
-                        }
-                        else if (this.status === 404 || this.status === 0) {
-                            MessageBar.setMessage(ErrorMessages.CannotAccessServer);
-                        }
-                        else {
-                            MessageBar.setMessage(this.responseText);
-                        }
+                        })
+
+                        HandleResponsesXHR.handleBadRequest(this);
+
+                        HandleResponsesXHR.handleCannotAccessServer(this);
+
+                        HandleResponsesXHR.handleUnauthorized(this);
+
+                        HandleResponsesXHR.handleNotAcceptable(this);
                     }
                 });
 
@@ -45,7 +43,7 @@ class Profile {
         });
     }
 
-    public static Change(profile: IProfile, propertieschanged: Array<String>): Promise<any> {
+    public static Change(profile: IProfile, propertiesChanged: Array<String>): Promise<any> {
 
         return new Promise(async function (resolve, reject) {
             var accessToken = await Auth.GetAccessToken();
@@ -53,19 +51,18 @@ class Profile {
                 var xhr = new XMLHttpRequest();
 
                 xhr.addEventListener("readystatechange", function () {
-
-                    if (this.readyState !== 4) return;
-
                     if (this.readyState === 4) {
-                        if (this.status === 200) {
+                        HandleResponsesXHR.handleOkResponse(this, (r) => {
                             resolve();
-                        }
-                        else if (this.status === 404 || this.status === 0) {
-                            MessageBar.setMessage(ErrorMessages.CannotAccessServer);
-                        }
-                        else {
-                            MessageBar.setMessage(this.responseText);
-                        }
+                        })
+
+                        HandleResponsesXHR.handleBadRequest(this);
+
+                        HandleResponsesXHR.handleCannotAccessServer(this);
+
+                        HandleResponsesXHR.handleUnauthorized(this);
+
+                        HandleResponsesXHR.handleNotAcceptable(this);
                     }
                 });
 
@@ -75,7 +72,7 @@ class Profile {
 
                 xhr.send(JSON.stringify({
                     "profile": profile,
-                    "propertieschanged": propertieschanged
+                    "propertiesChanged": propertiesChanged
                 }));
             }
         });
