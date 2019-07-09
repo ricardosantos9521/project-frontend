@@ -4,13 +4,8 @@ import Auth from '../Backend/Auth';
 import IFileDescription from './IFileDescription';
 import CardFile from './CardFile';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-<<<<<<< HEAD
 import { INavBarOptions } from '../Navigation/INavBarOptions';
-import MessageBar from '../MessageBar';
 import HandleResponsesXHR from '../Helper/HandleResponsesXHR';
-=======
-import HandleResponsesXHR from '../Helper/HandleResponsesXHR';
->>>>>>> 2343fff97cfa17522e750c293bbc33a6b9881c73
 
 interface IProps {
     setNavBarOptions?(newNavBarOptions: INavBarOptions): void
