@@ -3,17 +3,30 @@ import React from "react";
 import { MessageBar as MessageBarFabricUI, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 
 interface IState {
-    errorMessage: string | null
+    errorMessage: string | null,
 }
-
 
 class MessageBar extends React.Component<any, IState> {
 
     private static messageBar: MessageBar | null;
 
-    public static setMessage(errorMessage: string) {
+    private static lastTimeout: NodeJS.Timeout | null = null;
+
+    public static setMessage(errorMessage: string, isPersistent: boolean = false) {
         if (this.messageBar != null) {
-            this.messageBar.setMessage(errorMessage);
+            if (this.lastTimeout !== null) {
+                clearTimeout(this.lastTimeout);
+            }
+
+            this.messageBar!.setMessage(errorMessage);
+
+            this.lastTimeout = null;
+
+            if (!isPersistent) {
+                this.lastTimeout = setTimeout(() => {
+                    this.messageBar!.closeMessage();
+                }, 20000);
+            }
         }
     }
 
@@ -46,7 +59,12 @@ class MessageBar extends React.Component<any, IState> {
     render() {
         if (this.state.errorMessage !== null)
             return (
-                <MessageBarFabricUI messageBarType={MessageBarType.error} isMultiline={false} onDismiss={this.closeMessage} dismissButtonAriaLabel="Close">
+                <MessageBarFabricUI 
+                    messageBarType={MessageBarType.error} 
+                    isMultiline={true} 
+                    onDismiss={this.closeMessage} 
+                    dismissButtonAriaLabel="Close"
+                >
                     {this.state.errorMessage!}
                 </MessageBarFabricUI>
             );
