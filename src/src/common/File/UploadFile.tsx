@@ -4,6 +4,7 @@ import Auth from '../Backend/Auth';
 import IFileDescription from './IFileDescription';
 import CardFile from './CardFile';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import HandleResponsesXHR from '../Helper/HandleResponsesXHR';
 
 interface IProps {
 }
@@ -49,8 +50,18 @@ class UploadFile extends React.Component<IProps, IState>{
 
                 xhr.addEventListener("readystatechange", async function () {
                     if (this.readyState === 4) {
-                        var fileInfo = JSON.parse(this.responseText);
-                        self.setState({ fileInfo });
+                        HandleResponsesXHR.handleOkResponse(this, (r) => {
+                            var fileInfo = JSON.parse(r.responseText);
+                            self.setState({ fileInfo });
+                        })
+
+                        HandleResponsesXHR.handleBadRequest(this);
+
+                        HandleResponsesXHR.handleCannotAccessServer(this);
+
+                        HandleResponsesXHR.handleUnauthorized(this);
+
+                        HandleResponsesXHR.handleNotAcceptable(this);
                     }
                 });
 

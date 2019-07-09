@@ -2,8 +2,7 @@ import { Token, TokenResponse } from "./TokenResponse";
 import { Semaphore } from "prex/out/lib/semaphore";
 import Settings from "../Settings";
 import Profile from "./Profile";
-import MessageBar from "../MessageBar";
-import { ErrorMessages } from "../ErrorMessages";
+import HandleResponsesXHR from "../Helper/HandleResponsesXHR";
 
 class Auth {
 
@@ -53,24 +52,23 @@ class Auth {
 
             var xhr = new XMLHttpRequest();
             xhr.addEventListener("readystatechange", function () {
-
-                if (this.readyState !== 4) return;
-
                 if (this.readyState === 4) {
-                    if (this.status === 200) {
-                        var tokenResponse: TokenResponse = JSON.parse(this.responseText);
+
+                    HandleResponsesXHR.handleOkResponse(this, (r) => {
+                        var tokenResponse: TokenResponse = JSON.parse(r.responseText);
                         resolve(tokenResponse);
-                    }
-                    else if (this.status === 401) {
-                        MessageBar.setMessage(this.responseText);
+                    });
+
+                    HandleResponsesXHR.handleBadRequest(this);
+
+                    HandleResponsesXHR.handleNotAcceptable(this);
+
+                    HandleResponsesXHR.handleUnauthorized(this, (r) => {
                         self.SignOut();
-                    }
-                    else if (this.status === 404 || this.status === 0) {
-                        MessageBar.setMessage(ErrorMessages.CannotAccessServer);
-                    }
-                    else {
-                        MessageBar.setMessage("Something happen try again later!");
-                    }
+                    });
+
+                    HandleResponsesXHR.handleCannotAccessServer(this);
+
                     resolve(null);
                 }
             });
@@ -91,23 +89,22 @@ class Auth {
             var xhr = new XMLHttpRequest();
 
             xhr.addEventListener("readystatechange", function () {
-                if (this.readyState !== 4) return;
-
                 if (this.readyState === 4) {
-                    if (this.status === 200) {
-                        var tokenResponse: TokenResponse = JSON.parse(this.responseText);
+
+                    HandleResponsesXHR.handleOkResponse(this, (r) => {
+                        var tokenResponse: TokenResponse = JSON.parse(r.responseText);
                         resolve(tokenResponse);
-                    }
-                    else if (this.status === 401) {
-                        MessageBar.setMessage(this.responseText);
+                    })
+
+                    HandleResponsesXHR.handleBadRequest(this);
+
+                    HandleResponsesXHR.handleUnauthorized(this, (r) => {
                         self.SignOut();
-                    }
-                    else if (this.status === 404 || this.status === 0) {
-                        MessageBar.setMessage(ErrorMessages.CannotAccessServer);
-                    }
-                    else {
-                        MessageBar.setMessage(this.statusText + ": Something happen try again later!");
-                    }
+                    })
+
+                    HandleResponsesXHR.handleNotAcceptable(this);
+
+                    HandleResponsesXHR.handleCannotAccessServer(this);
                     resolve(null);
                 }
             });
@@ -130,13 +127,7 @@ class Auth {
                 var xhr = new XMLHttpRequest();
 
                 xhr.addEventListener("readystatechange", function () {
-
-                    if (this.readyState !== 4) return;
-
                     if (this.readyState === 4) {
-                        if (this.status === 404 || this.status === 0) {
-                            MessageBar.setMessage(ErrorMessages.CannotAccessServer);
-                        }
                         resolve();
                     }
                 });

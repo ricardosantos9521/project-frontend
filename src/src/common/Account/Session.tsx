@@ -1,13 +1,12 @@
 import React from 'react';
 import Auth from '../Backend/Auth';
 import Settings from '../Settings';
-import MessageBar from '../MessageBar';
-import { ErrorMessages } from '../ErrorMessages';
 import { DocumentCard, DocumentCardType, DocumentCardActions, DocumentCardTitle, DocumentCardDetails } from 'office-ui-fabric-react/lib/DocumentCard';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import './Sessions.css'
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import HandleResponsesXHR from '../Helper/HandleResponsesXHR';
 
 export interface ISession {
     sessionId: string,
@@ -56,19 +55,19 @@ class Session extends React.Component<IProps, IState>{
             var xhr = new XMLHttpRequest();
 
             xhr.addEventListener("readystatechange", function () {
-
-                if (this.readyState !== 4) return;
-
                 if (this.readyState === 4) {
-                    if (this.status === 200) {
+                    HandleResponsesXHR.handleOkResponse(this, (r) => {
                         self.props!.updateSessions();
-                    }
-                    else if (this.status === 404 || this.status === 0) {
-                        MessageBar.setMessage(ErrorMessages.CannotAccessServer);
-                    }
-                    else {
-                        MessageBar.setMessage(this.responseText);
-                    }
+                    });
+
+                    HandleResponsesXHR.handleBadRequest(this);
+
+                    HandleResponsesXHR.handleCannotAccessServer(this);
+
+                    HandleResponsesXHR.handleUnauthorized(this);
+
+                    HandleResponsesXHR.handleNotAcceptable(this);
+
                     self.closeSessionDeleteDialog();
                 }
             });

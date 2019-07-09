@@ -5,7 +5,7 @@ import IFileDescription from './IFileDescription';
 import CardFile from './CardFile';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import './Files.css'
-import MessageBar from '../MessageBar';
+import HandleResponsesXHR from '../Helper/HandleResponsesXHR';
 
 interface IProps {
 }
@@ -35,13 +35,18 @@ class Files extends React.Component<IProps, IState>{
 
             xhr.addEventListener("readystatechange", async function () {
                 if (this.readyState === 4) {
-                    if (this.status === 200) {
-                        var files: Array<IFileDescription> = JSON.parse(this.responseText) as Array<IFileDescription>;
+                    HandleResponsesXHR.handleOkResponse(this, (r) =>{
+                        var files: Array<IFileDescription> = JSON.parse(r.responseText) as Array<IFileDescription>;
                         self.setState({ files });
-                    }
-                    else {
-                        MessageBar.setMessage(this.responseText);
-                    }
+                    })
+
+                    HandleResponsesXHR.handleBadRequest(this);
+
+                    HandleResponsesXHR.handleCannotAccessServer(this);
+
+                    HandleResponsesXHR.handleUnauthorized(this);
+
+                    HandleResponsesXHR.handleNotAcceptable(this);
                 }
             });
 

@@ -2,11 +2,10 @@ import React from 'react';
 import { INavBarOptions } from '../Navigation/INavBarOptions';
 import Auth from '../Backend/Auth';
 import Settings from '../Settings';
-import MessageBar from '../MessageBar';
-import { ErrorMessages } from '../ErrorMessages';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import './Sessions.css'
 import Session, { ISession } from './Session';
+import HandleResponsesXHR from '../Helper/HandleResponsesXHR';
 
 interface IProps {
     setNavBarOptions?(newNavBarOptions: INavBarOptions): void
@@ -41,20 +40,20 @@ class Sessions extends React.Component<IProps, IState>{
             var xhr = new XMLHttpRequest();
 
             xhr.addEventListener("readystatechange", function () {
-
-                if (this.readyState !== 4) return;
-
                 if (this.readyState === 4) {
-                    if (this.status === 200) {
-                        var sessions: Array<ISession> = JSON.parse(this.response);
+
+                    HandleResponsesXHR.handleOkResponse(this, (r) => {
+                        var sessions: Array<ISession> = JSON.parse(r.response);
                         self.setState({ sessions: sessions });
-                    }
-                    else if (this.status === 404 || this.status === 0) {
-                        MessageBar.setMessage(ErrorMessages.CannotAccessServer);
-                    }
-                    else {
-                        MessageBar.setMessage(this.responseText);
-                    }
+                    })
+
+                    HandleResponsesXHR.handleBadRequest(this);
+
+                    HandleResponsesXHR.handleCannotAccessServer(this);
+
+                    HandleResponsesXHR.handleUnauthorized(this);
+
+                    HandleResponsesXHR.handleNotAcceptable(this);
                 }
             });
 
