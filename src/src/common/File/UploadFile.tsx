@@ -4,9 +4,11 @@ import Auth from '../Backend/Auth';
 import IFileDescription from './IFileDescription';
 import CardFile from './CardFile';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { INavBarOptions } from '../Navigation/INavBarOptions';
 import HandleResponsesXHR from '../Helper/HandleResponsesXHR';
 
 interface IProps {
+    setNavBarOptions?(newNavBarOptions: INavBarOptions): void
 }
 
 interface IState {
@@ -26,6 +28,8 @@ class UploadFile extends React.Component<IProps, IState>{
             fileInfo: null
         }
 
+        this.props.setNavBarOptions!(new INavBarOptions("Upload", false));
+
         this.fileSelected = this.fileSelected.bind(this);
         this.uploadFile = this.uploadFile.bind(this);
     }
@@ -34,7 +38,7 @@ class UploadFile extends React.Component<IProps, IState>{
         var file = event.target.files![0];
         if (file !== undefined) {
             this.file = file;
-            this.setState({ uploadButtonEnabled: true });
+            this.setState({ uploadButtonEnabled: true, fileInfo: null });
         }
     }
 
@@ -81,7 +85,7 @@ class UploadFile extends React.Component<IProps, IState>{
                 <DefaultButton text="upload" onClick={this.uploadFile} disabled={!this.state.uploadButtonEnabled} />
                 {
                     (this.state.fileInfo !== null) && (
-                        <CardFile file={this.state.fileInfo} />
+                        <CardFile file={this.state.fileInfo} uniqueKey={1} />
                     )
                 }
             </div >

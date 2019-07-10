@@ -143,7 +143,7 @@ class MainPage extends React.Component<Props, IState>{
                                         render={
                                             (props: RouteComponentProps<any, StaticContext, any>) => {
                                                 return (
-                                                    <UploadFile />
+                                                    <UploadFile setNavBarOptions={this.setNavBarOptions} />
                                                 )
                                             }
                                         }
@@ -154,7 +154,7 @@ class MainPage extends React.Component<Props, IState>{
                                         render={
                                             (props: RouteComponentProps<any, StaticContext, any>) => {
                                                 return (
-                                                    <Files />
+                                                    <Files setNavBarOptions={this.setNavBarOptions} />
                                                 )
                                             }
                                         }

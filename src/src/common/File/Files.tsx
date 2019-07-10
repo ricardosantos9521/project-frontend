@@ -6,8 +6,10 @@ import CardFile from './CardFile';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import './Files.css'
 import HandleResponsesXHR from '../Helper/HandleResponsesXHR';
+import { INavBarOptions } from '../Navigation/INavBarOptions';
 
 interface IProps {
+    setNavBarOptions?(newNavBarOptions: INavBarOptions): void
 }
 
 interface IState {
@@ -23,10 +25,16 @@ class Files extends React.Component<IProps, IState>{
             files: []
         }
 
+        this.props.setNavBarOptions!(new INavBarOptions("Files", false));
+
+        this.getFiles = this.getFiles.bind(this);
+
         this.getFiles();
     }
 
     async getFiles() {
+        this.setState({ files: [] });
+
         var self = this;
 
         var accessToken = await Auth.GetAccessToken();
@@ -65,7 +73,7 @@ class Files extends React.Component<IProps, IState>{
                     {
                         this.state.files.map((file, key) => {
                             return (
-                                <CardFile file={file} key={key} />
+                                <CardFile file={file} key={key} uniqueKey={key} />
                             )
                         })
                     }
