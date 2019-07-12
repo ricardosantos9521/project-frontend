@@ -5,7 +5,7 @@ import { Label } from 'office-ui-fabric-react/lib/Label';
 import './Sessions.css'
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import HandleResponsesXHR from '../Helpers/HandleResponsesXHR';
+import { handleOkResponse, handleBadRequest, handleCannotAccessServer, handleUnauthorized, handleNotAcceptable } from '../Helpers/HandleResponsesXHR';
 import { setAuthorizationHeader } from '../Helpers/Authorization';
 
 export interface ISession {
@@ -57,17 +57,17 @@ class CardSession extends React.Component<IProps, IState>{
             if (this.readyState === 4) {
                 self.setState({ showSessionDeleteDialog: false });
 
-                HandleResponsesXHR.handleOkResponse(this, (r) => {
+                handleOkResponse(this, (r) => {
                     self.setState({ showSessionCard: false });
                 });
 
-                HandleResponsesXHR.handleBadRequest(this);
+                handleBadRequest(this);
 
-                HandleResponsesXHR.handleCannotAccessServer(this);
+                handleCannotAccessServer(this);
 
-                HandleResponsesXHR.handleUnauthorized(this);
+                handleUnauthorized(this);
 
-                HandleResponsesXHR.handleNotAcceptable(this);
+                handleNotAcceptable(this);
             }
         });
 

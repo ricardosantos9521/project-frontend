@@ -2,7 +2,7 @@ import { Token, TokenResponse } from "./TokenResponse";
 import { Semaphore } from "prex/out/lib/semaphore";
 import Settings from "../Settings";
 import Profile from "./Profile";
-import HandleResponsesXHR from "../Helpers/HandleResponsesXHR";
+import { handleOkResponse, handleBadRequest, handleNotAcceptable, handleUnauthorized, handleCannotAccessServer } from "../Helpers/HandleResponsesXHR";
 import { setAuthorizationHeader } from "../Helpers/Authorization";
 
 class Auth {
@@ -55,20 +55,20 @@ class Auth {
             xhr.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
 
-                    HandleResponsesXHR.handleOkResponse(this, (r) => {
+                    handleOkResponse(this, (r) => {
                         var tokenResponse: TokenResponse = JSON.parse(r.responseText);
                         resolve(tokenResponse);
                     });
 
-                    HandleResponsesXHR.handleBadRequest(this);
+                    handleBadRequest(this);
 
-                    HandleResponsesXHR.handleNotAcceptable(this);
+                    handleNotAcceptable(this);
 
-                    HandleResponsesXHR.handleUnauthorized(this, (r) => {
+                    handleUnauthorized(this, (r) => {
                         self.SignOut();
                     });
 
-                    HandleResponsesXHR.handleCannotAccessServer(this);
+                    handleCannotAccessServer(this);
 
                     resolve(null);
                 }
@@ -92,20 +92,20 @@ class Auth {
             xhr.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
 
-                    HandleResponsesXHR.handleOkResponse(this, (r) => {
+                    handleOkResponse(this, (r) => {
                         var tokenResponse: TokenResponse = JSON.parse(r.responseText);
                         resolve(tokenResponse);
                     })
 
-                    HandleResponsesXHR.handleBadRequest(this);
+                    handleBadRequest(this);
 
-                    HandleResponsesXHR.handleUnauthorized(this, (r) => {
+                    handleUnauthorized(this, (r) => {
                         self.SignOut();
                     })
 
-                    HandleResponsesXHR.handleNotAcceptable(this);
+                    handleNotAcceptable(this);
 
-                    HandleResponsesXHR.handleCannotAccessServer(this);
+                    handleCannotAccessServer(this);
                     resolve(null);
                 }
             });

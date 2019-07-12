@@ -4,7 +4,7 @@ import Settings from '../Settings';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import './Sessions.css'
 import CardSession, { ISession } from './CardSession';
-import HandleResponsesXHR from '../Helpers/HandleResponsesXHR';
+import { handleOkResponse, handleBadRequest, handleCannotAccessServer, handleUnauthorized, handleNotAcceptable } from '../Helpers/HandleResponsesXHR';
 import { setAuthorizationHeader } from '../Helpers/Authorization';
 
 interface IProps {
@@ -40,18 +40,18 @@ class Sessions extends React.Component<IProps, IState>{
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
 
-                HandleResponsesXHR.handleOkResponse(this, (r) => {
+                handleOkResponse(this, (r) => {
                     var sessions: Array<ISession> = JSON.parse(r.response);
                     self.setState({ sessions: sessions });
                 })
 
-                HandleResponsesXHR.handleBadRequest(this);
+                handleBadRequest(this);
 
-                HandleResponsesXHR.handleCannotAccessServer(this);
+                handleCannotAccessServer(this);
 
-                HandleResponsesXHR.handleUnauthorized(this);
+                handleUnauthorized(this);
 
-                HandleResponsesXHR.handleNotAcceptable(this);
+                handleNotAcceptable(this);
             }
         });
 

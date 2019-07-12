@@ -4,7 +4,7 @@ import IFileDescription from './IFileDescription';
 import CardFile from './CardFile';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import './Files.css'
-import HandleResponsesXHR from '../Helpers/HandleResponsesXHR';
+import { handleOkResponse, handleBadRequest, handleCannotAccessServer, handleUnauthorized, handleNotAcceptable } from '../Helpers/HandleResponsesXHR';
 import { INavBarOptions } from '../Navigation/INavBarOptions';
 import { setAuthorizationHeader } from '../Helpers/Authorization';
 
@@ -41,18 +41,18 @@ class Files extends React.Component<IProps, IState>{
 
         xhr.addEventListener("readystatechange", async function () {
             if (this.readyState === 4) {
-                HandleResponsesXHR.handleOkResponse(this, (r) => {
+                handleOkResponse(this, (r) => {
                     var files: Array<IFileDescription> = JSON.parse(r.responseText) as Array<IFileDescription>;
                     self.setState({ files });
                 })
 
-                HandleResponsesXHR.handleBadRequest(this);
+                handleBadRequest(this);
 
-                HandleResponsesXHR.handleCannotAccessServer(this);
+                handleCannotAccessServer(this);
 
-                HandleResponsesXHR.handleUnauthorized(this);
+                handleUnauthorized(this);
 
-                HandleResponsesXHR.handleNotAcceptable(this);
+                handleNotAcceptable(this);
             }
         });
 

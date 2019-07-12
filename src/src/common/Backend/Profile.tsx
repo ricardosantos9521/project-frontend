@@ -1,6 +1,6 @@
 import IProfile from "../Account/IProfile";
 import Settings from "../Settings";
-import HandleResponsesXHR from "../Helpers/HandleResponsesXHR";
+import { handleOkResponse, handleBadRequest, handleCannotAccessServer, handleUnauthorized, handleNotAcceptable } from "../Helpers/HandleResponsesXHR";
 import { setAuthorizationHeader } from "../Helpers/Authorization";
 
 class Profile {
@@ -14,7 +14,7 @@ class Profile {
 
             xhr.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
-                    HandleResponsesXHR.handleOkResponse(this, (r) => {
+                    handleOkResponse(this, (r) => {
                         var profile: IProfile = JSON.parse(r.response);
                         localStorage.setItem("profile", JSON.stringify(profile));
                         self.profile = { ...profile };
@@ -22,13 +22,13 @@ class Profile {
                         resolve(profile);
                     })
 
-                    HandleResponsesXHR.handleBadRequest(this);
+                    handleBadRequest(this);
 
-                    HandleResponsesXHR.handleCannotAccessServer(this);
+                    handleCannotAccessServer(this);
 
-                    HandleResponsesXHR.handleUnauthorized(this);
+                    handleUnauthorized(this);
 
-                    HandleResponsesXHR.handleNotAcceptable(this);
+                    handleNotAcceptable(this);
                 }
             });
 
@@ -46,17 +46,17 @@ class Profile {
 
             xhr.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
-                    HandleResponsesXHR.handleOkResponse(this, (r) => {
+                    handleOkResponse(this, (r) => {
                         resolve();
                     })
 
-                    HandleResponsesXHR.handleBadRequest(this);
+                    handleBadRequest(this);
 
-                    HandleResponsesXHR.handleCannotAccessServer(this);
+                    handleCannotAccessServer(this);
 
-                    HandleResponsesXHR.handleUnauthorized(this);
+                    handleUnauthorized(this);
 
-                    HandleResponsesXHR.handleNotAcceptable(this);
+                    handleNotAcceptable(this);
                 }
             });
 
