@@ -1,12 +1,12 @@
 import React from 'react';
 import Settings from '../Settings';
-import Auth from '../Backend/Auth';
 import IFileDescription from './IFileDescription';
 import CardFile from './CardFile';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import './Files.css'
-import HandleResponsesXHR from '../Helper/HandleResponsesXHR';
+import HandleResponsesXHR from '../Helpers/HandleResponsesXHR';
 import { INavBarOptions } from '../Navigation/INavBarOptions';
+import { setAuthorizationHeader } from '../Helpers/Authorization';
 
 interface IProps {
     setNavBarOptions?(newNavBarOptions: INavBarOptions): void
@@ -37,32 +37,29 @@ class Files extends React.Component<IProps, IState>{
 
         var self = this;
 
-        var accessToken = await Auth.GetAccessToken();
-        if (accessToken != null) {
-            var xhr = new XMLHttpRequest();
+        var xhr = new XMLHttpRequest();
 
-            xhr.addEventListener("readystatechange", async function () {
-                if (this.readyState === 4) {
-                    HandleResponsesXHR.handleOkResponse(this, (r) =>{
-                        var files: Array<IFileDescription> = JSON.parse(r.responseText) as Array<IFileDescription>;
-                        self.setState({ files });
-                    })
+        xhr.addEventListener("readystatechange", async function () {
+            if (this.readyState === 4) {
+                HandleResponsesXHR.handleOkResponse(this, (r) => {
+                    var files: Array<IFileDescription> = JSON.parse(r.responseText) as Array<IFileDescription>;
+                    self.setState({ files });
+                })
 
-                    HandleResponsesXHR.handleBadRequest(this);
+                HandleResponsesXHR.handleBadRequest(this);
 
-                    HandleResponsesXHR.handleCannotAccessServer(this);
+                HandleResponsesXHR.handleCannotAccessServer(this);
 
-                    HandleResponsesXHR.handleUnauthorized(this);
+                HandleResponsesXHR.handleUnauthorized(this);
 
-                    HandleResponsesXHR.handleNotAcceptable(this);
-                }
-            });
+                HandleResponsesXHR.handleNotAcceptable(this);
+            }
+        });
 
-            xhr.open("GET", Settings.serverUrl + "/api/file/files");
-            xhr.setRequestHeader("Authorization", "Bearer " + accessToken!.token);
+        xhr.open("GET", Settings.serverUrl + "/api/file/files");
+        await setAuthorizationHeader(xhr);
 
-            xhr.send();
-        }
+        xhr.send();
     }
 
     render() {

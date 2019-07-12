@@ -2,7 +2,8 @@ import { Token, TokenResponse } from "./TokenResponse";
 import { Semaphore } from "prex/out/lib/semaphore";
 import Settings from "../Settings";
 import Profile from "./Profile";
-import HandleResponsesXHR from "../Helper/HandleResponsesXHR";
+import HandleResponsesXHR from "../Helpers/HandleResponsesXHR";
+import { setAuthorizationHeader } from "../Helpers/Authorization";
 
 class Auth {
 
@@ -122,21 +123,18 @@ class Auth {
 
     private static logout(accessToken: Token | null): Promise<any> {
         return new Promise(async (resolve, reject) => {
-            if (accessToken != null) {
+            var xhr = new XMLHttpRequest();
 
-                var xhr = new XMLHttpRequest();
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === 4) {
+                    resolve();
+                }
+            });
 
-                xhr.addEventListener("readystatechange", function () {
-                    if (this.readyState === 4) {
-                        resolve();
-                    }
-                });
+            xhr.open("POST", Settings.serverUrl + "/api/session/logout");
+            await setAuthorizationHeader(xhr);
 
-                xhr.open("POST", Settings.serverUrl + "/api/session/logout");
-                xhr.setRequestHeader("Authorization", "Bearer " + accessToken!.token);
-
-                xhr.send(null);
-            }
+            xhr.send(null);
         });
     }
 

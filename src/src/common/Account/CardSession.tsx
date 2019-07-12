@@ -1,12 +1,12 @@
 import React from 'react';
-import Auth from '../Backend/Auth';
 import Settings from '../Settings';
 import { DocumentCard, DocumentCardType, DocumentCardActions, DocumentCardTitle, DocumentCardDetails } from 'office-ui-fabric-react/lib/DocumentCard';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import './Sessions.css'
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import HandleResponsesXHR from '../Helper/HandleResponsesXHR';
+import HandleResponsesXHR from '../Helpers/HandleResponsesXHR';
+import { setAuthorizationHeader } from '../Helpers/Authorization';
 
 export interface ISession {
     sessionId: string,
@@ -50,35 +50,32 @@ class CardSession extends React.Component<IProps, IState>{
     async deleteSession() {
         var self = this;
 
-        var accessToken = await Auth.GetAccessToken();
-        if (accessToken != null) {
 
-            var xhr = new XMLHttpRequest();
+        var xhr = new XMLHttpRequest();
 
-            xhr.addEventListener("readystatechange", function () {
-                if (this.readyState === 4) {
-                    self.setState({ showSessionDeleteDialog: false });
-                    
-                    HandleResponsesXHR.handleOkResponse(this, (r) => {
-                        self.setState({ showSessionCard: false });
-                    });
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                self.setState({ showSessionDeleteDialog: false });
 
-                    HandleResponsesXHR.handleBadRequest(this);
+                HandleResponsesXHR.handleOkResponse(this, (r) => {
+                    self.setState({ showSessionCard: false });
+                });
 
-                    HandleResponsesXHR.handleCannotAccessServer(this);
+                HandleResponsesXHR.handleBadRequest(this);
 
-                    HandleResponsesXHR.handleUnauthorized(this);
+                HandleResponsesXHR.handleCannotAccessServer(this);
 
-                    HandleResponsesXHR.handleNotAcceptable(this);
-                }
-            });
+                HandleResponsesXHR.handleUnauthorized(this);
 
-            xhr.open("POST", Settings.serverUrl + "/api/session/delete");
-            xhr.setRequestHeader("Authorization", "Bearer " + accessToken!.token);
-            xhr.setRequestHeader("Content-Type", "application/json");
+                HandleResponsesXHR.handleNotAcceptable(this);
+            }
+        });
 
-            xhr.send(JSON.stringify(this.props.session.sessionId));
-        }
+        xhr.open("POST", Settings.serverUrl + "/api/session/delete");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        await setAuthorizationHeader(xhr);
+
+        xhr.send(JSON.stringify(this.props.session.sessionId));
     }
 
     render() {

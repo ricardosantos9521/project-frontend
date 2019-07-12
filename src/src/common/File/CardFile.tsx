@@ -2,7 +2,6 @@ import React from 'react';
 import IFileDescription from './IFileDescription';
 import { DocumentCard, DocumentCardType, DocumentCardDetails, DocumentCardTitle, DocumentCardActivity, DocumentCardActions } from 'office-ui-fabric-react/lib/DocumentCard';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import Auth from '../Backend/Auth';
 import Settings from '../Settings';
 import { getId } from 'office-ui-fabric-react/lib/Utilities';
 import { PrimaryButton, IButtonProps, DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -10,7 +9,8 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import HandleResponsesXHR from '../Helper/HandleResponsesXHR';
+import HandleResponsesXHR from '../Helpers/HandleResponsesXHR';
+import { setAuthorizationHeader } from '../Helpers/Authorization';
 
 interface IProps {
     file: IFileDescription,
@@ -82,55 +82,52 @@ class CardFile extends React.Component<IProps, IState>{
 
         var self = this;
 
-        var accessToken = await Auth.GetAccessToken();
-        if (accessToken != null) {
-            var xhr = new XMLHttpRequest();
+        var xhr = new XMLHttpRequest();
 
-            xhr.addEventListener("readystatechange", function () {
-                if (this.readyState === 4) {
-                    HandleResponsesXHR.handleOkResponse(this, (r) => {
-                        var fileInfo: IFileDescription = JSON.parse(r.response);
-                        var xhr2 = new XMLHttpRequest();
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                HandleResponsesXHR.handleOkResponse(this, async (r) => {
+                    var fileInfo: IFileDescription = JSON.parse(r.response);
+                    var xhr2 = new XMLHttpRequest();
 
-                        xhr2.addEventListener("readystatechange", function () {
-                            if (this.readyState === 4) {
-                                HandleResponsesXHR.handleOkResponse(this, (r) => {
-                                    var blob: Blob = r.response as Blob;
-                                    self.promptToDownload(blob, fileInfo.fileName);
-                                })
+                    xhr2.addEventListener("readystatechange", function () {
+                        if (this.readyState === 4) {
+                            HandleResponsesXHR.handleOkResponse(this, (r) => {
+                                var blob: Blob = r.response as Blob;
+                                self.promptToDownload(blob, fileInfo.fileName);
+                            })
 
-                                HandleResponsesXHR.handleBadRequest(this);
+                            HandleResponsesXHR.handleBadRequest(this);
 
-                                HandleResponsesXHR.handleCannotAccessServer(this);
+                            HandleResponsesXHR.handleCannotAccessServer(this);
 
-                                HandleResponsesXHR.handleUnauthorized(this);
+                            HandleResponsesXHR.handleUnauthorized(this);
 
-                                HandleResponsesXHR.handleNotAcceptable(this);
+                            HandleResponsesXHR.handleNotAcceptable(this);
 
-                                self.setState({ showDownloadDialog: false });
-                            }
-                        });
-                        xhr2.open("GET", Settings.serverUrl + "/api/file/get/" + id);
-                        xhr2.responseType = "blob";
-                        xhr2.setRequestHeader("Authorization", "Bearer " + accessToken!.token);
+                            self.setState({ showDownloadDialog: false });
+                        }
+                    });
+                    xhr2.open("GET", Settings.serverUrl + "/api/file/get/" + id);
+                    xhr2.responseType = "blob";
+                    await setAuthorizationHeader(xhr);
 
-                        xhr2.send();
-                    })
+                    xhr2.send();
+                })
 
-                    HandleResponsesXHR.handleBadRequest(this);
+                HandleResponsesXHR.handleBadRequest(this);
 
-                    HandleResponsesXHR.handleCannotAccessServer(this);
+                HandleResponsesXHR.handleCannotAccessServer(this);
 
-                    HandleResponsesXHR.handleUnauthorized(this);
+                HandleResponsesXHR.handleUnauthorized(this);
 
-                    HandleResponsesXHR.handleNotAcceptable(this);
-                }
-            });
-            xhr.open("GET", Settings.serverUrl + "/api/file/info/" + id);
-            xhr.setRequestHeader("Authorization", "Bearer " + accessToken!.token);
+                HandleResponsesXHR.handleNotAcceptable(this);
+            }
+        });
+        xhr.open("GET", Settings.serverUrl + "/api/file/info/" + id);
+        await setAuthorizationHeader(xhr);
 
-            xhr.send();
-        }
+        xhr.send();
     }
 
     private openDownloadDialog() {
@@ -171,51 +168,49 @@ class CardFile extends React.Component<IProps, IState>{
 
     private async shareFile() {
         await this.setState({ waitingForShareResponse: true });
-        var accessToken = await Auth.GetAccessToken();
-        if (accessToken != null) {
-            var self = this;
 
-            var data = {
-                fileId: this.props.file!.fileId,
-                email: this.state.emailToShare,
-                readPermission: this.state.giveReadPermission,
-                writePermission: this.state.giveWritePermission,
-                publicPermission: this.state.givePublicPermission
-            };
+        var self = this;
 
-            var xhr = new XMLHttpRequest();
-            xhr.withCredentials = true;
+        var data = {
+            fileId: this.props.file!.fileId,
+            email: this.state.emailToShare,
+            readPermission: this.state.giveReadPermission,
+            writePermission: this.state.giveWritePermission,
+            publicPermission: this.state.givePublicPermission
+        };
 
-            xhr.addEventListener("readystatechange", function () {
-                if (this.readyState === 4) {
-                    HandleResponsesXHR.handleOkResponse(this, (r) => {
-                        self.closeShareDialog();
-                        self.setState({ emailErrorMessage: "" });
-                    })
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
 
-                    var errorFunction = (r: XMLHttpRequest) => {
-                        self.closeShareDialog();
-                        self.setState({ emailErrorMessage: "" });
-                    }
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                HandleResponsesXHR.handleOkResponse(this, (r) => {
+                    self.closeShareDialog();
+                    self.setState({ emailErrorMessage: "" });
+                })
 
-                    HandleResponsesXHR.handleBadRequest(this);
-
-                    HandleResponsesXHR.handleCannotAccessServer(this, errorFunction);
-
-                    HandleResponsesXHR.handleUnauthorized(this, errorFunction);
-
-                    HandleResponsesXHR.handleNotAcceptable(this, (r) => {
-                        self.setState({ emailErrorMessage: this.responseText });
-                    });
+                var errorFunction = (r: XMLHttpRequest) => {
+                    self.closeShareDialog();
+                    self.setState({ emailErrorMessage: "" });
                 }
-            });
 
-            xhr.open("POST", Settings.serverUrl + "/api/file/share");
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.setRequestHeader("Authorization", "Bearer " + accessToken!.token);
+                HandleResponsesXHR.handleBadRequest(this);
 
-            xhr.send(JSON.stringify(data));
-        }
+                HandleResponsesXHR.handleCannotAccessServer(this, errorFunction);
+
+                HandleResponsesXHR.handleUnauthorized(this, errorFunction);
+
+                HandleResponsesXHR.handleNotAcceptable(this, (r) => {
+                    self.setState({ emailErrorMessage: this.responseText });
+                });
+            }
+        });
+
+        xhr.open("POST", Settings.serverUrl + "/api/file/share");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        await setAuthorizationHeader(xhr);
+
+        xhr.send(JSON.stringify(data));
 
         await this.setState({ waitingForShareResponse: false });
     }
@@ -231,41 +226,38 @@ class CardFile extends React.Component<IProps, IState>{
     }
 
     private async deleteFile() {
-        var accessToken = await Auth.GetAccessToken();
-        if (accessToken != null) {
-            var self = this;
+        var self = this;
 
-            var data = JSON.stringify(this.props.file.fileId);
+        var data = JSON.stringify(this.props.file.fileId);
 
-            var xhr = new XMLHttpRequest();
+        var xhr = new XMLHttpRequest();
 
-            xhr.addEventListener("readystatechange", function () {
-                if (this.readyState === 4) {
-                    HandleResponsesXHR.handleOkResponse(this, (r) => {
-                        self.setState({ showCardFile: false })
-                        self.closeDeleteDialog();
-                    })
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                HandleResponsesXHR.handleOkResponse(this, (r) => {
+                    self.setState({ showCardFile: false })
+                    self.closeDeleteDialog();
+                })
 
-                    var elseFunction = (r: XMLHttpRequest) => {
-                        self.closeDeleteDialog();
-                    }
-
-                    HandleResponsesXHR.handleBadRequest(this, elseFunction);
-
-                    HandleResponsesXHR.handleCannotAccessServer(this, elseFunction);
-
-                    HandleResponsesXHR.handleNotAcceptable(this, elseFunction);
-
-                    HandleResponsesXHR.handleUnauthorized(this);
+                var elseFunction = (r: XMLHttpRequest) => {
+                    self.closeDeleteDialog();
                 }
-            });
 
-            xhr.open("POST", Settings.serverUrl + "/api/file/delete");
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.setRequestHeader("Authorization", "Bearer " + accessToken!.token);
+                HandleResponsesXHR.handleBadRequest(this, elseFunction);
 
-            xhr.send(data);
-        }
+                HandleResponsesXHR.handleCannotAccessServer(this, elseFunction);
+
+                HandleResponsesXHR.handleNotAcceptable(this, elseFunction);
+
+                HandleResponsesXHR.handleUnauthorized(this);
+            }
+        });
+
+        xhr.open("POST", Settings.serverUrl + "/api/file/delete");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        await setAuthorizationHeader(xhr);
+
+        xhr.send(data);
     }
 
     render() {

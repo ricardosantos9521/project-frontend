@@ -1,11 +1,11 @@
 import React from 'react';
 import { INavBarOptions } from '../Navigation/INavBarOptions';
-import Auth from '../Backend/Auth';
 import Settings from '../Settings';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import './Sessions.css'
 import CardSession, { ISession } from './CardSession';
-import HandleResponsesXHR from '../Helper/HandleResponsesXHR';
+import HandleResponsesXHR from '../Helpers/HandleResponsesXHR';
+import { setAuthorizationHeader } from '../Helpers/Authorization';
 
 interface IProps {
     setNavBarOptions?(newNavBarOptions: INavBarOptions): void
@@ -34,34 +34,31 @@ class Sessions extends React.Component<IProps, IState>{
     async getSessions() {
         var self = this;
 
-        var accessToken = await Auth.GetAccessToken();
-        if (accessToken != null) {
 
-            var xhr = new XMLHttpRequest();
+        var xhr = new XMLHttpRequest();
 
-            xhr.addEventListener("readystatechange", function () {
-                if (this.readyState === 4) {
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
 
-                    HandleResponsesXHR.handleOkResponse(this, (r) => {
-                        var sessions: Array<ISession> = JSON.parse(r.response);
-                        self.setState({ sessions: sessions });
-                    })
+                HandleResponsesXHR.handleOkResponse(this, (r) => {
+                    var sessions: Array<ISession> = JSON.parse(r.response);
+                    self.setState({ sessions: sessions });
+                })
 
-                    HandleResponsesXHR.handleBadRequest(this);
+                HandleResponsesXHR.handleBadRequest(this);
 
-                    HandleResponsesXHR.handleCannotAccessServer(this);
+                HandleResponsesXHR.handleCannotAccessServer(this);
 
-                    HandleResponsesXHR.handleUnauthorized(this);
+                HandleResponsesXHR.handleUnauthorized(this);
 
-                    HandleResponsesXHR.handleNotAcceptable(this);
-                }
-            });
+                HandleResponsesXHR.handleNotAcceptable(this);
+            }
+        });
 
-            xhr.open("GET", Settings.serverUrl + "/api/session/sessions");
-            xhr.setRequestHeader("Authorization", "Bearer " + accessToken!.token);
-
-            xhr.send(null);
-        }
+        xhr.open("GET", Settings.serverUrl + "/api/session/sessions");
+        await setAuthorizationHeader(xhr);
+        
+        xhr.send(null);
     }
 
     render() {

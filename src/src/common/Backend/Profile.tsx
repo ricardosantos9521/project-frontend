@@ -1,7 +1,7 @@
 import IProfile from "../Account/IProfile";
 import Settings from "../Settings";
-import Auth from "./Auth";
-import HandleResponsesXHR from "../Helper/HandleResponsesXHR";
+import HandleResponsesXHR from "../Helpers/HandleResponsesXHR";
+import { setAuthorizationHeader } from "../Helpers/Authorization";
 
 class Profile {
     private static profile: IProfile | null = JSON.parse(localStorage.getItem("profile")!);
@@ -10,71 +10,64 @@ class Profile {
         var self = this;
 
         return new Promise(async function (resolve, reject) {
-            var accessToken = await Auth.GetAccessToken();
-            if (accessToken != null) {
+            var xhr = new XMLHttpRequest();
 
-                var xhr = new XMLHttpRequest();
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === 4) {
+                    HandleResponsesXHR.handleOkResponse(this, (r) => {
+                        var profile: IProfile = JSON.parse(r.response);
+                        localStorage.setItem("profile", JSON.stringify(profile));
+                        self.profile = { ...profile };
+                        dispatchEvent(new CustomEvent("profileChanged", { detail: self.profile }));
+                        resolve(profile);
+                    })
 
-                xhr.addEventListener("readystatechange", function () {
-                    if (this.readyState === 4) {
-                        HandleResponsesXHR.handleOkResponse(this, (r) => {
-                            var profile: IProfile = JSON.parse(r.response);
-                            localStorage.setItem("profile", JSON.stringify(profile));
-                            self.profile = { ...profile };
-                            dispatchEvent(new CustomEvent("profileChanged", { detail: self.profile }));
-                            resolve(profile);
-                        })
+                    HandleResponsesXHR.handleBadRequest(this);
 
-                        HandleResponsesXHR.handleBadRequest(this);
+                    HandleResponsesXHR.handleCannotAccessServer(this);
 
-                        HandleResponsesXHR.handleCannotAccessServer(this);
+                    HandleResponsesXHR.handleUnauthorized(this);
 
-                        HandleResponsesXHR.handleUnauthorized(this);
+                    HandleResponsesXHR.handleNotAcceptable(this);
+                }
+            });
 
-                        HandleResponsesXHR.handleNotAcceptable(this);
-                    }
-                });
+            xhr.open("GET", Settings.serverUrl + "/api/profile/");
+            await setAuthorizationHeader(xhr);
 
-                xhr.open("GET", Settings.serverUrl + "/api/profile/");
-                xhr.setRequestHeader("Authorization", "Bearer " + accessToken!.token);
-
-                xhr.send(null);
-            }
+            xhr.send(null);
         });
     }
 
     public static Change(profile: IProfile, propertiesChanged: Array<String>): Promise<any> {
 
         return new Promise(async function (resolve, reject) {
-            var accessToken = await Auth.GetAccessToken();
-            if (accessToken != null) {
-                var xhr = new XMLHttpRequest();
+            var xhr = new XMLHttpRequest();
 
-                xhr.addEventListener("readystatechange", function () {
-                    if (this.readyState === 4) {
-                        HandleResponsesXHR.handleOkResponse(this, (r) => {
-                            resolve();
-                        })
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === 4) {
+                    HandleResponsesXHR.handleOkResponse(this, (r) => {
+                        resolve();
+                    })
 
-                        HandleResponsesXHR.handleBadRequest(this);
+                    HandleResponsesXHR.handleBadRequest(this);
 
-                        HandleResponsesXHR.handleCannotAccessServer(this);
+                    HandleResponsesXHR.handleCannotAccessServer(this);
 
-                        HandleResponsesXHR.handleUnauthorized(this);
+                    HandleResponsesXHR.handleUnauthorized(this);
 
-                        HandleResponsesXHR.handleNotAcceptable(this);
-                    }
-                });
+                    HandleResponsesXHR.handleNotAcceptable(this);
+                }
+            });
 
-                xhr.open("POST", Settings.serverUrl + "/api/profile/");
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.setRequestHeader("Authorization", "Bearer " + accessToken!.token);
+            xhr.open("POST", Settings.serverUrl + "/api/profile/");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            await setAuthorizationHeader(xhr);
 
-                xhr.send(JSON.stringify({
-                    "profile": profile,
-                    "propertiesChanged": propertiesChanged
-                }));
-            }
+            xhr.send(JSON.stringify({
+                "profile": profile,
+                "propertiesChanged": propertiesChanged
+            }));
         });
     }
 
