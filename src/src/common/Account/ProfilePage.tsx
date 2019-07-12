@@ -66,7 +66,6 @@ class ProfilePage extends React.Component<IProps, IState>{
 
     async getProfile() {
         let profile = await Profile.Get();
-        console.log(profile!.uniqueId);
         this.profileBeforeChanges = { ...profile };
         this.propertiesChanged = [];
         if (profile != null) {
