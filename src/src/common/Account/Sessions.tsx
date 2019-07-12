@@ -4,7 +4,7 @@ import Auth from '../Backend/Auth';
 import Settings from '../Settings';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import './Sessions.css'
-import Session, { ISession } from './Session';
+import CardSession, { ISession } from './CardSession';
 import HandleResponsesXHR from '../Helper/HandleResponsesXHR';
 
 interface IProps {
@@ -71,7 +71,7 @@ class Sessions extends React.Component<IProps, IState>{
                     {
                         this.state.sessions.map((session, key) => {
                             return (
-                                <Session key={key} session={session} updateSessions={this.getSessions} />
+                                <CardSession key={key} session={session} />
                             )
                         })
                     }
