@@ -28,8 +28,10 @@ class Files extends React.Component<IProps, IState>{
         this.props.setNavBarOptions!(new INavBarOptions("Files", false));
 
         this.getFiles = this.getFiles.bind(this);
+    }
 
-        this.getFiles();
+    async componentDidMount() {
+        await this.getFiles();
     }
 
     async getFiles() {
