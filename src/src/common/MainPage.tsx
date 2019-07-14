@@ -43,9 +43,8 @@ class MainPage extends React.Component<Props, IState>{
         this.setNavBarOptions = this.setNavBarOptions.bind(this);
     }
 
-    componentWillMount() {
-        //get profile before mount
-        Profile.Get();
+    async componentWillMount() {
+        await Profile.Get();
     }
 
     componentDidMount() {
