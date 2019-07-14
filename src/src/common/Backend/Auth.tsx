@@ -15,7 +15,8 @@ class Auth {
         var responseToken = await this.GetTokenWithIdToken(issuer, id_token);
         if (responseToken !== null) {
             this.accessToken = responseToken.accessToken;
-            localStorage.setItem("refreshToken", responseToken.refreshToken.token);
+            sessionStorage.setItem("accessToken", JSON.stringify(responseToken.accessToken))
+            localStorage.setItem("refreshToken", JSON.stringify(responseToken.refreshToken));
             return true;
         }
         return false;
@@ -27,14 +28,21 @@ class Auth {
         let accessToken: Token | null = null;
 
         if (this.accessToken === null) {
-            let refreshToken = localStorage.getItem("refreshToken");
-            if (refreshToken != null) {
-                var responseToken = await this.GetTokenWithRefreshToken(refreshToken);
-                if (responseToken !== null) {
-                    this.accessToken = responseToken.accessToken;
-                    localStorage.setItem("refreshToken", responseToken.refreshToken.token);
-                    accessToken = this.accessToken;
+            let accessTokenSessionStorage = sessionStorage.getItem("accessToken");
+            if (accessTokenSessionStorage === null) {
+                let refreshToken = localStorage.getItem("refreshToken");
+                if (refreshToken !== null) {
+                    var responseToken = await this.GetTokenWithRefreshToken((JSON.parse(refreshToken) as Token).token);
+                    if (responseToken !== null) {
+                        this.accessToken = responseToken.accessToken;
+                        sessionStorage.setItem("accessToken", JSON.stringify(responseToken.accessToken))
+                        localStorage.setItem("refreshToken", JSON.stringify(responseToken.refreshToken.token));
+                        accessToken = this.accessToken;
+                    }
                 }
+            }
+            else {
+                accessToken = JSON.parse(accessTokenSessionStorage) as Token;
             }
         }
         else {
