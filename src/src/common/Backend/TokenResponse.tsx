@@ -6,5 +6,5 @@ export interface TokenResponse {
 
 export interface Token {
     token: string,
-    expireUtc: Date
+    expireUtc: string
 }
