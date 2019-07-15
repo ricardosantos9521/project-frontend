@@ -5,10 +5,14 @@ import QrCodePage from "../common/QRCode/QRCodePage";
 import IProfile from "../common/Account/IProfile";
 import NavigationPage, { MenuItem } from "../common/UIPages/NavigationPage";
 import Settings from "../common/Settings";
+import UploadFile from "../common/File/UploadFile";
+import Files from "../common/File/Files";
+import { INavBarOptions } from "../common/Navigation/INavBarOptions";
 
 interface IProps {
     pathParent: string,
-    profile: IProfile
+    profile: IProfile,
+    setNavBarOptions?(newNavBarOptions: INavBarOptions): void
 }
 
 class MainPageUser extends React.Component<IProps>{
@@ -20,6 +24,20 @@ class MainPageUser extends React.Component<IProps>{
                 name: "QRCode",
                 onClick: () => {
                     Settings.history.push({ pathname: '/user/qrcode' });
+                }
+            },
+            {
+                icon: "CloudUpload",
+                name: "Upload",
+                onClick: () => {
+                    Settings.history.push({ pathname: '/user/upload' });
+                }
+            },
+            {
+                icon: "FolderOpen",
+                name: "Files",
+                onClick: () => {
+                    Settings.history.push({ pathname: '/user/files' });
                 }
             }
         ];
@@ -41,6 +59,28 @@ class MainPageUser extends React.Component<IProps>{
                             }
                         }
                         key="qrcode"
+                    />
+                    <Route
+                        path={this.props.pathParent + "/upload"}
+                        render={
+                            (props: RouteComponentProps<any, StaticContext, any>) => {
+                                return (
+                                    <UploadFile setNavBarOptions={this.props.setNavBarOptions} />
+                                )
+                            }
+                        }
+                        key="upload"
+                    />
+                    <Route
+                        path={this.props.pathParent + "/files"}
+                        render={
+                            (props: RouteComponentProps<any, StaticContext, any>) => {
+                                return (
+                                    <Files setNavBarOptions={this.props.setNavBarOptions} />
+                                )
+                            }
+                        }
+                        key="files"
                     />
                 </NavigationPage>
             </div>

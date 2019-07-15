@@ -13,8 +13,6 @@ import MainPageAdmin from "../admin/MainPageAdmin";
 import MainPageUser from "../user/MainPageUser";
 import MessageBar from "./MessageBar";
 import AboutPage from "./About/AboutPage";
-import UploadFile from "./File/UploadFile";
-import Files from "./File/Files";
 import Sessions from "./Account/Sessions";
 
 interface IState {
@@ -137,28 +135,6 @@ class MainPage extends React.Component<Props, IState>{
                                         }
                                         key="sessions"
                                     />,
-                                    <Route
-                                        path="/upload/"
-                                        render={
-                                            (props: RouteComponentProps<any, StaticContext, any>) => {
-                                                return (
-                                                    <UploadFile setNavBarOptions={this.setNavBarOptions} />
-                                                )
-                                            }
-                                        }
-                                        key="upload"
-                                    />,
-                                    <Route
-                                        path="/files/"
-                                        render={
-                                            (props: RouteComponentProps<any, StaticContext, any>) => {
-                                                return (
-                                                    <Files setNavBarOptions={this.setNavBarOptions} />
-                                                )
-                                            }
-                                        }
-                                        key="files"
-                                    />,
                                     (this.state.profile !== null) &&
                                     (
                                         [
@@ -167,7 +143,7 @@ class MainPage extends React.Component<Props, IState>{
                                                 render={
                                                     (props: RouteComponentProps<any, StaticContext, any>) => {
                                                         return (
-                                                            <MainPageUser pathParent="/user" profile={this.state.profile!} />
+                                                            <MainPageUser pathParent="/user" profile={this.state.profile!} setNavBarOptions={this.setNavBarOptions} />
                                                         )
                                                     }
                                                 }
