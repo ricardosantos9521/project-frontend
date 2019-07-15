@@ -29,25 +29,27 @@ class Auth {
 
         if (this.accessToken === null) {
             let accessTokenSessionStorage = sessionStorage.getItem("accessToken");
-            if (accessTokenSessionStorage === null) {
-                let refreshToken = localStorage.getItem("refreshToken");
-                if (refreshToken !== null) {
-                    var responseToken = await this.GetTokenWithRefreshToken((JSON.parse(refreshToken) as Token).token);
-                    if (responseToken !== null) {
-                        this.accessToken = responseToken.accessToken;
-                        sessionStorage.setItem("accessToken", JSON.stringify(responseToken.accessToken))
-                        localStorage.setItem("refreshToken", JSON.stringify(responseToken.refreshToken.token));
-                        accessToken = this.accessToken;
-                    }
-                }
-            }
-            else {
+            if (accessTokenSessionStorage !== null) {
                 accessToken = JSON.parse(accessTokenSessionStorage) as Token;
             }
         }
         else {
             accessToken = this.accessToken;
         }
+
+        if (accessToken === null || (accessToken !== null && new Date(accessToken!.expireUtc).getTime() < Date.now() + 60000)) {
+            let refreshToken = localStorage.getItem("refreshToken");
+            if (refreshToken !== null) {
+                var responseToken = await this.GetTokenWithRefreshToken((JSON.parse(refreshToken) as Token).token);
+                if (responseToken !== null) {
+                    accessToken = responseToken.accessToken;
+                    sessionStorage.setItem("accessToken", JSON.stringify(responseToken.accessToken))
+                    localStorage.setItem("refreshToken", JSON.stringify(responseToken.refreshToken.token));
+                }
+            }
+        }
+
+        this.accessToken = accessToken;
 
         this.semaphore.release();
 
