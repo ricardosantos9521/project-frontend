@@ -8,7 +8,7 @@ import './NavBar.css'
 import { Depths } from "@uifabric/fluent-theme/lib/fluent/FluentDepths";
 import { CommunicationColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
 import { FontSizes } from '@uifabric/fluent-theme/lib/fluent/FluentType';
-import { IContextualMenuItem } from "office-ui-fabric-react/lib/ContextualMenu";
+import { IContextualMenuItem, ContextualMenuItemType } from "office-ui-fabric-react/lib/ContextualMenu";
 import Settings from "../Settings";
 
 interface IProps {
@@ -32,8 +32,6 @@ class NavBar extends React.Component<IProps, IState> {
 
         this.handleRequestGoBack = this.handleRequestGoBack.bind(this);
         this.handleRequestToSignIn = this.handleRequestToSignIn.bind(this);
-        this.openProfilePage = this.openProfilePage.bind(this);
-        this.signOut = this.signOut.bind(this);
 
         Settings.history.listen((p) => {
             let path_aux = (p.pathname.charAt(0) === '/') ? (p.pathname.slice(1, p.pathname.length)) : p.pathname;
@@ -60,14 +58,6 @@ class NavBar extends React.Component<IProps, IState> {
         Settings.history.push({ pathname: '/signin' });
     }
 
-    openProfilePage() {
-        Settings.history.push({ pathname: '/profile' });
-    }
-
-    signOut() {
-        AuthBackend.SignOut();
-    }
-
     render() {
         let persona: IPersonaSharedProps = {}
 
@@ -75,12 +65,25 @@ class NavBar extends React.Component<IProps, IState> {
             {
                 key: 'profile',
                 text: 'Profile',
-                onClick: this.openProfilePage
+                onClick: () => { Settings.history.push({ pathname: '/profile' }); }
+            },
+            {
+                key: 'sessions',
+                text: 'Sessions',
+                onClick: () => { Settings.history.push({ pathname: '/sessions' }); }
+            },
+            {
+                key: 'divider_1',
+                itemType: ContextualMenuItemType.Divider
+            },
+            {
+                key: 'divider_2',
+                itemType: ContextualMenuItemType.Divider
             },
             {
                 key: 'signout',
                 text: 'SignOut',
-                onClick: this.signOut
+                onClick: () => { AuthBackend.SignOut(); }
             }
         ]
 
@@ -91,7 +94,7 @@ class NavBar extends React.Component<IProps, IState> {
             }
 
             if (this.state.mode !== "user") {
-                menu.splice(1, 0, {
+                menu.splice(3, 0, {
                     key: 'user',
                     text: "User",
                     onClick: () => {
@@ -101,7 +104,7 @@ class NavBar extends React.Component<IProps, IState> {
             }
 
             if (this.props.profile.isAdmin && (this.state.mode !== "admin")) {
-                menu.splice(1, 0, {
+                menu.splice(3, 0, {
                     key: 'admin',
                     text: "Admin",
                     onClick: () => {
