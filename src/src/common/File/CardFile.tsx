@@ -110,7 +110,7 @@ class CardFile extends React.Component<IProps, IState>{
                     });
                     xhr2.open("GET", Settings.serverUrl + "/api/file/get/" + id);
                     xhr2.responseType = "blob";
-                    await setAuthorizationHeader(xhr);
+                    await setAuthorizationHeader(xhr2);
 
                     xhr2.send();
                 })
