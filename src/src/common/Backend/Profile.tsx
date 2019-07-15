@@ -33,9 +33,9 @@ class Profile {
             });
 
             xhr.open("GET", Settings.serverUrl + "/api/profile/");
-            await setAuthorizationHeader(xhr);
-
-            xhr.send(null);
+            if (await setAuthorizationHeader(xhr)) {
+                xhr.send(null);
+            }
         });
     }
 
