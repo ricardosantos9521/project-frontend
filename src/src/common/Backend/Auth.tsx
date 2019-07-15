@@ -44,7 +44,7 @@ class Auth {
                 if (responseToken !== null) {
                     accessToken = responseToken.accessToken;
                     sessionStorage.setItem("accessToken", JSON.stringify(responseToken.accessToken))
-                    localStorage.setItem("refreshToken", JSON.stringify(responseToken.refreshToken.token));
+                    localStorage.setItem("refreshToken", JSON.stringify(responseToken.refreshToken));
                 }
             }
         }
