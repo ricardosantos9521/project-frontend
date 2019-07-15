@@ -150,6 +150,7 @@ class Auth {
 
     public static SignOut() {
         this.logout(this.accessToken);
+        sessionStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         this.accessToken = null;
         Profile.DeleteLocalProfile();
