@@ -11,6 +11,7 @@ import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { handleOkResponse, handleBadRequest, handleCannotAccessServer, handleUnauthorized, handleNotAcceptable } from '../Helpers/HandleResponsesXHR';
 import { setAuthorizationHeader } from '../Helpers/Authorization';
+import QRCodeReader from '../QRCode/QRCodeReader';
 
 interface IProps {
     file: IFileDescription,
@@ -27,7 +28,8 @@ interface IState {
     giveReadPermission: boolean,
     giveWritePermission: boolean,
     givePublicPermission: boolean,
-    waitingForShareResponse: boolean
+    waitingForShareResponse: boolean,
+    showQRCodeReaderDialog: boolean,
 }
 
 class CardFile extends React.Component<IProps, IState>{
@@ -45,7 +47,8 @@ class CardFile extends React.Component<IProps, IState>{
             giveReadPermission: false,
             giveWritePermission: false,
             givePublicPermission: false,
-            waitingForShareResponse: false
+            waitingForShareResponse: false,
+            showQRCodeReaderDialog: false
         }
 
         //download file
@@ -67,6 +70,11 @@ class CardFile extends React.Component<IProps, IState>{
         this.openDeleteDialog = this.openDeleteDialog.bind(this);
         this.closeDeleteDialog = this.closeDeleteDialog.bind(this);
         this.deleteFile = this.deleteFile.bind(this);
+
+        //qrcode reader
+        this.onTextFieldEmailClick = this.onTextFieldEmailClick.bind(this);
+        this.closeQRCodeReaderDialog = this.closeQRCodeReaderDialog.bind(this);
+        this.onQRCodeRead = this.onQRCodeRead.bind(this);
     }
 
     promptToDownload(blob: Blob, fileName: string) {
@@ -260,6 +268,24 @@ class CardFile extends React.Component<IProps, IState>{
         xhr.send(data);
     }
 
+    clickOnTextField: number = 0;
+
+    onTextFieldEmailClick() {
+        this.clickOnTextField++;
+        if (this.clickOnTextField === 2) {
+            this.setState({ showQRCodeReaderDialog: true })
+            this.clickOnTextField = 0;
+        }
+    }
+
+    closeQRCodeReaderDialog() {
+        this.setState({ showQRCodeReaderDialog: false })
+    }
+
+    onQRCodeRead(data: string) {
+        this.setState({ emailToShare: data, showQRCodeReaderDialog: false });
+    }
+
     render() {
         const permissions: string[] = [];
 
@@ -359,6 +385,7 @@ class CardFile extends React.Component<IProps, IState>{
                                 onChange={this.onChangeEmail}
                                 disabled={!(this.state.giveReadPermission || this.state.giveWritePermission)}
                                 errorMessage={(this.state.emailErrorMessage) ? this.state.emailErrorMessage : undefined}
+                                onClick={this.onTextFieldEmailClick}
                                 required
                             />
                             <Checkbox
@@ -402,6 +429,20 @@ class CardFile extends React.Component<IProps, IState>{
                                 <PrimaryButton onClick={async () => await this.deleteFile()} text="Yes" />
                                 <DefaultButton onClick={this.closeDeleteDialog} text="No" />
                             </DialogFooter>
+                        </Dialog>
+                        <Dialog
+                            hidden={!this.state.showQRCodeReaderDialog}
+                            onDismiss={this.closeQRCodeReaderDialog}
+                            dialogContentProps={{
+                                type: DialogType.normal,
+                                title: 'Read Email',
+                            }}
+                            modalProps={{
+                                isBlocking: false,
+                                styles: { main: { maxWidth: 450 } }
+                            }}
+                        >
+                            <QRCodeReader onScan={this.onQRCodeRead} scan={true} />
                         </Dialog>
                     </div >
                 )
