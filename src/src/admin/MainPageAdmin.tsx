@@ -4,12 +4,20 @@ import { StaticContext } from "react-router";
 import QrCodeReaderPage from "../common/QRCode/QRCodeReaderPage";
 import NavigationPage, { MenuItem } from "../common/UIPages/NavigationPage";
 import Settings from "../common/Settings";
+import { INavBarOptions } from "../common/Navigation/INavBarOptions";
 
 interface IProps {
-    pathParent: string
+    pathParent: string,
+    setNavBarOptions?(newNavBarOptions: INavBarOptions): void
 }
 
 class MainPageAdmin extends React.Component<IProps>{
+
+    constructor(props: IProps) {
+        super(props);
+
+        this.props.setNavBarOptions!(new INavBarOptions("User Page"));
+    }
 
     render() {
         let items: Array<MenuItem> = [

@@ -17,6 +17,12 @@ interface IProps {
 
 class MainPageUser extends React.Component<IProps>{
 
+    constructor(props: IProps) {
+        super(props);
+
+        this.props.setNavBarOptions!(new INavBarOptions("User Page"));
+    }
+
     render() {
         let items: Array<MenuItem> = [
             {
@@ -54,7 +60,7 @@ class MainPageUser extends React.Component<IProps>{
                         render={
                             (props: RouteComponentProps<any, StaticContext, any>) => {
                                 return (
-                                    <QrCodePage value={this.props.profile.firstName} />
+                                    <QrCodePage value={this.props.profile.firstName} setNavBarOptions={this.props.setNavBarOptions} />
                                 )
                             }
                         }

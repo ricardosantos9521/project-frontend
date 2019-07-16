@@ -159,7 +159,7 @@ class MainPage extends React.Component<Props, IState>{
                                                 render={
                                                     (props: RouteComponentProps<any, StaticContext, any>) => {
                                                         return (
-                                                            <MainPageAdmin pathParent="/admin" />
+                                                            <MainPageAdmin pathParent="/admin" setNavBarOptions={this.setNavBarOptions} />
                                                         )
                                                     }
                                                 }
