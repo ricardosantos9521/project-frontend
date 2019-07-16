@@ -60,7 +60,7 @@ class MainPageUser extends React.Component<IProps>{
                         render={
                             (props: RouteComponentProps<any, StaticContext, any>) => {
                                 return (
-                                    <QrCodePage value={this.props.profile.firstName} setNavBarOptions={this.props.setNavBarOptions} />
+                                    <QrCodePage value={this.props.profile.email} setNavBarOptions={this.props.setNavBarOptions} />
                                 )
                             }
                         }
