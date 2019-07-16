@@ -83,7 +83,7 @@ class NavBar extends React.Component<IProps, IState> {
             {
                 key: 'signout',
                 text: 'SignOut',
-                onClick: () => { AuthBackend.SignOut(); }
+                onClick: async () => { await AuthBackend.SignOut(); }
             }
         ]
 

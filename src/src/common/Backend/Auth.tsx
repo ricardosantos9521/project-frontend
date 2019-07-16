@@ -74,8 +74,8 @@ class Auth {
 
                     handleNotAcceptable(this);
 
-                    handleUnauthorized(this, (r) => {
-                        self.SignOut();
+                    handleUnauthorized(this, async (r) => {
+                        await self.SignOut();
                     });
 
                     handleCannotAccessServer(this);
@@ -109,8 +109,8 @@ class Auth {
 
                     handleBadRequest(this);
 
-                    handleUnauthorized(this, (r) => {
-                        self.SignOut();
+                    handleUnauthorized(this, async (r) => {
+                        await self.SignOut();
                     })
 
                     handleNotAcceptable(this);
@@ -131,10 +131,9 @@ class Auth {
         });
     }
 
-    private static logout(accessToken: Token | null): Promise<any> {
+    private static async logout(): Promise<any> {
         return new Promise(async (resolve, reject) => {
             var xhr = new XMLHttpRequest();
-
             xhr.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
                     resolve();
@@ -148,8 +147,8 @@ class Auth {
         });
     }
 
-    public static SignOut() {
-        this.logout(this.accessToken);
+    public static async SignOut() {
+        await this.logout();
         sessionStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         this.accessToken = null;
