@@ -3,7 +3,7 @@ import { INavBarOptions } from "./INavBarOptions";
 import IProfile from "../Account/IProfile";
 import AuthBackend from "../Backend/Auth";
 import { IPersonaSharedProps, PersonaSize, Persona } from "office-ui-fabric-react/lib/Persona";
-import { DefaultButton, CommandButton, IconButton } from "office-ui-fabric-react/lib/Button";
+import { DefaultButton, CommandButton } from "office-ui-fabric-react/lib/Button";
 import './NavBar.css'
 import { Depths } from "@uifabric/fluent-theme/lib/fluent/FluentDepths";
 import { CommunicationColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
@@ -83,7 +83,7 @@ class NavBar extends React.Component<IProps, IState> {
             {
                 key: 'signout',
                 text: 'SignOut',
-                onClick: () => { AuthBackend.SignOut(); }
+                onClick: async () => { await AuthBackend.SignOut(); }
             }
         ]
 
@@ -116,18 +116,6 @@ class NavBar extends React.Component<IProps, IState> {
 
         return (
             <div className="bottomBar" style={{ boxShadow: Depths.depth16, color: CommunicationColors.primary }}>
-                <div className="backButton">
-                    {
-                        (this.props.navBarOptions.backButton) &&
-                        (
-                            <IconButton
-                                className="arrowButton"
-                                iconProps={{ iconName: 'Back' }}
-                                onClick={this.handleRequestGoBack}
-                            />
-                        )
-                    }
-                </div>
                 <div className="title" style={{ fontSize: FontSizes.size16 }}>
                     <h2>
                         {this.props.navBarOptions.title}

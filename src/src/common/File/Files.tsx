@@ -25,7 +25,7 @@ class Files extends React.Component<IProps, IState>{
             files: []
         }
 
-        this.props.setNavBarOptions!(new INavBarOptions("Files", false));
+        this.props.setNavBarOptions!(new INavBarOptions("Files"));
 
         this.getFiles = this.getFiles.bind(this);
     }

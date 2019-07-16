@@ -11,15 +11,15 @@ class Auth {
 
     private static semaphore = new Semaphore(1);
 
-    public static async Login(issuer: string, id_token: string): Promise<Boolean> {
+    public static async Login(issuer: string, id_token: string): Promise<[Boolean, Boolean]> {
         var responseToken = await this.GetTokenWithIdToken(issuer, id_token);
         if (responseToken !== null) {
             this.accessToken = responseToken.accessToken;
             sessionStorage.setItem("accessToken", JSON.stringify(responseToken.accessToken))
             localStorage.setItem("refreshToken", JSON.stringify(responseToken.refreshToken));
-            return true;
+            return [true, responseToken.isAccountNew];
         }
-        return false;
+        return [false, false];
     }
 
     public static async GetAccessToken(): Promise<Token | null> {
@@ -74,8 +74,8 @@ class Auth {
 
                     handleNotAcceptable(this);
 
-                    handleUnauthorized(this, (r) => {
-                        self.SignOut();
+                    handleUnauthorized(this, async (r) => {
+                        await self.SignOut();
                     });
 
                     handleCannotAccessServer(this);
@@ -109,8 +109,8 @@ class Auth {
 
                     handleBadRequest(this);
 
-                    handleUnauthorized(this, (r) => {
-                        self.SignOut();
+                    handleUnauthorized(this, async (r) => {
+                        await self.SignOut();
                     })
 
                     handleNotAcceptable(this);
@@ -131,10 +131,9 @@ class Auth {
         });
     }
 
-    private static logout(accessToken: Token | null): Promise<any> {
+    private static async logout(): Promise<any> {
         return new Promise(async (resolve, reject) => {
             var xhr = new XMLHttpRequest();
-
             xhr.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
                     resolve();
@@ -148,8 +147,8 @@ class Auth {
         });
     }
 
-    public static SignOut() {
-        this.logout(this.accessToken);
+    public static async SignOut() {
+        await this.logout();
         sessionStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         this.accessToken = null;

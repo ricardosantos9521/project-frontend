@@ -28,7 +28,7 @@ class UploadFile extends React.Component<IProps, IState>{
             fileInfo: null
         }
 
-        this.props.setNavBarOptions!(new INavBarOptions("Upload", false));
+        this.props.setNavBarOptions!(new INavBarOptions("Upload"));
 
         this.fileSelected = this.fileSelected.bind(this);
         this.uploadFile = this.uploadFile.bind(this);

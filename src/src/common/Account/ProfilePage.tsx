@@ -48,7 +48,7 @@ class ProfilePage extends React.Component<IProps, IState>{
             changed: false
         }
 
-        this.props.setNavBarOptions!(new INavBarOptions("Profile", true));
+        this.props.setNavBarOptions!(new INavBarOptions("Profile"));
 
         this.getProfile = this.getProfile.bind(this);
         this.onChangeFirstName = this.onChangeFirstName.bind(this);

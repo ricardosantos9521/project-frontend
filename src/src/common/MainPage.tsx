@@ -43,6 +43,7 @@ class MainPage extends React.Component<Props, IState>{
 
     async componentWillMount() {
         await Profile.Get();
+        Settings.history.push({ pathname: '/user' });
     }
 
     componentDidMount() {
@@ -70,10 +71,14 @@ class MainPage extends React.Component<Props, IState>{
         this.setState({ navBarOptions: newNavBarOptions });
     }
 
-    LoginConclude() {
-        Profile.Get().then(() => {
+    async LoginConclude(isNewAccount: Boolean) {
+        await Profile.Get();
+        if (!isNewAccount) {
+            Settings.history.push({ pathname: '/user' });
+        }
+        else {
             Settings.history.push({ pathname: '/profile' });
-        });
+        }
     }
 
     render() {
@@ -155,7 +160,7 @@ class MainPage extends React.Component<Props, IState>{
                                                 render={
                                                     (props: RouteComponentProps<any, StaticContext, any>) => {
                                                         return (
-                                                            <MainPageAdmin pathParent="/admin" />
+                                                            <MainPageAdmin pathParent="/admin" setNavBarOptions={this.setNavBarOptions} />
                                                         )
                                                     }
                                                 }

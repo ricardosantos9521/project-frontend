@@ -1,9 +1,7 @@
 export class INavBarOptions {
-    public backButton: boolean;
     public title: string;
 
-    constructor(title: string, backButton: boolean = false) {
+    constructor(title: string) {
         this.title = title;
-        this.backButton = backButton;
     }
 }
