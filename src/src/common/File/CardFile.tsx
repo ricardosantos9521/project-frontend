@@ -442,7 +442,7 @@ class CardFile extends React.Component<IProps, IState>{
                                 styles: { main: { maxWidth: 450 } }
                             }}
                         >
-                            <QRCodeReader onScan={this.onQRCodeRead} scan={true} />
+                            <QRCodeReader onScan={this.onQRCodeRead} scan={this.state.showQRCodeReaderDialog} />
                         </Dialog>
                     </div >
                 )
