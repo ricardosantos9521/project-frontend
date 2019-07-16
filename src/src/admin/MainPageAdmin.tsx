@@ -16,7 +16,7 @@ class MainPageAdmin extends React.Component<IProps>{
     constructor(props: IProps) {
         super(props);
 
-        this.props.setNavBarOptions!(new INavBarOptions("User Page"));
+        this.props.setNavBarOptions!(new INavBarOptions("Admin Page"));
     }
 
     render() {
