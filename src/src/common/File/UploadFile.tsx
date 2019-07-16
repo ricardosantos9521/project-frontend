@@ -6,6 +6,8 @@ import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { INavBarOptions } from '../Navigation/INavBarOptions';
 import { handleOkResponse, handleBadRequest, handleCannotAccessServer, handleUnauthorized, handleNotAcceptable } from '../Helpers/HandleResponsesXHR';
 import { setAuthorizationHeader } from '../Helpers/Authorization';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 interface IProps {
     setNavBarOptions?(newNavBarOptions: INavBarOptions): void
@@ -13,7 +15,8 @@ interface IProps {
 
 interface IState {
     uploadButtonEnabled: Boolean,
-    fileInfo: IFileDescription | null
+    fileInfo: IFileDescription | null,
+    isLoading: Boolean
 }
 
 class UploadFile extends React.Component<IProps, IState>{
@@ -25,7 +28,8 @@ class UploadFile extends React.Component<IProps, IState>{
 
         this.state = {
             uploadButtonEnabled: false,
-            fileInfo: null
+            fileInfo: null,
+            isLoading: false
         }
 
         this.props.setNavBarOptions!(new INavBarOptions("Upload"));
@@ -44,6 +48,7 @@ class UploadFile extends React.Component<IProps, IState>{
 
     async uploadFile() {
         if (this.file !== null) {
+            this.setState({ isLoading: true })
             var self = this;
             var data = new FormData();
             data.append("file", this.file);
@@ -64,6 +69,8 @@ class UploadFile extends React.Component<IProps, IState>{
                     handleUnauthorized(this);
 
                     handleNotAcceptable(this);
+
+                    self.setState({ isLoading: false })
                 }
             });
 
@@ -78,13 +85,23 @@ class UploadFile extends React.Component<IProps, IState>{
 
         return (
             <div>
-                <input type="file" name="file" onChange={this.fileSelected} />
-                <DefaultButton text="upload" onClick={this.uploadFile} disabled={!this.state.uploadButtonEnabled} />
-                {
-                    (this.state.fileInfo !== null) && (
-                        <CardFile file={this.state.fileInfo} uniqueKey={1} />
-                    )
-                }
+                <Stack className="sessions" tokens={{ childrenGap: 20 }} disableShrink wrap verticalAlign="center">
+                    <div style={{textAlign: "center"}}>
+                        <input type="file" name="file" onChange={this.fileSelected} />
+                        <DefaultButton text="upload" onClick={this.uploadFile} disabled={!this.state.uploadButtonEnabled} />
+                    </div>
+                    {
+                        (this.state.isLoading) ?
+                            (
+                                <Spinner size={SpinnerSize.large} />
+                            ) :
+                            (
+                                (this.state.fileInfo !== null) && (
+                                    <CardFile file={this.state.fileInfo} uniqueKey={1} />
+                                )
+                            )
+                    }
+                </Stack>
             </div >
         );
     }
