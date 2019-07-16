@@ -24,7 +24,7 @@ class Sessions extends React.Component<IProps, IState>{
             sessions: []
         }
 
-        this.props.setNavBarOptions!(new INavBarOptions("Sessions", false));
+        this.props.setNavBarOptions!(new INavBarOptions("Sessions"));
 
         this.getSessions = this.getSessions.bind(this);
 
