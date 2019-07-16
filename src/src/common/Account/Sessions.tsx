@@ -6,13 +6,16 @@ import './Sessions.css'
 import CardSession, { ISession } from './CardSession';
 import { handleOkResponse, handleBadRequest, handleCannotAccessServer, handleUnauthorized, handleNotAcceptable } from '../Helpers/HandleResponsesXHR';
 import { setAuthorizationHeader } from '../Helpers/Authorization';
+import { Label } from 'office-ui-fabric-react/lib/Label';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 interface IProps {
     setNavBarOptions?(newNavBarOptions: INavBarOptions): void
 }
 
 interface IState {
-    sessions: Array<ISession>
+    sessions: Array<ISession>,
+    isLoading: Boolean
 }
 
 class Sessions extends React.Component<IProps, IState>{
@@ -21,7 +24,8 @@ class Sessions extends React.Component<IProps, IState>{
         super(props);
 
         this.state = {
-            sessions: []
+            sessions: [],
+            isLoading: true
         }
 
         this.props.setNavBarOptions!(new INavBarOptions("Sessions"));
@@ -42,7 +46,7 @@ class Sessions extends React.Component<IProps, IState>{
 
                 handleOkResponse(this, (r) => {
                     var sessions: Array<ISession> = JSON.parse(r.response);
-                    self.setState({ sessions: sessions });
+                    self.setState({ sessions: sessions, isLoading: false });
                 })
 
                 handleBadRequest(this);
@@ -57,7 +61,7 @@ class Sessions extends React.Component<IProps, IState>{
 
         xhr.open("GET", Settings.serverUrl + "/api/session/sessions");
         await setAuthorizationHeader(xhr);
-        
+
         xhr.send(null);
     }
 
@@ -66,11 +70,21 @@ class Sessions extends React.Component<IProps, IState>{
             <div>
                 <Stack className="sessions" tokens={{ childrenGap: 20 }} horizontal disableShrink wrap horizontalAlign="center">
                     {
-                        this.state.sessions.map((session, key) => {
-                            return (
-                                <CardSession key={key} session={session} />
+                        (this.state.isLoading) ?
+                            (
+                                <Spinner size={SpinnerSize.large} />
+                            ) :
+                            (
+                                (this.state.sessions.length !== 0) ?
+                                    this.state.sessions.map((session, key) => {
+                                        return (
+                                            <CardSession key={key} session={session} />
+                                        )
+                                    }) :
+                                    (
+                                        <Label>No sessions</Label>
+                                    )
                             )
-                        })
                     }
                 </Stack>
             </div>
