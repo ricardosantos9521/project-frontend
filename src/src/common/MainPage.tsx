@@ -43,6 +43,7 @@ class MainPage extends React.Component<Props, IState>{
 
     async componentWillMount() {
         await Profile.Get();
+        Settings.history.push({ pathname: '/user' });
     }
 
     componentDidMount() {
