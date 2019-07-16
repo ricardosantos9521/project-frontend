@@ -44,7 +44,7 @@ class MainPage extends React.Component<Props, IState>{
     async componentWillMount() {
         await Profile.Get();
 
-        if (window.location.pathname === "/" || window.location.pathname === "/reactproject")
+        if (window.location.pathname === "/" || window.location.pathname === "/reactproject" || window.location.pathname === "/reactproject/")
             Settings.history.push({ pathname: '/user' });
     }
 
