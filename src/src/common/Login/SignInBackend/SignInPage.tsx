@@ -6,7 +6,7 @@ import AuthBackend from '../../Backend/Auth';
 import CardPage from '../../UIPages/CardPage';
 
 interface IProps {
-    LoginConclude(): void,
+    LoginConclude(isNewAccount: Boolean): void,
     setNavBarOptions(newNavBarOptions: INavBarOptions): void,
 }
 
@@ -30,8 +30,9 @@ class SignInPage extends React.Component<IProps, IState> {
 
     async OAuthLoginConclude(issuer: string, id_token: string) {
         this.setState({ isLoading: true });
-        if (await AuthBackend.Login(issuer, id_token)) {
-            this.props.LoginConclude();
+        var login = await AuthBackend.Login(issuer, id_token);
+        if (login[0]) {
+            this.props.LoginConclude(login[1]);
         }
         else {
             this.setState({ isLoading: false });

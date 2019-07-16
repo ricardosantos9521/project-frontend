@@ -70,10 +70,14 @@ class MainPage extends React.Component<Props, IState>{
         this.setState({ navBarOptions: newNavBarOptions });
     }
 
-    LoginConclude() {
-        Profile.Get().then(() => {
+    async LoginConclude(isNewAccount: Boolean) {
+        await Profile.Get();
+        if (!isNewAccount) {
+            Settings.history.push({ pathname: '/user' });
+        }
+        else {
             Settings.history.push({ pathname: '/profile' });
-        });
+        }
     }
 
     render() {

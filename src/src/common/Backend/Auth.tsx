@@ -11,15 +11,15 @@ class Auth {
 
     private static semaphore = new Semaphore(1);
 
-    public static async Login(issuer: string, id_token: string): Promise<Boolean> {
+    public static async Login(issuer: string, id_token: string): Promise<[Boolean, Boolean]> {
         var responseToken = await this.GetTokenWithIdToken(issuer, id_token);
         if (responseToken !== null) {
             this.accessToken = responseToken.accessToken;
             sessionStorage.setItem("accessToken", JSON.stringify(responseToken.accessToken))
             localStorage.setItem("refreshToken", JSON.stringify(responseToken.refreshToken));
-            return true;
+            return [true, responseToken.isAccountNew];
         }
-        return false;
+        return [false, false];
     }
 
     public static async GetAccessToken(): Promise<Token | null> {
