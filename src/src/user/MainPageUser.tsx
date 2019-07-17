@@ -1,6 +1,4 @@
 import React from "react";
-import { Route, RouteComponentProps } from "react-router-dom";
-import { StaticContext } from "react-router";
 import QrCodePage from "../common/QRCode/QRCodePage";
 import IProfile from "../common/Account/IProfile";
 import NavigationPage, { MenuItem } from "../common/UIPages/NavigationPage";
@@ -8,6 +6,7 @@ import Settings from "../common/Settings";
 import UploadFile from "../common/File/UploadFile";
 import Files from "../common/File/Files";
 import { INavBarOptions } from "../common/Navigation/INavBarOptions";
+import { CustomRoute } from "../common/Helpers/CustomRoute";
 
 interface IProps {
     pathParent: string,
@@ -55,39 +54,15 @@ class MainPageUser extends React.Component<IProps>{
         return (
             <div className="user-container" style={{ width: "100%", height: "100%" }}>
                 <NavigationPage items={items} overflowItems={overflowItems}>
-                    <Route
-                        path={this.props.pathParent + "/qrcode"}
-                        render={
-                            (props: RouteComponentProps<any, StaticContext, any>) => {
-                                return (
-                                    <QrCodePage value={this.props.profile.email} setNavBarOptions={this.props.setNavBarOptions} />
-                                )
-                            }
-                        }
-                        key="qrcode"
-                    />
-                    <Route
-                        path={this.props.pathParent + "/upload"}
-                        render={
-                            (props: RouteComponentProps<any, StaticContext, any>) => {
-                                return (
-                                    <UploadFile setNavBarOptions={this.props.setNavBarOptions} />
-                                )
-                            }
-                        }
-                        key="upload"
-                    />
-                    <Route
-                        path={this.props.pathParent + "/files"}
-                        render={
-                            (props: RouteComponentProps<any, StaticContext, any>) => {
-                                return (
-                                    <Files setNavBarOptions={this.props.setNavBarOptions} />
-                                )
-                            }
-                        }
-                        key="files"
-                    />
+                    <CustomRoute uniquePath={this.props.pathParent + "/qrcode"}>
+                        <QrCodePage value={this.props.profile.email} setNavBarOptions={this.props.setNavBarOptions} />
+                    </CustomRoute>
+                    <CustomRoute uniquePath={this.props.pathParent + "/upload"}>
+                        <UploadFile setNavBarOptions={this.props.setNavBarOptions} />
+                    </CustomRoute>
+                    <CustomRoute uniquePath={this.props.pathParent + "/files"}>
+                        <Files setNavBarOptions={this.props.setNavBarOptions} />
+                    </CustomRoute>
                 </NavigationPage>
             </div>
         );
