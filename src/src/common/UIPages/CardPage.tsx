@@ -2,6 +2,7 @@ import React from "react";
 import { Depths } from "@uifabric/fluent-theme/lib/fluent/FluentDepths";
 import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
 import { Stack } from "office-ui-fabric-react/lib/Stack";
+import './CardPage.css'
 
 interface IProps {
     isLoading?: boolean,
@@ -12,14 +13,14 @@ interface IProps {
 class CardPage extends React.Component<IProps> {
     render() {
         return (
-            <Stack className="files" tokens={{ childrenGap: 20 }} horizontal disableShrink wrap horizontalAlign="center" style={{ height: "100%" }} verticalAlign={(this.props.isLoading!) ? "start" : "center"}>
+            <Stack tokens={{ childrenGap: 20 }} verticalAlign="center" horizontalAlign="center" styles={{ root: { height: "100%" } }}>
                 {
                     (this.props.isLoading!) ?
                         (
                             <Spinner size={SpinnerSize.large} />
                         ) :
                         (
-                            <div style={{ boxShadow: Depths.depth64, width: this.props.widthCard, position: "absolute" }}>
+                            <div className="card" style={{ boxShadow: Depths.depth64, width: this.props.widthCard, position: "relative" }}>
                                 {this.props.children}
                             </div>
                         )
