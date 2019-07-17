@@ -86,7 +86,7 @@ class UploadFile extends React.Component<IProps, IState>{
         return (
             <div>
                 <Stack className="sessions" tokens={{ childrenGap: 20 }} disableShrink wrap verticalAlign="center">
-                    <Stack horizontal horizontalAlign="center" tokens={{ childrenGap: 20 }}>
+                    <Stack horizontal horizontalAlign="center" verticalAlign="center" tokens={{ childrenGap: 20 }}>
                         <input type="file" name="file" onChange={this.fileSelected} />
                         <DefaultButton text="upload" onClick={this.uploadFile} disabled={!this.state.uploadButtonEnabled} />
                     </Stack>
