@@ -12,7 +12,6 @@ import Settings from "./Settings";
 import MainPageAdmin from "../admin/MainPageAdmin";
 import MainPageUser from "../user/MainPageUser";
 import MessageBar from "./MessageBar";
-import AboutPage from "./About/AboutPage";
 import Sessions from "./Account/Sessions";
 
 interface IState {
@@ -93,17 +92,6 @@ class MainPage extends React.Component<Props, IState>{
                     <Router history={Settings.history}>
                         {
                             ([
-                                <Route
-                                    path="/about"
-                                    render={
-                                        (props: RouteComponentProps<any, StaticContext, any>) => {
-                                            return (
-                                                <AboutPage />
-                                            )
-                                        }
-                                    }
-                                    key="about"
-                                />,
                                 (!this.state.isAuth) &&
                                 ([
                                     <Route
