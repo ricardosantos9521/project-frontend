@@ -1,10 +1,9 @@
 import React from "react";
-import { Route, RouteComponentProps } from "react-router-dom";
-import { StaticContext } from "react-router";
 import QrCodeReaderPage from "../common/QRCode/QRCodeReaderPage";
 import NavigationPage, { MenuItem } from "../common/UIPages/NavigationPage";
 import Settings from "../common/Settings";
 import { INavBarOptions } from "../common/Navigation/INavBarOptions";
+import { CustomRoute } from "../common/Helpers/CustomRoute";
 
 interface IProps {
     pathParent: string,
@@ -37,17 +36,9 @@ class MainPageAdmin extends React.Component<IProps>{
         return (
             <div className="admin-container" style={{ width: "100%", height: "100%" }}>
                 <NavigationPage items={items} overflowItems={overflowItems}>
-                    <Route
-                        path={this.props.pathParent + "/qrreader"}
-                        render={
-                            (props: RouteComponentProps<any, StaticContext, any>) => {
-                                return (
-                                    <QrCodeReaderPage />
-                                )
-                            }
-                        }
-                        key="qrreader"
-                    />
+                    <CustomRoute uniquePath={this.props.pathParent + "/qrreader"}>
+                        <QrCodeReaderPage />
+                    </CustomRoute>
                 </NavigationPage>
             </div>
         );
