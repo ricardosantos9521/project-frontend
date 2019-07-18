@@ -7,7 +7,7 @@ import CardSession, { ISession } from './CardSession';
 import { handleOkResponse, handleBadRequest, handleCannotAccessServer, handleUnauthorized, handleNotAcceptable } from '../Helpers/HandleResponsesXHR';
 import { setAuthorizationHeader } from '../Helpers/Authorization';
 import { Label } from 'office-ui-fabric-react/lib/Label';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import SpinnerComponent from '../UIPages/SpinnerComponent';
 
 interface IProps {
     setNavBarOptions?(newNavBarOptions: INavBarOptions): void
@@ -31,13 +31,14 @@ class Sessions extends React.Component<IProps, IState>{
         this.props.setNavBarOptions!(new INavBarOptions("Sessions"));
 
         this.getSessions = this.getSessions.bind(this);
+    }
 
-        this.getSessions();
+    async componentDidMount() {
+        await this.getSessions();
     }
 
     async getSessions() {
         var self = this;
-
 
         var xhr = new XMLHttpRequest();
 
@@ -66,24 +67,21 @@ class Sessions extends React.Component<IProps, IState>{
     }
 
     render() {
+        if (this.state.isLoading!)
+            return (<SpinnerComponent isLoading={this.state.isLoading!} loadingMessage="Getting sessions!" />)
+
         return (
             <div>
                 <Stack className="sessions" tokens={{ childrenGap: 20 }} horizontal disableShrink wrap horizontalAlign="center">
                     {
-                        (this.state.isLoading) ?
+                        (this.state.sessions.length !== 0) ?
+                            this.state.sessions.map((session, key) => {
+                                return (
+                                    <CardSession key={key} session={session} />
+                                )
+                            }) :
                             (
-                                <Spinner size={SpinnerSize.large} />
-                            ) :
-                            (
-                                (this.state.sessions.length !== 0) ?
-                                    this.state.sessions.map((session, key) => {
-                                        return (
-                                            <CardSession key={key} session={session} />
-                                        )
-                                    }) :
-                                    (
-                                        <Label>No sessions</Label>
-                                    )
+                                <Label>No sessions</Label>
                             )
                     }
                 </Stack>

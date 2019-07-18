@@ -7,7 +7,7 @@ import { INavBarOptions } from '../Navigation/INavBarOptions';
 import { handleOkResponse, handleBadRequest, handleCannotAccessServer, handleUnauthorized, handleNotAcceptable } from '../Helpers/HandleResponsesXHR';
 import { setAuthorizationHeader } from '../Helpers/Authorization';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import SpinnerComponent from '../UIPages/SpinnerComponent';
 
 interface IProps {
     setNavBarOptions?(newNavBarOptions: INavBarOptions): void
@@ -93,7 +93,7 @@ class UploadFile extends React.Component<IProps, IState>{
                     {
                         (this.state.isLoading) ?
                             (
-                                <Spinner size={SpinnerSize.large} />
+                                <SpinnerComponent isLoading={this.state.isLoading} loadingMessage="Uploading File..." />
                             ) :
                             (
                                 (this.state.fileInfo !== null) && (
