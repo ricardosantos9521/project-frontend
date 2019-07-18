@@ -1,5 +1,5 @@
 import React from "react";
-import QrCodePage from "../common/QRCode/QRCodePage";
+import QrCodePage from "./QRCodePage";
 import IProfile from "../common/Account/IProfile";
 import NavigationPage, { MenuItem } from "../common/UIPages/NavigationPage";
 import Settings from "../common/Settings";

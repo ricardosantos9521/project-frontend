@@ -1,0 +1,23 @@
+.qrcode {
+    width: 400px;
+    max-width: 90%;
+    position: relative;
+}
+
+.buttonScanQRReader {
+    width: 15%;
+    position: absolute !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.readCode {
+    width: 90%;
+    position: absolute !important;
+    top: 83%;
+    left: 50%;
+    transform: translate(-50%, -17%);
+    color: white;
+    text-align: center;
+}

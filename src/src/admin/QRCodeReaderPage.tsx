@@ -1,8 +1,8 @@
 import React from "react";
-import QRCodeReader from "./QRCodeReader";
-import './QRCodeReaderPage.css'
+import QRCodeReader from "../common/QRCode/QRCodeReader";
 import { DefaultButton } from "office-ui-fabric-react/lib/Button";
-import CardPage from "../UIPages/CardPage";
+import Stack from "office-ui-fabric-react/lib/components/Stack/Stack";
+import './QRCodeReaderPage.css'
 
 interface IProps {
 
@@ -38,12 +38,12 @@ class QrCodeReaderPage extends React.Component<IProps, IState> {
 
     render() {
         return (
-            <CardPage widthCard="400px">
+            <Stack tokens={{ childrenGap: 20 }} verticalAlign="center" horizontalAlign="center" styles={{ root: { height: "100%" } }}>
+                <div className="qrcode">
                     <QRCodeReader
                         onScan={this.onScan}
                         scan={this.state.scan}
                     />
-                    <h2>{this.state.qrCodeString}</h2>
                     {
                         (!this.state.scan) &&
                         (<DefaultButton
@@ -52,7 +52,16 @@ class QrCodeReaderPage extends React.Component<IProps, IState> {
                             onClick={this.onClickScan}
                         />)
                     }
-            </CardPage>
+                    {
+                        (this.state.qrCodeString !== "") &&
+                        (
+                            <p className="readCode">
+                                {this.state.qrCodeString}
+                            </p>
+                        )
+                    }
+                </div>
+            </Stack>
         );
     }
 }

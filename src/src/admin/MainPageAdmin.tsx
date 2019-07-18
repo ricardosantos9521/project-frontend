@@ -1,9 +1,9 @@
 import React from "react";
-import QrCodeReaderPage from "../common/QRCode/QRCodeReaderPage";
 import NavigationPage, { MenuItem } from "../common/UIPages/NavigationPage";
 import Settings from "../common/Settings";
 import { INavBarOptions } from "../common/Navigation/INavBarOptions";
 import { CustomRoute } from "../common/Helpers/CustomRoute";
+import QrCodeReaderPage from "./QRCodeReaderPage";
 
 interface IProps {
     pathParent: string,
