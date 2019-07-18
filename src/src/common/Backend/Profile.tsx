@@ -1,4 +1,4 @@
-import IProfile from "../Account/IProfile";
+import IProfile from "./IProfile";
 import Settings from "../Settings";
 import { handleOkResponse, handleBadRequest, handleCannotAccessServer, handleUnauthorized, handleNotAcceptable } from "../Helpers/HandleResponsesXHR";
 import { setAuthorizationHeader } from "../Helpers/Authorization";

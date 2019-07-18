@@ -1,6 +1,6 @@
 import React from "react";
 import QrCodePage from "./QRCodePage";
-import IProfile from "../common/Account/IProfile";
+import IProfile from "../common/Backend/IProfile";
 import NavigationPage, { MenuItem } from "../common/UIPages/NavigationPage";
 import Settings from "../common/Settings";
 import UploadFile from "../common/File/UploadFile";

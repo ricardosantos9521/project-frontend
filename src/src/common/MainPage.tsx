@@ -4,7 +4,7 @@ import NavBar from "./Navigation/NavBar";
 import ProfilePage from "./Account/ProfilePage";
 import { INavBarOptions } from "./Navigation/INavBarOptions";
 import SignInPage from "./Login/SignInBackend/SignInPage";
-import IProfile from "./Account/IProfile";
+import IProfile from "./Backend/IProfile";
 import Profile from "./Backend/Profile";
 import './MainPage.css';
 import Settings from "./Settings";

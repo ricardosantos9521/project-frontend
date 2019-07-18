@@ -1,7 +1,7 @@
 import React from 'react';
 import { INavBarOptions } from '../Navigation/INavBarOptions';
 import './ProfilePage.css';
-import IProfile from './IProfile';
+import IProfile from '../Backend/IProfile';
 import Profile from '../Backend/Profile';
 import { Depths } from '@uifabric/fluent-theme/lib/fluent/FluentDepths';
 import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';

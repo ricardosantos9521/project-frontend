@@ -1,6 +1,6 @@
 import React from "react";
 import { INavBarOptions } from "./INavBarOptions";
-import IProfile from "../Account/IProfile";
+import IProfile from "../Backend/IProfile";
 import AuthBackend from "../Backend/Auth";
 import { IPersonaSharedProps, PersonaSize, Persona } from "office-ui-fabric-react/lib/Persona";
 import { DefaultButton, CommandButton } from "office-ui-fabric-react/lib/Button";
