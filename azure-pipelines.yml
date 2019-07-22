@@ -1,5 +1,11 @@
 trigger:
-- master
+  branches:
+    include:
+    - master
+    - dev/*
+  paths:
+    exclude:
+    - README.md
 
 variables:
   poolName: HomeServers
@@ -42,7 +48,12 @@ stages:
 #deploy stage
 - stage: Deploy
   dependsOn: Build
-  condition: ne(variables['Build.Reason'], 'PullRequest')
+  condition: |
+    and(
+      eq(variables['Build.SourceBranch'], 'master'),
+      ne(variables['Build.Reason'], 'PullRequest'), 
+      eq(startsWith(variables['Build.SourceBranch'], 'dev/'), 'false')
+    )
   jobs:
   - job: DeployJob
     pool: $(poolName)
