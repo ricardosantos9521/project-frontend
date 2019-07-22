@@ -19,6 +19,8 @@ stages:
   - job: BuildJob
     pool: $(poolName)
     steps:
+    - script: echo $(Build.SourceBranch) 
+      displayName: Print sourcebranch
     - task: Docker@1
       displayName: 'Build an image'
       inputs:
