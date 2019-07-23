@@ -35,7 +35,7 @@ spec:
           periodSeconds: 10
           successThreshold: 1
       imagePullSecrets:
-        - name: dockerregistrysecret
+        - name: gitlabdockersecret
 ---
 apiVersion: v1
 kind: Service
