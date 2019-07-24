@@ -10,7 +10,7 @@ class Settings {
         )
     );
 
-    private static publicServerUrl: string = "https://rics.synology.me/backendproject/";
+    private static publicServerUrl: string = "https://ricspt.ddns.net/backendproject/";
     private static localhostServerUrl: string = "http://localhost:5000";
 
     public static serverUrl: string = (Settings.isLocalhost) ? Settings.localhostServerUrl : Settings.publicServerUrl;
