@@ -4,7 +4,7 @@
 
 ![Image example](images-doc/image.png)
 
-This project was built with the intuit of learn new things about reactjs, typescript and PWA (progressive web apps) as well as to be a base for future projects.
+This project was built with the intuit of learning new things about reactjs, typescript and PWA (progressive web apps) as well as to be a base for future projects.
 
 It allows:
 - login with google to authenticate with the backend (adaptable to other id providers)
