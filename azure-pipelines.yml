@@ -6,6 +6,7 @@ trigger:
   paths:
     exclude:
     - README.md
+    - images-doc/*
 
 variables:
   poolName: HomeServers
