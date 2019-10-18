@@ -40,7 +40,7 @@ stages:
           - task: kasunkodagoda.regex-match-replace.regex-match-replace.RegExMatchReplace@2
             displayName: "RegEx Match & Replace"
             inputs:
-              PathToFile: deployment.yaml'
+              PathToFile: 'deployment.yaml'
               RegEx: BUILDNUMBER
               ValueToReplace: "$(Build.BuildNumber)"
           - task: CopyFiles@1
