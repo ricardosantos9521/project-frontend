@@ -10,13 +10,13 @@ class Settings {
         )
     );
 
-    private static publicServerUrl: string = "https://ricspt.ddns.net/backendproject/";
+    private static publicServerUrl: string = "https://ricspt.ddns.net/project/backend/";
     private static localhostServerUrl: string = "http://localhost:5000";
 
     public static serverUrl: string = (Settings.isLocalhost) ? Settings.localhostServerUrl : Settings.publicServerUrl;
 
     public static history: History<any> = createBrowserHistory({
-        basename: '/reactproject'
+        basename: '/project/frontend'
     });
 }
 

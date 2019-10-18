@@ -1,5 +1,5 @@
 {
-    "name": "app",
+    "name": "project",
     "version": "0.2.0",
     "private": true,
     "dependencies": {
@@ -45,5 +45,5 @@
         "@types/react-qr-reader": "2.1.2",
         "@types/react-router-dom": "4.3.4"
     },
-    "homepage": "https://127.0.0.1/reactproject/"
+    "homepage": "https://127.0.0.1/project/frontend/"
 }
