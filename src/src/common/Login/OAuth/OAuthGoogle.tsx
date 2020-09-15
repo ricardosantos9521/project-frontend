@@ -28,7 +28,7 @@ class OAuthGoogle extends IOAuthLogin {
     render() {
         return (
             <GoogleLogin
-                clientId="967896757735-df4onrvs1e3259s87n9hlqpp18ipllgh.apps.googleusercontent.com"
+                clientId="213579612838-6lq11uuoinqh3e27qfrhi7a6hu434gog.apps.googleusercontent.com"
                 buttonText="Google"
                 onSuccess={this.signIn}
                 onFailure={this.error}
