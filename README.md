@@ -28,6 +28,6 @@ Both parts of this project are built with docker and then deployed using kuberne
 
 # Project online at:
 
-WebApp online in: https://ricspt.ddns.net/project/frontend
+WebApp online in: https://ricspt.ddns.net/project/frontend/
 
 Backend online in: https://ricspt.ddns.net/project/backend/api/version
